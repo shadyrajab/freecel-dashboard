@@ -16,11 +16,13 @@ df_movel.replace({
 
 }, inplace=True)
 
-def altas_e_migracoes(ano, revenda, tipo, aggregate = True | False):
-    ano = int(ano) if ano.isnumeric() else ano
+
+def altas_e_migracoes(revenda, ano, tipo, aggregate = True | False):
     df_altas_e_migracoes = df_movel[
-        (df_movel['ANO'] == ano if ano != 'Todos' else df_movel['ANO'] == df_movel['ANO']) &
-        (df_movel['REVENDA'] == revenda if revenda != 'Todos' else df_movel['REVENDA'] == df_movel['REVENDA']) &
+        (df_movel['ANO'] == int(ano) if (
+            ano != 'Todos' and ano != 'Geral'
+        ) else df_movel['ANO'] == df_movel['ANO']) &
+        (df_movel['REVENDA'] == revenda if revenda != 'Geral' else df_movel['REVENDA'] == df_movel['REVENDA']) &
         (df_movel['TIPO VENDA'] == tipo if tipo != 'GERAL' else df_movel['TIPO VENDA'] == df_movel['TIPO VENDA'])
     ]
 
