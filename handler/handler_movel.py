@@ -16,6 +16,10 @@ df_movel.replace({
 
 }, inplace=True)
 
+df_movel.rename(columns={
+    'TIPO VENDA': 'TIPO'
+}, inplace=True)
+
 
 def altas_e_migracoes(revenda, ano, tipo, aggregate = True | False):
     df_altas_e_migracoes = df_movel[
@@ -23,7 +27,7 @@ def altas_e_migracoes(revenda, ano, tipo, aggregate = True | False):
             ano != 'Todos' and ano != 'Geral'
         ) else df_movel['ANO'] == df_movel['ANO']) &
         (df_movel['REVENDA'] == revenda if revenda != 'Geral' else df_movel['REVENDA'] == df_movel['REVENDA']) &
-        (df_movel['TIPO VENDA'] == tipo if tipo != 'GERAL' else df_movel['TIPO VENDA'] == df_movel['TIPO VENDA'])
+        (df_movel['TIPO'] == tipo if tipo != 'GERAL' else df_movel['TIPO'] == df_movel['TIPO'])
     ]
 
     if aggregate:
