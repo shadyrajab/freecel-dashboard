@@ -9,7 +9,6 @@ def st_plot(dataframe, general = True | False):
 
 def plot(planilha, ano, revenda, tipo):
     general = True if ano == 'Geral' else False
-    print(general)
     if planilha == 'MÓVEL':
         dataframe = altas_e_migracoes(revenda = revenda, ano = ano, tipo = tipo, aggregate = False)
         st_plot(dataframe, general)
