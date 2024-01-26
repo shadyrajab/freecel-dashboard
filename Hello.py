@@ -9,8 +9,9 @@ filtro_revenda = ['Geral', 'Todos', 'FREECEL', 'PARCEIRO', 'VALPARAISO', 'ESCRIT
 st.title('Vendas Concluídas 2022 e 2023')
 st.write('---------------------------------------')
 
-selectbox_ano = st.selectbox('Ano Selecionado:', options=filtro_ano)
-selectbox_revenda = st.selectbox('Revenda: ', options=filtro_revenda)
+selectbox_ano = st.sidebar.selectbox('Ano Selecionado:', options=filtro_ano)
+selectbox_revenda = st.sidebar.selectbox('Revenda: ', options=filtro_revenda)
+exibir_por = st.sidebar.selectbox('Exibir por: ', options=['Quantidade de Produtos', 'Receita'])
 
 st.write('#### Avançada ')
 tab_fixa, tab_avancada, tab_soho, tab_vvn = st.tabs(['GERAL', 'AVANÇADA', 'SOHO', 'VVN'])
