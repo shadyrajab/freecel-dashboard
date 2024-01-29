@@ -18,18 +18,15 @@ def get_receita_total(retorno, ano = None, mes = None, escritorio = None, consul
 
     return dataframe[retorno].sum()
 
-def get_aumento_percentual():
-    pass
-
 def get_consultor_do_mes(ano, mes):
     dataframe = dataframe_geral[
         (dataframe_geral['ANO'] == ano) &
         (dataframe_geral['MÊS'] == mes) 
     ]
 
-    dataframe_agrupado_por_consultor = dataframe.groupby('CONSULTOR', as_index = False).sum(numeric_only=True)
-    maior_valor_vendido = dataframe_agrupado_por_consultor['VALOR ACUMULADO'].max()
-    consultor_do_mes = dataframe_agrupado_por_consultor[dataframe_agrupado_por_consultor['VALOR ACUMULADO'] == maior_valor_vendido]
+    ranking_consultores = dataframe.groupby('CONSULTOR', as_index = False).sum(numeric_only = True)
+    maior_valor_vendido = ranking_consultores['VALOR ACUMULADO'].max()
+    consultor_do_mes = ranking_consultores[ranking_consultores['VALOR ACUMULADO'] == maior_valor_vendido]
 
     return consultor_do_mes
 
@@ -66,3 +63,16 @@ def get_ranking_meses(ano, key):
     ranking_meses['VALOR MÁXIMO'] = ranking_meses['MÊS'].apply(lambda m: valor_maximo(m))
 
     return ranking_meses
+
+def get_rankings_consultores(ano, mes, tipo):
+    dataframe = dataframe_geral[
+        (dataframe_geral['ANO'] == ano) &
+        (dataframe_geral['MÊS'] == mes) 
+    ]
+
+    if tipo != 'GERAL':
+        dataframe = dataframe_geral[dataframe_geral['TIPO'] == tipo]
+
+    ranking_consultores = dataframe.groupby('CONSULTOR', as_index = False).sum(numeric_only = True).sort_values(by = ['VALOR ACUMULADO'], ascending = False).reset_index()
+
+    return ranking_consultores[0:16]
