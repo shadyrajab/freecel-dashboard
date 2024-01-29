@@ -13,9 +13,6 @@ def plot_metric(
         consultor_do_mes = get_consultor_do_mes(ano, mes)
         receita = int(consultor_do_mes['VALOR ACUMULADO'])
         title_indicator = list(consultor_do_mes['CONSULTOR'])[0]
-        splited_title = title_indicator.split(' ')
-
-        title_indicator = splited_title[0] + ' ' + splited_title[1]
     
     if metric == 'REVENDA':
         receita = get_receita_total('VALOR ACUMULADO')
@@ -108,7 +105,7 @@ def plot_gauge(
         margin = dict(t = 50, b = 10),
         showlegend = False,
         plot_bgcolor = 'white',
-        height = 120,
+        height = 150,
     )
 
     st.plotly_chart(fig, theme='streamlit', use_container_width=True)
