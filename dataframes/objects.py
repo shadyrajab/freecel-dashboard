@@ -40,7 +40,10 @@ dataframe_geral.replace({
 def formatar_nome(nome):
     nome_splited = nome.split(' ')
     try:
-        nome = nome_splited[0] + ' ' + nome_splited[1]
+        if nome_splited[1] == 'DE' or nome_splited[1] == 'DOS':
+            nome = nome_splited[0] + ' ' + nome_splited[1] + ' ' + nome_splited[2]
+        else:
+            nome = nome_splited[0] + ' ' + nome_splited[1]
     except:
         pass
 

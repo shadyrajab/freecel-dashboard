@@ -71,7 +71,7 @@ def get_rankings_consultores(ano, mes, tipo):
     ]
 
     if tipo != 'GERAL':
-        dataframe = dataframe_geral[dataframe_geral['TIPO'] == tipo]
+        dataframe = dataframe[dataframe['TIPO'] == tipo]
 
     ranking_consultores = dataframe.groupby('CONSULTOR', as_index = False).sum(numeric_only = True).sort_values(by = ['VALOR ACUMULADO'], ascending = False).reset_index()
 
