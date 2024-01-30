@@ -76,3 +76,40 @@ def get_rankings_consultores(ano, mes, tipo):
     ranking_consultores = dataframe.groupby('CONSULTOR', as_index = False).sum(numeric_only = True).sort_values(by = ['VALOR ACUMULADO'], ascending = False).reset_index()
 
     return ranking_consultores[0:16]
+
+def get_media_mensal_por_consultor(ano, mes):
+    dataframe = dataframe_geral[
+        (dataframe_geral['ANO'] == ano) &
+        (dataframe_geral['MÊS'] == mes) 
+    ]
+
+    consultores = len(list(dataframe['CONSULTOR'].unique()))
+    valor_total = dataframe['VALOR ACUMULADO'].sum()
+
+    media = valor_total / consultores
+
+    return 'R$ ' + str(int(media)) 
+
+def get_media_mensal_diaria(ano, mes):
+    dataframe = dataframe_geral[
+        (dataframe_geral['ANO'] == ano) &
+        (dataframe_geral['MÊS'] == mes) 
+    ]
+
+    valor_total = dataframe['VALOR ACUMULADO'].sum()
+
+    media = valor_total / 30
+
+    return 'R$ ' + str(int(media)) 
+
+def get_ticket_medio_mensal(ano, mes):
+    dataframe = dataframe_geral[
+        (dataframe_geral['ANO'] == ano) &
+        (dataframe_geral['MÊS'] == mes) 
+    ]
+
+    valor_total = dataframe['VALOR ACUMULADO'].sum()
+
+    ticket_medio = valor_total / dataframe.shape[0]
+
+    return 'R$ ' + str(int(ticket_medio)) 
