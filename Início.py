@@ -25,18 +25,19 @@ st.markdown('----')
 
 metric1.metric(
     label = 'Média Diária', 
-    value = get_media_mensal_diaria(ano, mes), 
-    delta = get_delta_mensal_diaria(ano, mes))
-
+    value = 'R$ ' + str(get_media_mensal_diaria(ano, mes)), 
+    delta = get_delta_mensal_diaria(ano, mes)
+)
 metric2.metric(
     label = 'Média Mensal por Consultor', 
-    value = get_media_mensal_por_consultor(ano, mes), 
+    value = 'R$ ' + str(get_media_mensal_por_consultor(ano, mes)), 
     delta = get_delta_mensal_por_consultor(ano, mes)
 )
 metric3.metric(
     label = 'Ticket Médio', 
-    value = get_ticket_medio_mensal(ano, mes), 
-    delta = get_delta_ticket_medio_mensal(ano, mes))
+    value = 'R$ ' + str(get_ticket_medio_mensal(ano, mes)), 
+    delta = get_delta_ticket_medio_mensal(ano, mes)
+)
 
 style_metric_cards(border_left_color = '#000000')
 
