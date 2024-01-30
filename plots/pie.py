@@ -4,7 +4,7 @@ import streamlit as st
 from dataframes.objects import dataframe_geral
 
 def plot_pie(
-    ano, mes, key
+    ano, mes, tipo, key, title
 ):
     dataframe = dataframe_geral[
         (dataframe_geral['ANO'] == ano) &
@@ -14,8 +14,9 @@ def plot_pie(
     fig = go.Figure(
         px.pie(
             dataframe,
-            values = 'VALOR ACUMULADO',
-            names = key
+            values = key,
+            names = tipo,
+            title = title
         )
     )
 

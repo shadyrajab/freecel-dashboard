@@ -4,7 +4,7 @@ import streamlit as st
 from dataframes.stats.basic_stats import get_rankings_consultores
 
 def plot_rankings(
-    ano, mes, tipo
+    ano, mes, tipo, key, title
 ):
     dataframe = get_rankings_consultores(ano, mes, tipo)
 
@@ -12,8 +12,10 @@ def plot_rankings(
         px.bar(
             dataframe,
             y = 'CONSULTOR',
-            x = 'VALOR ACUMULADO',
-            orientation = 'h'
+            x = key,
+            orientation = 'h',
+            title = title,
+            text_auto = '.2s'
         )
     )
 

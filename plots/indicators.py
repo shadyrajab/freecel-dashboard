@@ -4,21 +4,18 @@ from dataframes.stats.basic_stats import get_maior_venda_escritorio, get_receita
 import random
 
 def plot_metric(
-    ano, mes, escritorio, indicator_color, prefix, metric = None
+    ano, mes, indicator_color, prefix, metric = None
 ):  
     title_indicator = mes
-    receita = get_receita_total('VALOR ACUMULADO', ano, mes, escritorio)
+    receita = get_receita_total('VALOR ACUMULADO', ano, mes)
 
     if metric == 'CONSULTORES':
         consultor_do_mes = get_consultor_do_mes(ano, mes)
         receita = int(consultor_do_mes['VALOR ACUMULADO'])
         title_indicator = list(consultor_do_mes['CONSULTOR'])[0]
-    
-    if metric == 'REVENDA':
-        receita = get_receita_total('VALOR ACUMULADO')
 
     if metric == 'PRODUTOS':
-        receita = get_receita_total('QUANTIDADE DE PRODUTOS', ano, mes, escritorio)
+        receita = get_receita_total('QUANTIDADE DE PRODUTOS', ano, mes)
 
     fig = go.Figure(
         go.Indicator(
@@ -65,9 +62,9 @@ def plot_metric(
 
 
 def plot_gauge(
-    ano, mes, escritorio, indicator_color, prefix, metric = None
+    ano, mes, indicator_color, prefix, metric = None
 ):
-    receita = get_receita_total('VALOR ACUMULADO', ano, mes, escritorio)
+    receita = get_receita_total('VALOR ACUMULADO', ano, mes)
     axis_range = get_maior_venda_mes('VALOR ACUMULADO')
 
     if metric == 'CONSULTORES':
@@ -76,11 +73,8 @@ def plot_gauge(
 
         axis_range = get_maior_venda_consultor(ano)
     
-    if metric == 'REVENDA':
-        axis_range = get_maior_venda_escritorio(ano)
-    
     if metric == 'PRODUTOS':
-        receita = get_receita_total('QUANTIDADE DE PRODUTOS', ano, mes, escritorio)
+        receita = get_receita_total('QUANTIDADE DE PRODUTOS', ano, mes)
         axis_range = get_maior_venda_mes('QUANTIDADE DE PRODUTOS')
 
     fig = go.Figure(
