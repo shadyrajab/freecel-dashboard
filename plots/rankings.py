@@ -15,7 +15,11 @@ def plot_rankings(
             x = key,
             orientation = 'h',
             title = title,
-            text_auto = '.1s'
+            hover_data = ['VALOR ACUMULADO', 'QUANTIDADE DE PRODUTOS'],
+            color = key,
+            text_auto = '.1s',
+            range_color = [dataframe[key].min(), dataframe[key].max()],
+            color_continuous_scale = ["blue", "purple", "red", "yellow"]
         )
     )
 
