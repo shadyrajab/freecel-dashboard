@@ -152,3 +152,35 @@ def get_delta_ticket_medio_mensal(ano, mes):
     media_mes_passado = get_ticket_medio_mensal(ano_delta, mes_delta)
 
     return media_atual - media_mes_passado
+
+def get_vendas_mensais_por_consultor(ano, consultor):
+    dataframe = dataframe_geral[
+        (dataframe_geral['ANO'] == ano) &
+        (dataframe_geral['CONSULTOR'] == consultor)
+    ]
+
+    dataframe = add_static_values(dataframe)
+
+    vendas_mensais = dataframe.groupby('MÊS').sum(numeric_only = True)
+    vendas_mensais_T = vendas_mensais.T
+
+    vendas_mensais = vendas_mensais_T[meses].T.reset_index()
+
+    return vendas_mensais
+
+
+def add_static_values(dataframe):
+    dataframe = dataframe[['MÊS', 'ANO', 'QUANTIDADE DE PRODUTOS', 'VALOR ACUMULADO']]
+
+    for mes in meses:
+        static = pd.DataFrame({
+            'MÊS': [mes],
+            'ANO': [2023],
+            'QUANTIDADE DE PRODUTOS': [0],
+            'VALOR ACUMULADO': [0]
+
+        })
+
+        dataframe = pd.concat([static, dataframe])
+
+    return dataframe
