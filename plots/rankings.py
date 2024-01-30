@@ -6,7 +6,7 @@ from dataframes.stats.basic_stats import get_rankings_consultores
 def plot_rankings(
     ano, mes, tipo, key, title
 ):
-    dataframe = get_rankings_consultores(ano, mes, tipo)
+    dataframe = get_rankings_consultores(ano, mes, tipo, key)
 
     fig = go.Figure(
         px.bar(

@@ -64,7 +64,7 @@ def get_ranking_meses(ano, key):
 
     return ranking_meses
 
-def get_rankings_consultores(ano, mes, tipo):
+def get_rankings_consultores(ano, mes, tipo, key):
     dataframe = dataframe_geral[
         (dataframe_geral['ANO'] == ano) &
         (dataframe_geral['MÊS'] == mes) 
@@ -73,7 +73,7 @@ def get_rankings_consultores(ano, mes, tipo):
     if tipo != 'GERAL':
         dataframe = dataframe[dataframe['TIPO'] == tipo]
 
-    ranking_consultores = dataframe.groupby('CONSULTOR', as_index = False).sum(numeric_only = True).sort_values(by = ['VALOR ACUMULADO'], ascending = False).reset_index()
+    ranking_consultores = dataframe.groupby('CONSULTOR', as_index = False).sum(numeric_only = True).sort_values(by = [key], ascending = False).reset_index()
 
     return ranking_consultores[0:16]
 
