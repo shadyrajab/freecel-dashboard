@@ -88,7 +88,20 @@ def get_media_mensal_por_consultor(ano, mes):
 
     media = valor_total / consultores
 
-    return 'R$ ' + str(int(media)) 
+    return int(media) 
+
+def get_delta_mensal_por_consultor(ano, mes):
+    if ano == 2022 and mes == 'Janeiro':
+        return 0
+    
+    ano_delta = ano - 1 if mes == 'Janeiro' else ano
+    index_mes_passado = meses.index(mes) - 1
+    mes_delta = meses[index_mes_passado]
+
+    media_atual = get_media_mensal_por_consultor(ano, mes)
+    media_mes_passado = get_media_mensal_por_consultor(ano_delta, mes_delta)
+
+    return media_atual - media_mes_passado
 
 def get_media_mensal_diaria(ano, mes):
     dataframe = dataframe_geral[
@@ -100,7 +113,20 @@ def get_media_mensal_diaria(ano, mes):
 
     media = valor_total / 30
 
-    return 'R$ ' + str(int(media)) 
+    return int(media)
+
+def get_delta_mensal_diaria(ano, mes):
+    if ano == 2022 and mes == 'Janeiro':
+        return 0
+    
+    ano_delta = ano - 1 if mes == 'Janeiro' else ano
+    index_mes_passado = meses.index(mes) - 1
+    mes_delta = meses[index_mes_passado]
+
+    media_atual = get_media_mensal_diaria(ano, mes)
+    media_mes_passado = get_media_mensal_diaria(ano_delta, mes_delta)
+
+    return media_atual - media_mes_passado
 
 def get_ticket_medio_mensal(ano, mes):
     dataframe = dataframe_geral[
@@ -112,4 +138,17 @@ def get_ticket_medio_mensal(ano, mes):
 
     ticket_medio = valor_total / dataframe.shape[0]
 
-    return 'R$ ' + str(int(ticket_medio)) 
+    return int(ticket_medio)
+
+def get_delta_ticket_medio_mensal(ano, mes):
+    if ano == 2022 and mes == 'Janeiro':
+        return 0
+    
+    ano_delta = ano - 1 if mes == 'Janeiro' else ano
+    index_mes_passado = meses.index(mes) - 1
+    mes_delta = meses[index_mes_passado]
+
+    media_atual = get_ticket_medio_mensal(ano, mes)
+    media_mes_passado = get_ticket_medio_mensal(ano_delta, mes_delta)
+
+    return media_atual - media_mes_passado

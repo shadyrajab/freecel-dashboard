@@ -5,7 +5,7 @@ from plots.indicators import plot_metric, plot_gauge
 from plots.rankings import plot_rankings
 from plots.pie import plot_pie
 
-from dataframes.stats.basic_stats import get_media_mensal_por_consultor, get_media_mensal_diaria, get_ticket_medio_mensal
+from dataframes.stats.basic_stats import *
 
 # Configurando o Layout e título de página
 st.set_page_config(layout="wide")
@@ -23,9 +23,20 @@ col7, col8, col9 = st.columns(3)
 st.markdown('----')
 col4, col5, col6 = st.columns(3)
 
-col7.metric(label = 'Média Diária', value = get_media_mensal_diaria(ano, mes), delta = 1200)
-col8.metric(label = 'Média Mensal por Consultor', value = get_media_mensal_por_consultor(ano, mes), delta = 1200)
-col9.metric(label = 'Ticket Médio', value = get_ticket_medio_mensal(ano, mes), delta = 1200)
+col7.metric(
+    label = 'Média Diária', 
+    value = get_media_mensal_diaria(ano, mes), 
+    delta = get_delta_mensal_diaria(ano, mes))
+
+col8.metric(
+    label = 'Média Mensal por Consultor', 
+    value = get_media_mensal_por_consultor(ano, mes), 
+    delta = get_delta_mensal_por_consultor(ano, mes)
+)
+col9.metric(
+    label = 'Ticket Médio', 
+    value = get_ticket_medio_mensal(ano, mes), 
+    delta = get_delta_ticket_medio_mensal(ano, mes))
 
 style_metric_cards(border_left_color = '#000000')
 
