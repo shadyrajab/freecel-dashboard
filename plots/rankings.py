@@ -15,7 +15,7 @@ def plot_rankings(
             x = key,
             orientation = 'h',
             title = title,
-            text_auto = '.2s'
+            text_auto = '.1s'
         )
     )
 

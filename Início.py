@@ -21,6 +21,7 @@ st.markdown('----')
 metric1, metric2, metric3 = st.columns(3)
 st.markdown('----')
 col4, col5 = st.columns(2)
+st.markdown('----')
 
 metric1.metric(
     label = 'Média Diária', 
@@ -72,24 +73,27 @@ with col5:
     with tab_qtd:
         plot_pie(ano, mes, 'TIPO', 'QUANTIDADE DE PRODUTOS', 'Tipo de Produto')
 
+retorno = st.selectbox('Ordenar por', options = ['Receita', 'Quantidade'])
+retorno = 'VALOR ACUMULADO' if retorno == 'Receita' else 'QUANTIDADE DE PRODUTOS'
+
 tab_geral, tab_altas, tab_migracao, tab_fixa, tab_soho, tab_vvn = st.tabs(
     ['Geral', 'Altas', 'Migração Pré-Pós', 'Fixa', 'SOHO', 'VVN']
 )
 
 with tab_geral:
-    plot_rankings(ano, mes, 'GERAL', 'VALOR ACUMULADO', 'Ranking de Consultores')
+    plot_rankings(ano, mes, 'GERAL', retorno, 'Ranking de Consultores')
 
 with tab_altas:
-    plot_rankings(ano, mes, 'ALTAS', 'VALOR ACUMULADO', 'Ranking de Consultores')
+    plot_rankings(ano, mes, 'ALTAS', retorno, 'Ranking de Consultores')
 
 with tab_migracao:
-    plot_rankings(ano, mes, 'MIGRAÇÃO PRÉ-PÓS', 'VALOR ACUMULADO', 'Ranking de Consultores')
+    plot_rankings(ano, mes, 'MIGRAÇÃO PRÉ-PÓS', retorno, 'Ranking de Consultores')
 
 with tab_fixa:
-    plot_rankings(ano, mes, 'FIXA', 'VALOR ACUMULADO', 'Ranking de Consultores')
+    plot_rankings(ano, mes, 'FIXA', retorno, 'Ranking de Consultores')
 
 with tab_soho:
-    plot_rankings(ano, mes, 'AVANÇADA', 'VALOR ACUMULADO', 'Ranking de Consultores')
+    plot_rankings(ano, mes, 'AVANÇADA', retorno, 'Ranking de Consultores')
 
 with tab_vvn:
-    plot_rankings(ano, mes, 'VVN', 'VALOR ACUMULADO', 'Ranking de Consultores')
+    plot_rankings(ano, mes, 'VVN', retorno, 'Ranking de Consultores')
