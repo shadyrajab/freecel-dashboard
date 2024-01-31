@@ -15,26 +15,41 @@ consultor = st.sidebar.selectbox('Selecionar Consultor', options = get_consultor
 st.title(consultor)
 st.markdown('-----')
 
-col1, col2, col3 = st.columns(3)
+m1, m2, m3 = st.columns(3)
+m4, m5 = st.columns(2)
+st.markdown('-----')
 col4, col5 = st.columns(2)
 
 receita_total = int(get_receita_total('VALOR ACUMULADO', consultor = consultor))
-receita_media_mensal = int(get_media_vendas_consultor(consultor))
+receita_media_mensal = int(get_media_vendas_consultor(consultor, 'VALOR ACUMULADO'))
 ticket_medio_consultor = int(get_ticket_medio_consultor(consultor))
 
-col1.metric(
+qtd_vendida = int(get_receita_total('QUANTIDADE DE PRODUTOS', consultor = consultor))
+media_qtd_vendida = int(get_media_vendas_consultor(consultor, 'QUANTIDADE DE PRODUTOS'))
+
+m1.metric(
     label = 'Receita Total',
     value = f'R$ {receita_total:,.0f}'
 )
 
-col2.metric(
+m2.metric(
     label = 'Receita Média Mensal',
     value = f'R$ {receita_media_mensal:,.0f}'
 )
 
-col3.metric(
+m3.metric(
     label = 'Ticket Médio',
     value = f'R$ {ticket_medio_consultor:,.0f}'
+)
+
+m4.metric(
+    label = 'Quantidade Total',
+    value = qtd_vendida
+)
+
+m5.metric(
+    label = 'Quantidade Média Mensal',
+    value = media_qtd_vendida
 )
 
 style_metric_cards(border_left_color = '#000000')
