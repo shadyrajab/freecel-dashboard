@@ -3,3 +3,4 @@ streamlit
 pandas
 plotly
 streamlit_extras
+python_dotenv
