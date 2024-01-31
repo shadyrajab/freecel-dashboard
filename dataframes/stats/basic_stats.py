@@ -185,7 +185,7 @@ def add_static_values(dataframe):
 
     return dataframe
 
-def get_media_vendas_consultor(consultor):
+def get_media_vendas_consultor(consultor, key):
     dataframe = dataframe_geral[
         (dataframe_geral['CONSULTOR'] == consultor)
     ]
@@ -193,7 +193,7 @@ def get_media_vendas_consultor(consultor):
     anos = get_years(consultor)
     total_meses = len(anos) * 12
 
-    total_vendido = dataframe['VALOR ACUMULADO'].sum()
+    total_vendido = dataframe[key].sum()
 
     media = total_vendido / total_meses
 
