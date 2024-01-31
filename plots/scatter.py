@@ -38,7 +38,7 @@ def plot_line(
     )
 
     fig.update_layout(
-        title = f'Vendas de {consultor}',
+        title = f'Vendas anuais por mês - {consultor}',
         xaxis_title = 'Receita',
         yaxis_title = 'Mês'
     )
