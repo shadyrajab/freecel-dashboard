@@ -1,6 +1,6 @@
 import plotly.graph_objects as go
 import streamlit as st
-from dataframes.stats.basic_stats import get_maior_venda_escritorio, get_receita_total, get_consultor_do_mes, get_maior_venda_consultor, get_maior_venda_mes
+from dataframes.stats.basic_stats import *
 import random
 
 def plot_metric(
