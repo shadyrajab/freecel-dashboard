@@ -21,3 +21,25 @@ def plot_pie(
     )
 
     st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
+
+def plot_pie_consultor(
+    consultor, tipo, key, title, color
+):
+    
+    dataframe = dataframe_geral[
+        (dataframe_geral['CONSULTOR'] == consultor)
+    ]
+
+    fig = go.Figure(
+        px.pie(
+            dataframe,
+            values = key,
+            names = tipo,
+            title = title,
+            color_discrete_sequence = color
+        )
+    )
+
+    fig.update_traces(textposition='inside', textinfo='percent+label')
+
+    st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
