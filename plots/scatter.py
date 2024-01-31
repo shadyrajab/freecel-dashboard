@@ -4,20 +4,29 @@ from dataframes.stats.basic_stats import get_vendas_mensais_por_consultor
 import streamlit as st
 
 def plot_line(
-    consultores
+    consultor
 ):  
     
     fig = go.Figure()
 
-    for consultor in consultores:
-        dataframe = get_vendas_mensais_por_consultor(2023, consultor)
-        
-        fig.add_trace(
-            go.Scatter(
-                dataframe,
-                x = dataframe['MÊS'],
-                y = dataframe['VALOR ACUMULADO']
-            )
+    dataframe1 = get_vendas_mensais_por_consultor(2023, consultor)
+    dataframe2 = get_vendas_mensais_por_consultor(2022, consultor)
+    fig.add_trace(
+        go.Scatter(
+            x = dataframe1['MÊS'],
+            y = dataframe1['VALOR ACUMULADO'],
+            mode = 'lines+markers',
+            name = '2023'
         )
-    fig.show()
-    # st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x = dataframe2['MÊS'],
+            y = dataframe2['VALOR ACUMULADO'],
+            mode = 'lines+markers',
+            name = '2022'
+        )
+    )
+
+    st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)

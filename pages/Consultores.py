@@ -4,6 +4,6 @@ from plots.scatter import plot_line
 
 st.title('Consultores')
 
-consultor = st.sidebar.multiselect('Selecionar Consultor', options = get_consultores())
+consultor = st.sidebar.selectbox('Selecionar Consultor', options = get_consultores())
 
-plot_line(['LUCAS ERICK'])
+plot_line(consultor)
