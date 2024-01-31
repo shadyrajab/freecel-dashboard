@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_extras.metric_cards import style_metric_cards
-from dataframes.objects import get_years, get_months, get_escritorios
+from dataframes.objects import get_years, get_months
 from plots.indicators import plot_metric, plot_gauge
 from plots.rankings import plot_rankings
 from plots.pie import plot_pie
