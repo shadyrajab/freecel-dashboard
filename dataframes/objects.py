@@ -18,7 +18,15 @@ dataframe_geral.replace({
     'MIGRAÇÃO PRÉ/PÓS': 'MIGRAÇÃO PRÉ-PÓS',
     'MIGRAÇÃO PRÉ/PÓS - VIVO TOTAL': 'MIGRAÇÃO PRÉ-PÓS',
 
-    'MIGRAÇÃO': 'MIGRAÇÃO PRÉ-PÓS'
+    'MIGRAÇÃO': 'MIGRAÇÃO PRÉ-PÓS',
+    'MIGRAÇÃO PRÉ/PÓS_TOTALIZACAO': 'MIGRAÇÃO PRÉ-PÓS',
+
+    'INTERNET_TOTALIZACAO': 'ALTAS',
+    'MIGRAÇÃO+TROCA': 'MIGRAÇÃO PRÉ-PÓS',
+    'NOVO_TOTALIZACAO': 'ALTAS',
+
+    'JÁ CLIENTE - VIVO TOTAL': 'ALTAS',
+    'MIGRAÇÃO PRÉ/PÓS + TROCA': 'MIGRAÇÃO PRÉ-PÓS'
 
 }, inplace=True)
 
@@ -37,6 +45,8 @@ dataframe_geral.replace({
     'DEZ': 'Dezembro'
 }, inplace = True)
 
+# dataframe_geral.to_excel('doidao.xlsx')
+
 def formatar_nome(nome):
     nome_splited = nome.split(' ')
     try:
@@ -54,8 +64,14 @@ dataframe_geral['CONSULTOR'] = dataframe_geral['CONSULTOR'].apply(lambda n: form
 
 meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 
-def get_years():
-    return list(dataframe_geral['ANO'].unique())
+def get_years(consultor = None):
+    dataframe = dataframe_geral
+
+    if consultor:
+        dataframe = dataframe_geral[
+            (dataframe_geral['CONSULTOR'] == consultor)
+        ]
+    return list(dataframe['ANO'].unique())
 
 def get_months(ano):
     dataframe = dataframe_geral[dataframe_geral['ANO'] == ano]
