@@ -1,4 +1,4 @@
-from dataframes.objects import dataframe_geral, meses
+from dataframes.objects import dataframe_geral, meses, get_years
 import pandas as pd
 
 def get_receita_total(retorno, ano = None, mes = None, escritorio = None, consultor = None):
@@ -79,7 +79,7 @@ def get_rankings_consultores(ano, mes, tipo, key):
 
 def get_media_mensal_por_consultor(ano, mes):
     dataframe = dataframe_geral[
-        (dataframe_geral['ANO'] == ano) &
+        (dataframe_geral['ANO'] == ano) & 
         (dataframe_geral['MÊS'] == mes) 
     ]
 
@@ -184,3 +184,28 @@ def add_static_values(dataframe):
         dataframe = pd.concat([static, dataframe])
 
     return dataframe
+
+def get_media_vendas_consultor(consultor):
+    dataframe = dataframe_geral[
+        (dataframe_geral['CONSULTOR'] == consultor)
+    ]
+
+    anos = get_years(consultor)
+    total_meses = len(anos) * 12
+
+    total_vendido = dataframe['VALOR ACUMULADO'].sum()
+
+    media = total_vendido / total_meses
+
+    return media
+
+def get_ticket_medio_consultor(consultor):
+    dataframe = dataframe_geral[
+        (dataframe_geral['CONSULTOR'] == consultor)
+    ]
+
+    valor_total = dataframe['VALOR ACUMULADO'].sum()
+
+    ticket_medio = valor_total / dataframe.shape[0]
+
+    return int(ticket_medio)
