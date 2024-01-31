@@ -16,7 +16,11 @@ def plot_line(
             x = dataframe1['MÊS'],
             y = dataframe1['VALOR ACUMULADO'],
             mode = 'lines+markers',
-            name = '2023'
+            name = '2023',
+            line = {
+                "color": "firebrick",
+                "width": 2
+            }
         )
     )
 
@@ -25,8 +29,18 @@ def plot_line(
             x = dataframe2['MÊS'],
             y = dataframe2['VALOR ACUMULADO'],
             mode = 'lines+markers',
-            name = '2022'
+            name = '2022',
+            line = {
+                "color": "royalblue",
+                "width": 2
+            }
         )
+    )
+
+    fig.update_layout(
+        title = f'Vendas de {consultor}',
+        xaxis_title = 'Receita',
+        yaxis_title = 'Mês'
     )
 
     st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
