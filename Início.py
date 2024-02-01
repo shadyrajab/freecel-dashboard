@@ -7,6 +7,8 @@ from plots.pie import plot_pie
 
 from dataframes.stats.basic_stats import *
 
+from dataframes.stats.client_stats import *
+
 # Configurando o Layout e título de página
 st.set_page_config(layout="wide")
 st.title('Dashboard Freecel')
@@ -98,3 +100,19 @@ with tab_soho:
 
 with tab_vvn:
     plot_rankings(ano, mes, 'VVN', retorno, 'Ranking de Consultores')
+
+st.markdown('### Estatísticas de clientes')
+st.markdown('----')
+
+st.markdown('Vendas por CNAE')
+st.dataframe(get_cnaes())
+
+st.markdown('----')
+
+st.markdown('Vendas por FATURAMENTO DE EMPRESA')
+st.dataframe(get_faturamentos())
+
+st.markdown('----')
+
+st.markdown('Vendas por QUANTIDADE DE FUNCIONÁRIOS DA EMPRESA')
+st.dataframe(get_funcionarios())
