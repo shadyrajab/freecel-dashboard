@@ -18,6 +18,13 @@ def get_receita_total(retorno, ano = None, mes = None, escritorio = None, consul
 
     return dataframe[retorno].sum()
 
+def get_quantidade_clientes(consultor):
+    dataframe = dataframe_geral[
+        (dataframe_geral['CONSULTOR'] == consultor)
+    ]
+
+    return dataframe.shape[0]
+
 def get_consultor_do_mes(ano, mes):
     dataframe = dataframe_geral[
         (dataframe_geral['ANO'] == ano) &
