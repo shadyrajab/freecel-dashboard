@@ -9,29 +9,15 @@ def plot_line(
     
     fig = go.Figure()
 
-    dataframe1 = get_vendas_mensais_por_consultor(2023, consultor)
-    dataframe2 = get_vendas_mensais_por_consultor(2022, consultor)
+    dataframe1 = get_vendas_mensais_por_consultor(consultor)
     fig.add_trace(
         go.Scatter(
-            x = dataframe1['MÊS'],
+            x = dataframe1['DATA'],
             y = dataframe1['VALOR ACUMULADO'],
             mode = 'lines+markers',
             name = '2023',
             line = {
                 "color": "firebrick",
-                "width": 2
-            }
-        )
-    )
-
-    fig.add_trace(
-        go.Scatter(
-            x = dataframe2['MÊS'],
-            y = dataframe2['VALOR ACUMULADO'],
-            mode = 'lines+markers',
-            name = '2022',
-            line = {
-                "color": "royalblue",
                 "width": 2
             }
         )

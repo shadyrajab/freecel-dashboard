@@ -160,15 +160,14 @@ def get_delta_ticket_medio_mensal(ano, mes):
 
     return media_atual - media_mes_passado
 
-def get_vendas_mensais_por_consultor(ano, consultor):
+def get_vendas_mensais_por_consultor(consultor):
     dataframe = dataframe_geral[
-        (dataframe_geral['ANO'] == ano) &
         (dataframe_geral['CONSULTOR'] == consultor)
     ]
 
     dataframe = add_static_values(dataframe)
 
-    vendas_mensais = dataframe.groupby('MÊS').sum(numeric_only = True)
+    vendas_mensais = dataframe.groupby('DATA').sum(numeric_only = True)
     vendas_mensais_T = vendas_mensais.T
 
     vendas_mensais = vendas_mensais_T[meses].T.reset_index()
