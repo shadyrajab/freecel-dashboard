@@ -20,7 +20,9 @@ mes = st.sidebar.selectbox('Mês: ', options=get_months(ano))
 
 receita_total = get_receita_total('VALOR ACUMULADO', ano, mes)
 quantidade_total = get_receita_total('QUANTIDADE DE PRODUTOS', ano, mes)
-consultor_do_mes_receita = get_consultor_do_mes( ano, mes)['VALOR ACUMULADO'].iloc[0]
+consultor_do_mes_receita = get_consultor_do_mes(ano, mes)['VALOR ACUMULADO'].iloc[0]
+
+consultor_do_mes_nome = get_consultor_do_mes(ano, mes)['CONSULTOR'].iloc[0]
 
 col1, col2, col3 = st.columns(3)
 metric1, metric2, metric3 = st.columns(3)
@@ -39,7 +41,7 @@ col2.metric(
 )
 
 col3.metric(
-    label = f'Consultor do mês - {get_consultor_do_mes( ano, mes)['CONSULTOR'].iloc[0]}',
+    label = f'Consultor do mês - {consultor_do_mes_nome}',
     value = f'R$ {consultor_do_mes_receita:,.0f}'
 )
 
