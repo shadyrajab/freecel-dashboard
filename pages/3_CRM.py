@@ -13,7 +13,6 @@ def formatar_cnpj(cnpj):
 df = pd.read_excel('dataframes/excel/crm 05-02.xlsx')
 df.drop(axis = 1, 
     columns = {
-        '0', 
         'Pedido Vinculado',
         'Usuário ADM',
         'Revisão',
