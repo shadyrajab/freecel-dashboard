@@ -45,8 +45,6 @@ dataframe_geral.replace({
     'DEZ': 'Dezembro'
 }, inplace = True)
 
-# dataframe_geral.to_excel('doidao.xlsx')
-
 def formatar_nome(nome):
     nome_splited = nome.split(' ')
     try:
@@ -61,8 +59,6 @@ def formatar_nome(nome):
 
 dataframe_geral['CONSULTOR'] = dataframe_geral['CONSULTOR'].apply(lambda n: formatar_nome(n))
 dataframe_geral['DATA'] = dataframe_geral['MÊS'] + '/' + dataframe_geral['ANO'].astype(str)
-
-dataframe_geral.to_excel('doidao.xlsx')
 
 meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 
