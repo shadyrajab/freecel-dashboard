@@ -18,12 +18,30 @@ st.markdown('----')
 ano = st.sidebar.selectbox('Ano: ', options=get_years())
 mes = st.sidebar.selectbox('Mês: ', options=get_months(ano))
 
+receita_total = get_receita_total('VALOR ACUMULADO', ano, mes)
+quantidade_total = get_receita_total('QUANTIDADE DE PRODUTOS', ano, mes)
+consultor_do_mes_receita = get_consultor_do_mes( ano, mes)['VALOR ACUMULADO'].iloc[0]
+
 col1, col2, col3 = st.columns(3)
-st.markdown('----')
 metric1, metric2, metric3 = st.columns(3)
 st.markdown('----')
 col4, col5 = st.columns(2)
 st.markdown('----')
+
+col1.metric(
+    label = f'Receita Total - {mes}',
+    value = f'R$ {receita_total:,.0f}'
+)
+
+col2.metric(
+    label = f'Quantidade de Produtos - {mes}',
+    value = f'{quantidade_total:,.0f}'
+)
+
+col3.metric(
+    label = f'Consultor do mês - {get_consultor_do_mes( ano, mes)['CONSULTOR'].iloc[0]}',
+    value = f'R$ {consultor_do_mes_receita:,.0f}'
+)
 
 metric1.metric(
     label = 'Média Diária', 
@@ -43,20 +61,20 @@ metric3.metric(
 
 style_metric_cards(border_left_color = '#000000')
 
-with col1:
-    st.markdown('##### Receita Total')
-    plot_metric(ano, mes, '#add8e6', prefix = 'R$')
-    plot_gauge(ano, mes, '#add8e6', prefix = 'R$')
+# with col1:
+#     st.markdown('##### Receita Total')
+#     plot_metric(ano, mes, '#add8e6', prefix = 'R$')
+#     plot_gauge(ano, mes, '#add8e6', prefix = 'R$')
 
-with col2:
-    st.markdown('##### Quantidade de Produtos ')
-    plot_metric(ano, mes, '#00FF00', prefix = '', metric = 'PRODUTOS')
-    plot_gauge(ano, mes, '#00FF00', prefix = '', metric = 'PRODUTOS')
+# with col2:
+#     st.markdown('##### Quantidade de Produtos ')
+#     plot_metric(ano, mes, '#00FF00', prefix = '', metric = 'PRODUTOS')
+#     plot_gauge(ano, mes, '#00FF00', prefix = '', metric = 'PRODUTOS')
 
-with col3:
-    st.markdown('##### Consultor do mês')
-    plot_metric(ano, mes, '#ff6961', prefix = 'R$', metric = 'CONSULTORES')
-    plot_gauge(ano, mes, '#ff6961', prefix = 'R$', metric = 'CONSULTORES')
+# with col3:
+#     st.markdown('##### Consultor do mês')
+#     plot_metric(ano, mes, '#ff6961', prefix = 'R$', metric = 'CONSULTORES')
+#     plot_gauge(ano, mes, '#ff6961', prefix = 'R$', metric = 'CONSULTORES')
 
 with col4:
     tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
