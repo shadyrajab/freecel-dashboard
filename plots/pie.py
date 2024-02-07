@@ -20,6 +20,7 @@ def plot_pie(
         )
     )
 
+    fig.update_traces(textposition='inside', textinfo='value')
     st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
 
 def plot_pie_consultor(
@@ -40,6 +41,6 @@ def plot_pie_consultor(
         )
     )
 
-    fig.update_traces(textposition='inside', textinfo='percent+label')
+    fig.update_traces(textposition='inside', textinfo='value')
 
     st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)

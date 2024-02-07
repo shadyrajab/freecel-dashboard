@@ -167,10 +167,11 @@ def get_vendas_mensais_por_consultor(consultor):
 
     dataframe = add_static_values(dataframe)
 
-    vendas_mensais = dataframe.groupby('DATA').sum(numeric_only = True)
-    vendas_mensais_T = vendas_mensais.T
+    vendas_mensais = dataframe.groupby('DATA', as_index = False).sum(numeric_only = True)
 
-    vendas_mensais = vendas_mensais_T[meses].T.reset_index()
+    # vendas_mensais_T = vendas_mensais.T
+
+    # vendas_mensais = vendas_mensais_T[meses].T.reset_index()
 
     return vendas_mensais
 
@@ -178,16 +179,25 @@ def get_vendas_mensais_por_consultor(consultor):
 def add_static_values(dataframe):
     dataframe = dataframe[['MÊS', 'ANO', 'QUANTIDADE DE PRODUTOS', 'VALOR ACUMULADO']]
 
-    for mes in meses:
-        static = pd.DataFrame({
-            'MÊS': [mes],
-            'ANO': [2023],
-            'QUANTIDADE DE PRODUTOS': [0],
-            'VALOR ACUMULADO': [0]
+    # for mes in meses:
+    #     static = pd.DataFrame({
+    #         'MÊS': [mes],
+    #         'ANO': [2023],
+    #         'QUANTIDADE DE PRODUTOS': [0],
+    #         'VALOR ACUMULADO': [0]
 
-        })
+    #     })
 
-        dataframe = pd.concat([static, dataframe])
+    #     dataframe = pd.concat([static, dataframe])
+
+    dataframe = dataframe.set_index('MÊS')
+
+    dataframe = dataframe.T
+
+    dataframe = dataframe[meses].T.reset_index()
+
+    
+    dataframe['DATA'] = dataframe['MÊS'] + '/' + dataframe['ANO'].astype(str)
 
     return dataframe
 
