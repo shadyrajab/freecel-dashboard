@@ -1,8 +1,6 @@
 import pandas as pd
 
-dataframe_movel = pd.read_excel('dataframes/excel/vendas concluidas - movel - 2023 e 2022.xlsx')
-dataframe_fixa = pd.read_excel('dataframes/excel/vendas concluidas - fixa - 2023 e 2022.xlsx')
-dataframe_geral = pd.concat([dataframe_movel, dataframe_fixa])
+dataframe_geral = pd.read_excel('dataframes/excel/df_full.xlsx')
 
 dataframe_geral.replace({
     'JÁ CLIENTE': 'ALTAS', 
@@ -89,10 +87,16 @@ def grouped_by_mes(planilha, ano):
             dataframe = dataframe_geral[dataframe_geral['ANO'] == ano]
         
         case 'FIXA':
-            dataframe = dataframe_fixa[dataframe_fixa['ANO'] == ano]
+            dataframe = dataframe_geral[
+                (dataframe_geral['ANO'] == ano) &
+                (dataframe_geral['TIPO'] == planilha)
+            ]
 
         case 'MÓVEL':
-            dataframe = dataframe_movel[dataframe_movel['ANO'] == ano]
+            dataframe = dataframe_geral[
+                (dataframe_geral['ANO'] == ano) &
+                (dataframe_geral['TIPO'] == planilha)
+            ]
 
     grouped_dataframe = dataframe.groupby('MÊS', as_index = False).sum(numeric_only = True)
     grouped_dataframe['ANO'] = ano
