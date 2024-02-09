@@ -1,15 +1,12 @@
 import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
-from dataframes.objects import dataframe_geral
+
+from dataframe.freecel import Freecel
 
 def plot_pie(
-    ano, mes, tipo, key, title
+    dataframe, tipo, key, title
 ):
-    dataframe = dataframe_geral[
-        (dataframe_geral['ANO'] == ano) &
-        (dataframe_geral['MÊS'] == mes)
-    ]
 
     fig = go.Figure(
         px.pie(
@@ -24,12 +21,8 @@ def plot_pie(
     st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
 
 def plot_pie_consultor(
-    consultor, tipo, key, title, color
+    dataframe, tipo, key, title, color
 ):
-    
-    dataframe = dataframe_geral[
-        (dataframe_geral['CONSULTOR'] == consultor)
-    ]
 
     fig = go.Figure(
         px.pie(

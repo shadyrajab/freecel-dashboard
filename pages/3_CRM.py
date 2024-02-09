@@ -1,6 +1,12 @@
 import streamlit as st
 import pandas as pd 
 import re
+from requests import request
+
+url = 'https://freecelapi-b44da8eb3c50.herokuapp.com/crm'
+response = request('GET', url = url).json()
+
+df = pd.DataFrame(response)
 
 def formatar_cnpj(cnpj):
     cnpj = re.sub(r'\D', '', cnpj)
@@ -9,8 +15,6 @@ def formatar_cnpj(cnpj):
     
     return cnpj_formatado
 
-
-df = pd.read_excel('dataframes/excel/crm 05-02.xlsx')
 df.drop(axis = 1, 
     columns = {
         'Pedido Vinculado',

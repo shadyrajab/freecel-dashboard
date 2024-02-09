@@ -1,19 +1,17 @@
 import plotly.graph_objects as go
 import plotly.express as px
-from dataframes.stats.basic_stats import get_vendas_mensais_por_consultor
 import streamlit as st
 
 def plot_line(
-    consultor
+    dataframe, consultor
 ):  
     
     fig = go.Figure()
 
-    dataframe1 = get_vendas_mensais_por_consultor(consultor)
     fig.add_trace(
         go.Scatter(
-            x = dataframe1['DATA'],
-            y = dataframe1['VALOR ACUMULADO'],
+            x = dataframe['data'],
+            y = dataframe['valor_acumulado'],
             mode = 'lines+markers',
             name = '2023',
             line = {

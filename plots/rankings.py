@@ -1,21 +1,18 @@
 import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
-from dataframes.stats.basic_stats import get_rankings_consultores
 
 def plot_rankings(
-    ano, mes, tipo, key, title
+    dataframe, key, title
 ):
-    dataframe = get_rankings_consultores(ano, mes, tipo, key)
-
     fig = go.Figure(
         px.bar(
             dataframe,
-            y = 'CONSULTOR',
+            y = 'consultor',
             x = key,
             orientation = 'h',
             title = title,
-            hover_data = ['VALOR ACUMULADO', 'QUANTIDADE DE PRODUTOS'],
+            hover_data = ['valor_acumulado', 'quantidade_de_produtos'],
             color = key,
             text_auto = '.1s',
             range_color = [dataframe[key].min(), dataframe[key].max()],
