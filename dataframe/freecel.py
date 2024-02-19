@@ -1,8 +1,19 @@
 from requests import request
 import pandas as pd
 from typing import Optional
+from dotenv import load_dotenv
+from os import getenv
+from typing import Optional
 
-class Freecel:
+load_dotenv()
+
+TOKEN = getenv('tokenFreecel')
+
+headers = {
+    'Authorization': f'Bearer {TOKEN}'
+}
+
+class Stats:
     def __init__(self, ano: Optional[int] = None, mes: Optional[str] = None):
         self.ano = ano
         self.mes = mes
@@ -13,29 +24,41 @@ class Freecel:
         params = {
             "ano": self.ano,
             "mes": self.mes,
-            "display_vendas": True
         }
 
-        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/freecel?'
-        data = request('GET', url = url, params = params).json()
+        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/stats?'
+        data = request('GET', url = url, params = params, headers=headers).json()
 
         return data
     
     @staticmethod
     def years():
-        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/freecel?display_vendas=true'
-        data = request('GET', url = url).json()
-        vendas = pd.DataFrame(data['vendas'])
+        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
+        data = request('GET', url = url, headers=headers).json()
+        vendas = pd.DataFrame(data)
 
         return vendas['ano'].unique().tolist()
     
     @staticmethod
     def months():
-        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/freecel?display_vendas=true'
-        data = request('GET', url = url).json()
-        vendas = pd.DataFrame(data['vendas'])
+        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
+        data = request('GET', url = url, headers=headers).json()
+        vendas = pd.DataFrame(data)
 
         return vendas['mês'].unique().tolist()
+    
+    @staticmethod
+    def vendas(ano: Optional[int] = None, mes: Optional[str] = None):
+        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
+        params = {
+            "ano": ano,
+            "mes": mes,
+        }
+
+        data = request('GET', url = url, headers=headers, params=params).json()
+        vendas = pd.DataFrame(data)
+
+        return vendas
     
     @property
     def receita_total(self):
@@ -122,19 +145,28 @@ class Freecel:
     @property
     def qtd_vendas_por_colaboradores(self):
         return pd.DataFrame(self.data['qtd_vendas_por_colaboradores'])
-
-    @property
-    def consultores(self):
-        return self.data['consultores']
     
     @property
     def ufs(self):
         return self.data['ufs']
     
-    def ranking_consultores(self, sortby):
-        return pd.DataFrame(self.data['ranking_consultores']).sort_values(
-            by = sortby, ascending=False)[0:16]
+    @staticmethod
+    def consultores():
+        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/consultores'
+
+        data = request('GET', url = url, headers=headers).json()
+
+        return pd.DataFrame(data)
     
-    @property
-    def vendas(self):
-        return pd.DataFrame(self.data['vendas'])
+    @staticmethod
+    def ranking_consultores( 
+            sortby: str, ranking: str, ano: Optional[int] = None, mes: Optional[str] = None
+        ):
+        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/rankings'
+        params = {
+            "ano": ano,
+            "mes": mes,
+        }
+        data = request('GET', url = url, params=params, headers=headers).json()
+        return pd.DataFrame(data[ranking]).sort_values(
+            by = sortby, ascending=False)[0:16]

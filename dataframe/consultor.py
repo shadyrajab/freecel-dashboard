@@ -1,6 +1,16 @@
 from requests import request
 import pandas as pd
 from typing import Optional
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
+
+TOKEN = getenv('tokenFreecel')
+
+headers = {
+    'Authorization': f'Bearer {TOKEN}'
+}
 
 class Consultor:
     def __init__(self, nome: str, ano: Optional[int] = None, mes: Optional[str] = None):
@@ -17,8 +27,8 @@ class Consultor:
             "display_vendas": True
         }
 
-        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/consultor/{self.nome}'
-        data = request('GET', url = url, params = params).json()
+        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/consultores/{self.nome}'
+        data = request('GET', url = url, params = params, headers=headers).json()
 
         return data
     
@@ -82,9 +92,12 @@ class Consultor:
     
     @property
     def vendas(self):
-        return pd.DataFrame(self.data['vendas']).sort_values(
+        dataframe = pd.DataFrame(self.data['vendas']).sort_values(
             by = 'data', ascending = False
         )
+
+        dataframe['data'] = pd.to_datetime(dataframe['data'], unit='ms')
+        return dataframe
 
     @property
     def groupby_data(self):
@@ -93,5 +106,4 @@ class Consultor:
         dataframe = vendas.groupby('data', as_index = False).sum(numeric_only = True).sort_values(
             by = 'data', ascending = False
         )
-
         return dataframe

@@ -6,11 +6,11 @@ from streamlit_extras.metric_cards import style_metric_cards
 import plotly.express as px
 
 from dataframe.consultor import Consultor
-from dataframe.freecel import Freecel
+from dataframe.freecel import Stats
 
-freecel = Freecel()
+freecel = Stats()
 
-consultor_st = st.sidebar.selectbox('Selecionar Consultor', options = freecel.consultores)
+consultor_st = st.sidebar.selectbox('Selecionar Consultor', options = freecel.consultores())
 
 st.title(consultor_st)
 st.markdown('-----')

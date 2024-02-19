@@ -3,7 +3,7 @@ from streamlit_extras.metric_cards import style_metric_cards
 from plots.rankings import plot_rankings
 from plots.pie import plot_pie
 
-from dataframe.freecel import Freecel
+from dataframe.freecel import Stats
 
 # Configurando o Layout e título de página
 st.set_page_config(layout="wide")
@@ -11,10 +11,10 @@ st.title('Dashboard Freecel')
 
 st.markdown('----')
 
-ano = st.sidebar.selectbox('Ano: ', options = Freecel.years())
-mes = st.sidebar.selectbox('Mês: ', options = Freecel.months())
+ano = st.sidebar.selectbox('Ano: ', options = Stats.years())
+mes = st.sidebar.selectbox('Mês: ', options = Stats.months())
 
-freecel = Freecel(ano, mes)
+freecel = Stats(ano, mes)
 
 col1, col2, col3 = st.columns(3)
 metric1, metric2, metric3 = st.columns(3)
@@ -62,19 +62,19 @@ with col4:
     tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
 
     with tab_valor:
-        plot_pie(freecel.vendas, 'consultor', 'valor_acumulado', 'Consultor')
+        plot_pie(freecel.vendas(ano, mes), 'consultor', 'valor_acumulado', 'Consultor')
 
     with tab_qtd:
-        plot_pie(freecel.vendas, 'consultor', 'quantidade_de_produtos', 'Consultor')
+        plot_pie(freecel.vendas(ano, mes), 'consultor', 'quantidade_de_produtos', 'Consultor')
 
 with col5:
     tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
 
     with tab_valor:
-        plot_pie(freecel.vendas, 'tipo', 'valor_acumulado', 'Tipo de Produto')
+        plot_pie(freecel.vendas(ano, mes), 'tipo', 'valor_acumulado', 'Tipo de Produto')
     
     with tab_qtd:
-        plot_pie(freecel.vendas, 'tipo', 'quantidade_de_produtos', 'Tipo de Produto')
+        plot_pie(freecel.vendas(ano, mes), 'tipo', 'quantidade_de_produtos', 'Tipo de Produto')
 
 retorno = st.selectbox('Ordenar por', options = ['Receita', 'Quantidade'])
 sortby = 'valor_acumulado' if retorno == 'Receita' else 'quantidade_de_produtos'
@@ -84,22 +84,22 @@ tab_geral, tab_altas, tab_migracao, tab_fixa, tab_soho, tab_vvn = st.tabs(
 )
 
 with tab_geral:
-    plot_rankings(freecel.ranking_consultores(sortby), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_consultores'), sortby, 'Ranking de Consultores')
 
 with tab_altas:
-    plot_rankings(freecel.ranking_consultores(sortby), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_altas'), sortby, 'Ranking de Consultores')
 
 with tab_migracao:
-    plot_rankings(freecel.ranking_consultores(sortby), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_migracao'), sortby, 'Ranking de Consultores')
 
 with tab_fixa:
-    plot_rankings(freecel.ranking_consultores(sortby), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_fixa'), sortby, 'Ranking de Consultores')
 
 with tab_soho:
-    plot_rankings(freecel.ranking_consultores(sortby), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_avancada'), sortby, 'Ranking de Consultores')
 
 with tab_vvn:
-    plot_rankings(freecel.ranking_consultores(sortby), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_vvn'), sortby, 'Ranking de Consultores')
 
 st.markdown('### Estatísticas de clientes')
 st.markdown('----')

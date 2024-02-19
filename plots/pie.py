@@ -2,8 +2,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
 
-from dataframe.freecel import Freecel
-
 def plot_pie(
     dataframe, tipo, key, title
 ):

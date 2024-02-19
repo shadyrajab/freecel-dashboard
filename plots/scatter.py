@@ -23,8 +23,8 @@ def plot_line(
 
     fig.update_layout(
         title = f'Vendas anuais por mês - {consultor}',
-        xaxis_title = 'Receita',
-        yaxis_title = 'Mês'
+        xaxis_title = 'Mês',
+        yaxis_title = 'Receita'
     )
 
     st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)

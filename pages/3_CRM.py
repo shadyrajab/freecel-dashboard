@@ -3,36 +3,54 @@ import pandas as pd
 import re
 from requests import request
 
-url = 'https://freecelapi-b44da8eb3c50.herokuapp.com/crm'
-response = request('GET', url = url).json()
+import streamlit as st
+from requests import request
+from dotenv import load_dotenv
+from os import getenv
 
-df = pd.DataFrame(response)
+load_dotenv()
 
-def formatar_cnpj(cnpj):
-    cnpj = re.sub(r'\D', '', cnpj)
-    cnpj = cnpj.zfill(14)
-    cnpj_formatado = f"{cnpj[:2]}.{cnpj[2:5]}.{cnpj[5:8]}/{cnpj[8:12]}-{cnpj[12:]}"
-    
-    return cnpj_formatado
+TOKEN = getenv('tokenFreecel')
 
-df.drop(axis = 1, 
-    columns = {
-        'Pedido Vinculado',
-        'Usuário ADM',
-        'Revisão',
-        'Item',
-        'Data Instalação',
-        'Período',
-        'Cidade Instalação',
-        'Estado Instalação',
-        'Rpon',
-        'Instância',
-        'Consultor na Operadora',
-        'Etapa Item'
-    }, 
-    inplace = True
-)
+cnpj = st.text_input('Qual CNPJ do cliente')
+telefone = st.text_input('Qual telefone do cliente')
+consultor = st.text_input('Qual o nome do consultor que realizou a venda')
+data = st.text_input('Qual a data da venda? (escreva no formato xx-xx-xxxx)')
+gestor = st.text_input('Qual nome do gestor?')
+plano = st.text_input('Qual nome do plano vendido')
+quantidade_de_produtos = st.text_input('Qual a quantidade de produtos vendidos')
+revenda = st.text_input('Qual escritório realizou a venda?')
+tipo = st.text_input('Qual tipo de venda?')
+uf = st.text_input('Qual a uf da venda?')
+valor_do_plano = st.text_input('Qual o valor do plano?')
+email = st.text_input('Qual o email do cliente?')
 
-df = df.astype(str)
-df['Cpf Cnpj'] = df['Cpf Cnpj'].apply(lambda n: formatar_cnpj(n))
-st.dataframe(df)
+bt = st.button("Enviar", type = 'primary')
+
+def enviar_dados():
+    url = 'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
+    headers = {
+        'Authorization': f'Bearer {TOKEN}'
+    }
+
+    params = {
+        "cnpj": cnpj,
+        "telefone": telefone,
+        "consultor": consultor,
+        "data": data,
+        "gestor": gestor,
+        "plano": plano,
+        "quantidade_de_produtos": quantidade_de_produtos,
+        "revenda": revenda,
+        "tipo": tipo,
+        "uf": uf,
+        "valor_do_plano": valor_do_plano,
+        "email": email
+    }
+
+    response = request('PUT', url = url, json = params, headers = headers)
+
+    print(response.text)
+
+if bt:
+    enviar_dados()
