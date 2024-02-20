@@ -65,6 +65,8 @@ class Stats:
             vendas = vendas.groupby('data', as_index = False).sum()
             vendas = vendas[(vendas['data'].dt.month != now.month) | (vendas['data'].dt.year != now.year)]
 
+        vendas.replace(['NaN', 'UNDEFINED'], 'Não Informado', inplace = True)
+
         return vendas.sort_values(
             by = 'data', ascending=False)
     
