@@ -4,6 +4,7 @@ from utils.utils import formatar_cnpj, formatar_telefone, remover_ponto
 from requests import request
 from os import getenv
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -29,19 +30,19 @@ ano = st.selectbox(label = 'Adicionar Filtro:', options = ['Nenhum', 'Ano', 'Mê
 
 st.dataframe(vendas)
 
-add_venda, remove_venda = st.tabs(['Adicionar venda', 'Remover venda'])
-
 url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
 
 headers = {
     'Authorization': f'Bearer {TOKEN}'
 }
 
-with add_venda:
-    cnpj = st.text_input('Qual CNPJ do cliente')
+with st.expander('Adicionar venda'):
+    today = datetime.today().date()
+
+    cnpj = st.text_input('Qual CNPJ do cliente', max_chars = 14)
     telefone = st.text_input('Qual telefone do cliente')
-    consultor = st.text_input('Qual o nome do consultor que realizou a venda')
-    data = st.text_input('Qual a data da venda? (escreva no formato xx-xx-xxxx)')
+    consultor = st.selectbox('Qual o nome do consultor que realizou a venda', options = Stats.consultores())
+    data = st.date_input('Qual a data da venda?', format = 'DD/MM/YYYY', max_value=today)
     gestor = st.text_input('Qual nome do gestor?')
     plano = st.text_input('Qual nome do plano vendido')
     quantidade_de_produtos = st.text_input('Qual a quantidade de produtos vendidos')
@@ -70,7 +71,7 @@ with add_venda:
         response = request('PUT', url = url, json = params, headers = headers)
         st.success('Venda adicionada com sucesso.')
 
-with remove_venda:
+with st.expander('Remover venda'):
     id_venda = st.text_input('Qual o ID da venda que deseja remover?')
 
     if st.button('Remover'):
