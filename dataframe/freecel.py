@@ -50,7 +50,7 @@ class Stats:
     
     @staticmethod
     def vendas(ano: Optional[int] = None, mes: Optional[str] = None, groupby: Optional[str] = None):
-        now = datetime.now().month
+        now = datetime.now()
         url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
         params = {
             "ano": ano,
@@ -63,7 +63,7 @@ class Stats:
 
         if groupby:
             vendas = vendas.groupby('data', as_index = False).sum()
-            vendas = vendas[vendas['data'].dt.month != now]
+            vendas = vendas[(vendas['data'].dt.month != now.month) | (vendas['data'].dt.year != now.year)]
 
         return vendas.sort_values(
             by = 'data', ascending=False)
