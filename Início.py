@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_extras.metric_cards import style_metric_cards
 from plots.rankings import plot_rankings
 from plots.pie import plot_pie
+from plots.scatter import plot_line
 
 from dataframe.freecel import Stats
 
@@ -57,6 +58,8 @@ metric3.metric(
 )
 
 style_metric_cards(border_left_color = '#000000')
+
+plot_line(freecel.vendas(), 'geral')
 
 with col4:
     tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
