@@ -27,6 +27,15 @@ vendas = vendas[
 ] 
 
 ano = st.selectbox(label = 'Adicionar Filtro:', options = ['Nenhum', 'Ano', 'Mês', 'Tipo'])
+selected_columns = []
+
+with st.expander('Selecionar colunas'):
+    for col in vendas.columns.to_list():
+        selected = st.checkbox(col, value = True)
+        if selected:
+            selected_columns.append(col)
+
+vendas = vendas[selected_columns]
 
 st.dataframe(vendas)
 
