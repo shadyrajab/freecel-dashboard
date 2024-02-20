@@ -25,8 +25,7 @@ vendas = vendas[
     ]
 ] 
 
-ano = st.selectbox(label = 'Qual ano deseja filtrar?', options = ['2024', '2023', '2022'])
-mes = st.selectbox(label = 'Qual mês deseja filtrar?', options = ['Janeiro', 'Fevereiro', 'Março'])
+ano = st.selectbox(label = 'Adicionar Filtro:', options = ['Nenhum', 'Ano', 'Mês', 'Tipo'])
 
 st.dataframe(vendas)
 
