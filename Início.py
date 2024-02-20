@@ -59,7 +59,7 @@ metric3.metric(
 
 style_metric_cards(border_left_color = '#000000')
 
-plot_line(freecel.vendas(), 'geral')
+plot_line(freecel.vendas(groupby = 'data'), 'geral')
 
 with col4:
     tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])

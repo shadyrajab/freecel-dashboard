@@ -48,7 +48,7 @@ class Stats:
         return vendas['mês'].unique().tolist()
     
     @staticmethod
-    def vendas(ano: Optional[int] = None, mes: Optional[str] = None):
+    def vendas(ano: Optional[int] = None, mes: Optional[str] = None, groupby: Optional[str] = None):
         url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
         params = {
             "ano": ano,
@@ -57,8 +57,13 @@ class Stats:
 
         data = request('GET', url = url, headers=headers, params=params).json()
         vendas = pd.DataFrame(data)
+        vendas['data'] = pd.to_datetime(vendas['data'], unit='ms')
 
-        return vendas
+        if groupby:
+            vendas = vendas.groupby('data', as_index = False).sum()
+
+        return vendas.sort_values(
+            by = 'data', ascending=False)
     
     @property
     def receita_total(self):
