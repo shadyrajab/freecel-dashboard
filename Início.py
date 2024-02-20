@@ -87,22 +87,22 @@ tab_geral, tab_altas, tab_migracao, tab_fixa, tab_soho, tab_vvn = st.tabs(
 )
 
 with tab_geral:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_consultores'), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_consultores', ano, mes), sortby, 'Ranking de Consultores')
 
 with tab_altas:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_altas'), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_altas', ano, mes), sortby, 'Ranking de Consultores')
 
 with tab_migracao:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_migracao'), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_migracao', ano, mes), sortby, 'Ranking de Consultores')
 
 with tab_fixa:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_fixa'), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_fixa', ano, mes), sortby, 'Ranking de Consultores')
 
 with tab_soho:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_avancada'), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_avancada', ano, mes), sortby, 'Ranking de Consultores')
 
 with tab_vvn:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_vvn'), sortby, 'Ranking de Consultores')
+    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_vvn', ano, mes), sortby, 'Ranking de Consultores')
 
 st.markdown('### Estatísticas de clientes')
 st.markdown('----')
