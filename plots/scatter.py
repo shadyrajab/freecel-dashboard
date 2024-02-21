@@ -22,7 +22,7 @@ def plot_line(dataframe, consultor):
         title=f'Vendas anuais por mês - {consultor}',
         xaxis_title='Mês',
         yaxis_title='Receita',
-        plot_bgcolor='white',  # Cor de fundo do gráfico
+        plot_bgcolor='#ffffff',  # Cor de fundo do gráfico
         font=dict(color='black'),  # Cor do texto
         margin=dict(l=50, r=50, t=80, b=50),  # Margens do gráfico
         hovermode='x',  # Modo de exibição de informações ao passar o mouse
@@ -31,7 +31,8 @@ def plot_line(dataframe, consultor):
             dtick='M1',  # Define o espaçamento entre os ticks para 1 mês
             tickformat='%b\n%Y'  # Formato de exibição dos ticks (abreviação do mês e ano)
         ),
-        yaxis=dict(range=[0, dataframe['valor_acumulado'].max() * 1.1])
+        yaxis=dict(range=[0, dataframe['valor_acumulado'].max() * 1.1]),
+        paper_bgcolor = "#ffffff"
     )
 
     st.plotly_chart(fig, theme='streamlit', use_container_width=True)

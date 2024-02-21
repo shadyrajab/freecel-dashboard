@@ -20,6 +20,6 @@ def plot_rankings(
         )
     )
 
-    fig.update_layout(yaxis = dict(autorange = "reversed"))
+    fig.update_layout(yaxis = dict(autorange = "reversed"), plot_bgcolor="#ffffff", paper_bgcolor = "#ffffff")
     fig.update_traces(texttemplate='%{x:.1f}', textposition='outside')
     st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
