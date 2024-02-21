@@ -10,6 +10,10 @@ from dataframe.freecel import Stats
 st.set_page_config(layout="wide")
 st.title('Dashboard Freecel')
 
+with open('styles/styles.css', 'r') as styles:
+    css = styles.read()
+    st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
+
 st.markdown('----')
 
 ano = st.sidebar.selectbox('Ano: ', options = Stats.years())
@@ -59,50 +63,58 @@ metric3.metric(
 
 style_metric_cards(border_left_color = '#000000')
 
-plot_line(freecel.vendas(groupby = 'data'), 'geral')
+with st.container(border = True):
+    plot_line(freecel.vendas(groupby = 'data'), 'geral')
 
 with col4:
-    tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
+    with st.container(border = True):
+        tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
 
-    with tab_valor:
-        plot_pie(freecel.vendas(ano, mes), 'consultor', 'valor_acumulado', 'Consultor')
+        with tab_valor:
+            plot_pie(freecel.vendas(ano, mes), 'consultor', 'valor_acumulado', 'Consultor')
 
-    with tab_qtd:
-        plot_pie(freecel.vendas(ano, mes), 'consultor', 'quantidade_de_produtos', 'Consultor')
+        with tab_qtd:
+            plot_pie(freecel.vendas(ano, mes), 'consultor', 'quantidade_de_produtos', 'Consultor')
 
 with col5:
-    tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
+    with st.container(border = True):
+        tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
 
-    with tab_valor:
-        plot_pie(freecel.vendas(ano, mes), 'tipo', 'valor_acumulado', 'Tipo de Produto')
-    
-    with tab_qtd:
-        plot_pie(freecel.vendas(ano, mes), 'tipo', 'quantidade_de_produtos', 'Tipo de Produto')
+        with tab_valor:
+            plot_pie(freecel.vendas(ano, mes), 'tipo', 'valor_acumulado', 'Tipo de Produto')
+        
+        with tab_qtd:
+            plot_pie(freecel.vendas(ano, mes), 'tipo', 'quantidade_de_produtos', 'Tipo de Produto')
 
-retorno = st.selectbox('Ordenar por', options = ['Receita', 'Quantidade'])
-sortby = 'valor_acumulado' if retorno == 'Receita' else 'quantidade_de_produtos'
 
-tab_geral, tab_altas, tab_migracao, tab_fixa, tab_soho, tab_vvn = st.tabs(
-    ['Geral', 'Altas', 'Migração Pré-Pós', 'Fixa', 'SOHO', 'VVN']
-)
+with st.container(border = True):
+    retorno = st.selectbox('Ordenar por', options = ['Receita', 'Quantidade'])
+    sortby = 'valor_acumulado' if retorno == 'Receita' else 'quantidade_de_produtos'
 
-with tab_geral:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_consultores', ano, mes), sortby, 'Ranking de Consultores')
+    tab_geral, tab_altas, tab_migracao, tab_fixa, tab_soho, tab_vvn = st.tabs(
+        ['Geral', 'Altas', 'Migração Pré-Pós', 'Fixa', 'SOHO', 'VVN']
+    )
 
-with tab_altas:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_altas', ano, mes), sortby, 'Ranking de Consultores')
+    with tab_geral:
+        plot_rankings(freecel.ranking_consultores(sortby, 'ranking_consultores', ano, mes), sortby, 'Ranking de Consultores')
 
-with tab_migracao:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_migracao', ano, mes), sortby, 'Ranking de Consultores')
+    with tab_altas:
+        plot_rankings(freecel.ranking_consultores(sortby, 'ranking_altas', ano, mes), sortby, 'Ranking de Consultores')
 
-with tab_fixa:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_fixa', ano, mes), sortby, 'Ranking de Consultores')
+    with tab_migracao:
+        plot_rankings(freecel.ranking_consultores(sortby, 'ranking_migracao', ano, mes), sortby, 'Ranking de Consultores')
 
-with tab_soho:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_avancada', ano, mes), sortby, 'Ranking de Consultores')
+    with tab_fixa:
+        plot_rankings(freecel.ranking_consultores(sortby, 'ranking_fixa', ano, mes), sortby, 'Ranking de Consultores')
 
-with tab_vvn:
-    plot_rankings(freecel.ranking_consultores(sortby, 'ranking_vvn', ano, mes), sortby, 'Ranking de Consultores')
+    with tab_soho:
+        plot_rankings(freecel.ranking_consultores(sortby, 'ranking_avancada', ano, mes), sortby, 'Ranking de Consultores')
+
+    with tab_vvn:
+        try:
+            plot_rankings(freecel.ranking_consultores(sortby, 'ranking_vvn', ano, mes), sortby, 'Ranking de Consultores')
+        except:
+            st.write('Não há dados para sua solicitação')
 
 st.markdown('### Estatísticas de clientes')
 st.markdown('----')
