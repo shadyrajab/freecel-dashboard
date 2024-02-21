@@ -7,6 +7,7 @@ from plots.scatter import plot_line
 from dataframe.freecel import Stats
 from dataframe.rankings import Ranking
 from dataframe.vendas import Vendas
+import os
 
 # Configurando o Layout e título de página
 st.set_page_config(layout="wide")
@@ -128,3 +129,6 @@ with st.spinner('Carregando dados...'):
                     by=sortby, ascending=False)[0:16], sortby, 'Ranking de Consultores')
             except:
                 st.write('Não há dados para sua solicitação')
+
+
+port = int(os.environ.get('PORT', 8501))
