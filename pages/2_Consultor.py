@@ -10,6 +10,10 @@ from dataframe.freecel import Stats
 
 freecel = Stats()
 
+with open('styles/styles.css', 'r') as styles:
+    css = styles.read()
+    st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
+
 consultor_st = st.sidebar.selectbox('Selecionar Consultor', options = freecel.consultores())
 
 st.title(consultor_st)
@@ -52,23 +56,25 @@ m6.metric(
     value = consultor.quantidade_clientes
 )
 
-style_metric_cards(border_left_color = '#000000')
+style_metric_cards(border_left_color = '#ffffff', border_radius_px = 20)
 
-st.markdown('-----')
-plot_line(consultor.groupby_data, consultor.name)
-st.markdown('-----')
+
+with st.container(border = True):
+    plot_line(consultor.groupby_data, consultor.name)
 
 ano = st.selectbox('Ano', options = consultor.years)
 mes = st.selectbox('Mês', options = consultor.months)
 
 with col4:
-    plot_pie_consultor(
-        consultor.vendas, 'tipo', 'valor_acumulado', 'Receita por Produtos',
-        color = px.colors.sequential.RdBu
-    )
+    with st.container(border = True):
+        plot_pie_consultor(
+            consultor.vendas, 'tipo', 'valor_acumulado', 'Receita por Produtos',
+            color = px.colors.sequential.RdBu
+        )
 
 with col5:
-    plot_pie_consultor(
-        consultor.vendas, 'tipo', 'quantidade_de_produtos', 'Quantidade de Produtos',
-        color = px.colors.sequential.Aggrnyl
-    )
+    with st.container(border = True):
+        plot_pie_consultor(
+            consultor.vendas, 'tipo', 'quantidade_de_produtos', 'Quantidade de Produtos',
+            color = px.colors.sequential.Aggrnyl
+        )
