@@ -16,10 +16,19 @@ def plot_rankings(
             color = key,
             text_auto = '.1s',
             range_color = [dataframe[key].min(), dataframe[key].max()],
-            color_continuous_scale = ["blue", "purple", "red", "yellow"]
+            color_continuous_scale = ["red", "blue", "purple", "yellow"],
         )
     )
 
-    fig.update_layout(yaxis = dict(autorange = "reversed"), plot_bgcolor="#ffffff", paper_bgcolor = "#ffffff")
-    fig.update_traces(texttemplate='%{x:.1f}', textposition='outside')
+    fig.update_layout(
+        yaxis = dict(autorange = "reversed"),
+        plot_bgcolor="#ffffff", 
+        paper_bgcolor = "#ffffff",
+        bargap = 0.2,
+    )
+    fig.update_traces(
+        texttemplate='%{x:.1f}', 
+        textposition='outside',
+    )
+
     st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
