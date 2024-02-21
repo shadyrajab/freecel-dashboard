@@ -115,19 +115,3 @@ with st.container(border = True):
             plot_rankings(freecel.ranking_consultores(sortby, 'ranking_vvn', ano, mes), sortby, 'Ranking de Consultores')
         except:
             st.write('Não há dados para sua solicitação')
-
-st.markdown('### Estatísticas de clientes')
-st.markdown('----')
-
-st.markdown('Vendas por CNAE')
-st.dataframe(freecel.qtd_vendas_por_cnae)
-
-st.markdown('----')
-
-st.markdown('Vendas por FATURAMENTO DE EMPRESA')
-st.dataframe(freecel.qtd_vendas_por_faturamento)
-
-st.markdown('----')
-
-st.markdown('Vendas por QUANTIDADE DE FUNCIONÁRIOS DA EMPRESA')
-st.dataframe(freecel.qtd_vendas_por_colaboradores)
