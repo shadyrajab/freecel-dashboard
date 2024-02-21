@@ -167,16 +167,3 @@ class Stats:
         data = request('GET', url = url, headers=headers).json()
 
         return pd.DataFrame(data)
-    
-    @staticmethod
-    def ranking_consultores( 
-            sortby: str, ranking: str, ano: Optional[int] = None, mes: Optional[str] = None
-        ):
-        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/rankings'
-        params = {
-            "ano": ano,
-            "mes": mes,
-        }
-        data = request('GET', url = url, params=params, headers=headers).json()
-        return pd.DataFrame(data[ranking]).sort_values(
-            by = sortby, ascending=False)[0:16]
