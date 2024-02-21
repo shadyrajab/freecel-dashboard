@@ -1,0 +1,1 @@
+web: streamlit run Início.py
