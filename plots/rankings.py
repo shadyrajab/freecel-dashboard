@@ -16,7 +16,7 @@ def plot_rankings(
             color = key,
             text_auto = '.1s',
             range_color = [dataframe[key].min(), dataframe[key].max()],
-            color_continuous_scale = ["red", "blue", "purple", "yellow"],
+            color_continuous_scale = ["red", "blue", "#3E35AB"],
         )
     )
 
