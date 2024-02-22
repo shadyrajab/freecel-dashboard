@@ -4,32 +4,30 @@ import streamlit as st
 
 def plot_pie(dataframe, tipo, key, title, color=None):
     color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
-    if key.lower() == "clientes":
-        counts = dataframe[tipo].value_counts()
-        fig = go.Figure(
-            go.Pie(
-                labels=counts.index,
-                values=counts.values,
-                marker=dict(colors=color),
-                pull=0.03,
-            )
+    counts = dataframe[tipo].value_counts()
+
+    labels = counts.index if key == "clientes" else dataframe[tipo]
+    values = counts.values if key == "clientes" else dataframe[key]
+
+    total = counts.sum()
+    sizes = [count / total for count in counts.values]
+
+    largest_slice_index = sizes.index(max(sizes))
+
+    pull_values = [0.07 if i == largest_slice_index else 0.05 for i in range(len(sizes))]
+    
+    fig = go.Figure(
+        go.Pie(
+            labels=labels,
+            values=values,
+            marker=dict(colors=color),
+            pull = pull_values,
         )
-        title_text = f'<b>{title}</b>'
-    else:
-        fig = go.Figure(
-            px.pie(
-                dataframe,
-                values=key,
-                names=tipo,
-                title=title,
-                color_discrete_sequence=color
-            )
-        )
-        title_text = title
+    )
 
     fig.update_traces(textposition='inside', textinfo='value')
     fig.update_layout(
-        title=title_text,
+        title=f'<b>{title}</b>',
         yaxis=dict(autorange="reversed"),
         plot_bgcolor="#ffffff",
         paper_bgcolor="#ffffff"
