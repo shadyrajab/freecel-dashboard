@@ -33,7 +33,22 @@ freecel, rankings, vendas = load_data(ano, mes)
 with st.spinner('Carregando dados...'):
     m1, m2, m3 = st.columns(3)
     m4, m5, m6 = st.columns(3)
-    st.write('-------')
+    st.write('<div id = "consultor_do_mes">Consultor do Mês<div>', unsafe_allow_html = True)
+    with st.container(border = True):
+        consultor_do_mes = freecel.consultor_do_mes
+        s2, s3, s4, s5 = st.columns(4)
+        with s2:
+            st.markdown(f'##### {consultor_do_mes['name'].title()}')
+
+        with s3:
+            st.markdown(f'##### Receita: R$ {int(consultor_do_mes['receita_total'])}')
+
+        with s4:
+            st.markdown(f'##### Quantidade: {consultor_do_mes['quantidade_vendida']}')
+
+        with s5:
+            st.markdown(f'##### Clientes: {consultor_do_mes['quantidade_clientes']}')
+
     col4, col5 = st.columns(2)
 
     m1.metric(
