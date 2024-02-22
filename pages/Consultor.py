@@ -17,12 +17,9 @@ with open('styles/styles.css', 'r') as styles:
 consultor_st = st.sidebar.selectbox('Selecionar Consultor', options = freecel.consultores())
 
 st.title(consultor_st)
-st.markdown('-----')
 
 m1, m2, m3 = st.columns(3)
 m4, m5, m6 = st.columns(3)
-st.markdown('-----')
-col4, col5 = st.columns(2)
 
 consultor = Consultor(consultor_st)
 
@@ -62,18 +59,15 @@ style_metric_cards(border_left_color = '#ffffff', border_radius_px = 20)
 with st.container(border = True):
     plot_line(consultor.groupby_data, consultor.name)
 
-ano = st.selectbox('Ano', options = consultor.years)
-mes = st.selectbox('Mês', options = consultor.months)
-
-with col4:
-    with st.container(border = True):
+with st.container(border = True):
+    tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
+    with tab_valor:
         plot_pie_consultor(
             consultor.vendas, 'tipo', 'valor_acumulado', 'Receita por Produtos',
             color = px.colors.sequential.RdBu
         )
 
-with col5:
-    with st.container(border = True):
+    with tab_qtd:
         plot_pie_consultor(
             consultor.vendas, 'tipo', 'quantidade_de_produtos', 'Quantidade de Produtos',
             color = px.colors.sequential.Aggrnyl
