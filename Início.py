@@ -8,6 +8,7 @@ from dataframe.freecel import Stats
 from dataframe.rankings import Ranking
 from dataframe.vendas import Vendas
 import os
+from IPython.display import HTML
 
 # Configurando o Layout e título de página
 st.set_page_config(layout="wide")
@@ -29,14 +30,13 @@ def load_data(ano, mes):
 
 freecel, rankings, vendas = load_data(ano, mes)
 
-# Renderizar os elementos somente após os dados estarem carregados
 with st.spinner('Carregando dados...'):
     m1, m2, m3 = st.columns(3)
     m4, m5, m6 = st.columns(3)
     st.write('<div id = "consultor_do_mes">Consultor do Mês<div>', unsafe_allow_html = True)
     with st.container(border = True):
         consultor_do_mes = freecel.consultor_do_mes
-        s2, s3, s4, s5 = st.columns(4)
+        s1, s2, s3, s4, s5 = st.columns(5)
         with s2:
             st.markdown(f'##### {consultor_do_mes['name'].title()}')
 
@@ -44,10 +44,10 @@ with st.spinner('Carregando dados...'):
             st.markdown(f'##### Receita: R$ {int(consultor_do_mes['receita_total'])}')
 
         with s4:
-            st.markdown(f'##### Quantidade: {consultor_do_mes['quantidade_vendida']}')
+            st.markdown(f'##### Volume: {consultor_do_mes['quantidade_vendida']}')
 
         with s5:
-            st.markdown(f'##### Clientes: {consultor_do_mes['quantidade_clientes']}')
+            st.markdown(f'##### Vendas: {consultor_do_mes['quantidade_clientes']}')
 
     col4, col5 = st.columns(2)
 
@@ -144,6 +144,5 @@ with st.spinner('Carregando dados...'):
                     by=sortby, ascending=False)[0:16], sortby, 'Ranking de Consultores')
             except:
                 st.write('Não há dados para sua solicitação')
-
 
 port = int(os.environ.get('PORT', 8501))
