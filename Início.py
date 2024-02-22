@@ -92,23 +92,31 @@ with st.spinner('Carregando dados...'):
 
     with col4:
         with st.container(border=True):
-            tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
+            tab_valor, tab_vol, tab_clientes = st.tabs(['Receita', 'Volume', 'Clientes'])
 
             with tab_valor:
                 plot_pie(vendas.vendas_by_data(ano, mes), 'consultor', 'valor_acumulado', 'Consultor')
 
-            with tab_qtd:
+            with tab_vol:
                 plot_pie(vendas.vendas_by_data(ano, mes), 'consultor', 'quantidade_de_produtos', 'Consultor')
+
+            with tab_clientes:
+                plot_pie(vendas.vendas_by_data(ano, mes), 'consultor', 'clientes', 'Quantidade de Vendas')
 
     with col5:
         with st.container(border=True):
-            tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
+            tab_valor, tab_vol, tab_clientes = st.tabs(['Receita', 'Volume', 'Clientes'])
 
             with tab_valor:
                 plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'valor_acumulado', 'Tipo de Produto')
 
-            with tab_qtd:
+            with tab_vol:
                 plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'quantidade_de_produtos', 'Tipo de Produto')
+
+            with tab_clientes:
+                plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'clientes', 'Quantidade de Vendas')
+            
+
 
     with st.container(border=True):
         retorno = st.selectbox('Ordenar por', options=['Receita', 'Quantidade'])

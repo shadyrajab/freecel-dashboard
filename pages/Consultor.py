@@ -1,6 +1,6 @@
 import streamlit as st
 from plots.scatter import plot_line
-from plots.pie import plot_pie_consultor
+from plots.pie import plot_pie
 from streamlit_extras.metric_cards import style_metric_cards
 
 import plotly.express as px
@@ -60,15 +60,21 @@ with st.container(border = True):
     plot_line(consultor.groupby_data, consultor.name)
 
 with st.container(border = True):
-    tab_valor, tab_qtd = st.tabs(['Receita', 'Quantidade'])
+    tab_valor, tab_vol, tab_clientes = st.tabs(['Receita', 'Volume', 'Clientes'])
     with tab_valor:
-        plot_pie_consultor(
+        plot_pie(
             consultor.vendas, 'tipo', 'valor_acumulado', 'Receita por Produtos',
             color = px.colors.sequential.RdBu
         )
 
-    with tab_qtd:
-        plot_pie_consultor(
+    with tab_vol:
+        plot_pie(
             consultor.vendas, 'tipo', 'quantidade_de_produtos', 'Quantidade de Produtos',
+            color = px.colors.sequential.Aggrnyl
+        )
+
+    with tab_clientes:
+        plot_pie(
+            consultor.vendas, 'tipo', 'clientes', 'Quantidade de Vendas',
             color = px.colors.sequential.Aggrnyl
         )
