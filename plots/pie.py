@@ -3,13 +3,15 @@ import plotly.express as px
 import streamlit as st
 
 def plot_pie(dataframe, tipo, key, title, color=None):
+    color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
     if key.lower() == "clientes":
         counts = dataframe[tipo].value_counts()
         fig = go.Figure(
             go.Pie(
                 labels=counts.index,
                 values=counts.values,
-                marker=dict(colors=color)
+                marker=dict(colors=color),
+                pull=0.03,
             )
         )
         title_text = f'<b>{title}</b>'
