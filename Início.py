@@ -7,6 +7,7 @@ from plots.scatter import plot_line
 from dataframe.freecel import Stats
 from dataframe.rankings import Ranking
 from dataframe.vendas import Vendas
+from utils.utils import years, months
 import os
 
 # Configurando o Layout e título de página
@@ -17,14 +18,17 @@ with open('styles/styles.css', 'r') as styles:
     css = styles.read()
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
-ano = st.sidebar.selectbox('Ano: ', options=Stats.years())
-mes = st.sidebar.selectbox('Mês: ', options=Stats.months())
+
+ano = st.sidebar.selectbox('Ano: ', options = years)
+mes = st.sidebar.selectbox('Mês: ', options = months)
 
 @st.cache_data
 def load_data(ano, mes):
     freecel = Stats(ano, mes)
     rankings = Ranking(ano, mes)
     vendas = Vendas()
+
+
     return freecel, rankings, vendas
 
 freecel, rankings, vendas = load_data(ano, mes)

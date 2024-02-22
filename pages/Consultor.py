@@ -8,13 +8,19 @@ import plotly.express as px
 from dataframe.consultor import Consultor
 from dataframe.freecel import Stats
 
-freecel = Stats()
-
 with open('styles/styles.css', 'r') as styles:
     css = styles.read()
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
-consultor_st = st.sidebar.selectbox('Selecionar Consultor', options = freecel.consultores())
+@st.cache_data
+def get_consultores():
+    freecel = Stats()
+
+    return freecel.consultores()
+
+consultores = get_consultores()
+
+consultor_st = st.sidebar.selectbox('Selecionar Consultor', options = consultores)
 
 st.title(consultor_st)
 

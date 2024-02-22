@@ -11,3 +11,19 @@ def formatar_telefone(telefone):
 def remover_ponto(string):
     string = string.replace('.', '')
     return string
+
+years = [2023, 2022]
+months = [
+    'Janeiro', 
+    'Fevereiro', 
+    'Março', 
+    'Abril',
+    'Maio', 
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
+]

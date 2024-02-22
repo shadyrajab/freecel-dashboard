@@ -33,22 +33,6 @@ class Stats:
         return data
     
     @staticmethod
-    def years():
-        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
-        data = request('GET', url = url, headers=headers).json()
-        vendas = pd.DataFrame(data)
-
-        return vendas['ano'].unique().tolist()
-    
-    @staticmethod
-    def months():
-        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
-        data = request('GET', url = url, headers=headers).json()
-        vendas = pd.DataFrame(data)
-
-        return vendas['mês'].unique().tolist()
-    
-    @staticmethod
     def vendas(ano: Optional[int] = None, mes: Optional[str] = None, groupby: Optional[str] = None):
         now = datetime.now()
         url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
