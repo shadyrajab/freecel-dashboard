@@ -8,7 +8,6 @@ from dataframe.freecel import Stats
 from dataframe.rankings import Ranking
 from dataframe.vendas import Vendas
 import os
-from IPython.display import HTML
 
 # Configurando o Layout e título de página
 st.set_page_config(layout="wide")
