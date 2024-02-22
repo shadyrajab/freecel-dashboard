@@ -28,7 +28,6 @@ def load_data(ano, mes):
     rankings = Ranking(ano, mes)
     vendas = Vendas()
 
-
     return freecel, rankings, vendas
 
 freecel, rankings, vendas = load_data(ano, mes)
