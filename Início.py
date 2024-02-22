@@ -64,10 +64,11 @@ with st.spinner('Carregando dados...'):
     )
 
     m3.metric(
-        label='Média Diária',
-        value=f'R$ {freecel.receita_media_diaria:,.0f}',
-        delta=int(freecel.delta_media_diaria)
+        label='Quantidade de Clientes',
+        value=int(freecel.quantidade_clientes),
+        delta=freecel.delta_quantidade_clientes
     )
+
     m4.metric(
         label='Média Mensal por Consultor',
         value=f'R$ {freecel.media_por_consultor:,.0f}',
@@ -80,9 +81,9 @@ with st.spinner('Carregando dados...'):
     )
 
     m6.metric(
-        label='Quantidade de Clientes',
-        value=int(freecel.quantidade_clientes),
-        delta=freecel.delta_quantidade_clientes
+        label='Média Diária',
+        value=f'R$ {freecel.receita_media_diaria:,.0f}',
+        delta=int(freecel.delta_media_diaria)
     )
 
     style_metric_cards(border_left_color='#ffffff', border_radius_px=20)
