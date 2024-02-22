@@ -3,19 +3,19 @@ import plotly.express as px
 import streamlit as st
 
 def plot_rankings(
-    dataframe, key, title
+    dataframe, title
 ):
     fig = go.Figure(
         px.bar(
             dataframe,
             y = 'consultor',
-            x = key,
+            x = 'valor_acumulado',
             orientation = 'h',
             title = title,
             hover_data = ['valor_acumulado', 'quantidade_de_produtos'],
-            color = key,
+            color = 'valor_acumulado',
             text_auto = '.1s',
-            range_color = [dataframe[key].min(), dataframe[key].max()],
+            range_color = [dataframe['valor_acumulado'].min(), dataframe['valor_acumulado'].max()],
             color_continuous_scale = ["red", "blue", "#3E35AB"],
         )
     )

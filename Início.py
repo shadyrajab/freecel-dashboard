@@ -99,31 +99,31 @@ with st.spinner('Carregando dados...'):
             tab_valor, tab_vol, tab_clientes = st.tabs(['Receita', 'Volume', 'Clientes'])
 
             with tab_valor:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'consultor', 'valor_acumulado', 'Consultor')
+                plot_pie(vendas.vendas_by_data(ano, mes), 'revenda', 'valor_acumulado', 'Receita por Equipe')
 
             with tab_vol:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'consultor', 'quantidade_de_produtos', 'Consultor')
+                plot_pie(vendas.vendas_by_data(ano, mes), 'revenda', 'quantidade_de_produtos', 'Volume por Equipe')
 
             with tab_clientes:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'consultor', 'clientes', 'Quantidade de Vendas')
+                plot_pie(vendas.vendas_by_data(ano, mes), 'revenda', 'clientes', 'Clientes por Equipe')
 
     with col5:
         with st.container(border=True):
             tab_valor, tab_vol, tab_clientes = st.tabs(['Receita', 'Volume', 'Clientes'])
 
             with tab_valor:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'valor_acumulado', 'Tipo de Produto')
+                plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'valor_acumulado', 'Receita por Tipo de Produto')
 
             with tab_vol:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'quantidade_de_produtos', 'Tipo de Produto')
+                plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'quantidade_de_produtos', 'Volume por Tipo de Produto')
 
             with tab_clientes:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'clientes', 'Quantidade de Vendas')
+                plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'clientes', 'Clientes por Tipo de Produto')
             
 
 
     with st.container(border=True):
-        retorno = st.selectbox('Ordenar por', options=['Receita', 'Quantidade'])
+        retorno = st.selectbox('Ordenar por', options=['Consultor', 'Equipe'])
         sortby = 'valor_acumulado' if retorno == 'Receita' else 'quantidade_de_produtos'
 
         tab_geral, tab_altas, tab_migracao, tab_fixa, tab_soho, tab_vvn = st.tabs(
@@ -132,28 +132,28 @@ with st.spinner('Carregando dados...'):
 
         with tab_geral:
             plot_rankings(rankings.ranking_consultores.sort_values(
-                by=sortby, ascending=False)[0:16], sortby, 'Ranking de Consultores')
+                by='valor_acumulado', ascending=False)[0:16], 'Ranking de Consultores')
 
         with tab_altas:
             plot_rankings(rankings.ranking_altas.sort_values(
-                by=sortby, ascending=False)[0:16], sortby, 'Ranking de Consultores')
+                by='valor_acumulado', ascending=False)[0:16], 'Ranking de Consultores')
 
         with tab_migracao:
             plot_rankings(rankings.ranking_migracao.sort_values(
-                by=sortby, ascending=False)[0:16], sortby, 'Ranking de Consultores')
+                by='valor_acumulado', ascending=False)[0:16], 'Ranking de Consultores')
 
         with tab_fixa:
             plot_rankings(rankings.ranking_fixa.sort_values(
-                by=sortby, ascending=False)[0:16], sortby, 'Ranking de Consultores')
+                by='valor_acumulado', ascending=False)[0:16], 'Ranking de Consultores')
 
         with tab_soho:
             plot_rankings(rankings.ranking_avancada.sort_values(
-                by=sortby, ascending=False)[0:16], sortby, 'Ranking de Consultores')
+                by='valor_acumulado', ascending=False)[0:16], 'Ranking de Consultores')
 
         with tab_vvn:
             try:
                 plot_rankings(rankings.ranking_vvn.sort_values(
-                    by=sortby, ascending=False)[0:16], sortby, 'Ranking de Consultores')
+                    by='valor_acumulado', ascending=False)[0:16], 'Ranking de Consultores')
             except:
                 st.write('Não há dados para sua solicitação')
 
