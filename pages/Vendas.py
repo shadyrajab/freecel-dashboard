@@ -10,7 +10,20 @@ load_dotenv()
 
 TOKEN = getenv('tokenFreecel')
 
-vendas = Stats.vendas().astype(str)
+@st.cache_data
+def load_vendas():
+    vendas = Stats.vendas().astype(str)
+
+    return vendas
+
+vendas = load_vendas()
+
+url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
+
+headers = {
+    'Authorization': f'Bearer {TOKEN}'
+}
+
 vendas['cnpj'] = vendas['cnpj'].apply(lambda cnpj: formatar_cnpj(cnpj))
 vendas['telefone'] = vendas['telefone'].apply(lambda telefone: formatar_telefone(telefone))
 vendas[['matriz', 'porte', 'capital_social', 'situacao_cadastral', 'cep']] = vendas[
@@ -43,13 +56,6 @@ with st.container(border = True):
 
     st.dataframe(vendas)
 
-url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
-
-headers = {
-    'Authorization': f'Bearer {TOKEN}'
-}
-
-with st.container(border = True):
     with st.expander('Adicionar venda'):
         today = datetime.today().date()
         
@@ -87,7 +93,6 @@ with st.container(border = True):
 
                 response = request('PUT', url = url, json = params, headers = headers)
                 st.success('Venda adicionada com sucesso.')
-
     with st.expander('Remover venda'):
         with st.form('remover_venda'):
             id_venda = st.text_input('Qual o ID da venda que deseja remover?')
