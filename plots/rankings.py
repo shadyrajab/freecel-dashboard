@@ -5,10 +5,13 @@ import streamlit as st
 def plot_rankings(
     dataframe, title
 ):
+    y = 'plano' if title == 'Planos' else "consultor"
+    color = ["yellow", "orange", "red"] if title == 'Planos' else ["red", "blue", "#3E35AB"]
+
     fig = go.Figure(
         px.bar(
             dataframe,
-            y = 'consultor',
+            y = y,
             x = 'valor_acumulado',
             orientation = 'h',
             title = title,
@@ -16,7 +19,7 @@ def plot_rankings(
             color = 'valor_acumulado',
             text_auto = '.1s',
             range_color = [dataframe['valor_acumulado'].min(), dataframe['valor_acumulado'].max()],
-            color_continuous_scale = ["red", "blue", "#3E35AB"],
+            color_continuous_scale = color,
         )
     )
 

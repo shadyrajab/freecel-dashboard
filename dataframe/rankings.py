@@ -34,6 +34,7 @@ class Ranking:
         self.ranking_fixa = pd.DataFrame(data['ranking_fixa'])
         self.ranking_avancada = pd.DataFrame(data['ranking_avancada'])
         self.ranking_vvn = pd.DataFrame(data['ranking_vvn'])
+        self.ranking_planos = pd.DataFrame(data['ranking_planos'])
 
     def ranking_geral(self):
         def renomear_colunas(dataframe, nome_do_ranking):

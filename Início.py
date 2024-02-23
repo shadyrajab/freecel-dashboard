@@ -35,22 +35,6 @@ freecel, rankings, vendas = load_data(ano, mes)
 with st.spinner('Carregando dados...'):
     m1, m2, m3 = st.columns(3)
     m4, m5, m6 = st.columns(3)
-    st.write('<div id = "consultor_do_mes">Consultor do Mês<div>', unsafe_allow_html = True)
-    with st.container(border = True):
-        consultor_do_mes = freecel.consultor_do_mes
-        s1, s2, s3, s4, s5 = st.columns(5)
-        with s2:
-            st.markdown(f'##### {consultor_do_mes['name'].title()}')
-
-        with s3:
-            st.markdown(f'##### Receita: R$ {int(consultor_do_mes['receita_total'])}')
-
-        with s4:
-            st.markdown(f'##### Volume: {consultor_do_mes['quantidade_vendida']}')
-
-        with s5:
-            st.markdown(f'##### Vendas: {consultor_do_mes['quantidade_clientes']}')
-
     col4, col5 = st.columns(2)
 
     m1.metric(
@@ -90,6 +74,10 @@ with st.spinner('Carregando dados...'):
 
     style_metric_cards(border_left_color='#ffffff', border_radius_px=20)
 
+    with st.container(border = True):
+        plot_rankings(rankings.ranking_planos.sort_values(
+            by='valor_acumulado', ascending=False)[0:16], 'Planos')
+
     with st.container(border=True):
         plot_line(vendas.vendas_by_data(), 'geral')
 
@@ -98,29 +86,51 @@ with st.spinner('Carregando dados...'):
             tab_valor, tab_vol, tab_clientes = st.tabs(['Receita', 'Volume', 'Clientes'])
 
             with tab_valor:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'revenda', 'valor_acumulado', 'Receita por Equipe')
+                plot_pie(
+                    vendas.vendas_by_data(ano, mes), 
+                    'revenda', 'valor_acumulado', 'Receita por Equipe', 
+                    color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
+                )
 
             with tab_vol:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'revenda', 'quantidade_de_produtos', 'Volume por Equipe')
+                plot_pie(
+                    vendas.vendas_by_data(ano, mes), 
+                    'revenda', 'quantidade_de_produtos', 'Volume por Equipe',
+                    color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
+                )
 
             with tab_clientes:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'revenda', 'clientes', 'Clientes por Equipe')
+                plot_pie(
+                    vendas.vendas_by_data(ano, mes), 
+                    'revenda', 'clientes', 'Clientes por Equipe',
+                    color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
+                )
 
     with col5:
         with st.container(border=True):
             tab_valor, tab_vol, tab_clientes = st.tabs(['Receita', 'Volume', 'Clientes'])
 
             with tab_valor:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'valor_acumulado', 'Receita por Tipo de Produto')
+                plot_pie(
+                    vendas.vendas_by_data(ano, mes), 
+                    'tipo', 'valor_acumulado', 'Receita por Tipo de Produto',
+                    color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
+                )
 
             with tab_vol:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'quantidade_de_produtos', 'Volume por Tipo de Produto')
+                plot_pie(
+                    vendas.vendas_by_data(ano, mes), 
+                    'tipo', 'quantidade_de_produtos', 'Volume por Tipo de Produto', 
+                    color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
+                )
 
             with tab_clientes:
-                plot_pie(vendas.vendas_by_data(ano, mes), 'tipo', 'clientes', 'Clientes por Tipo de Produto')
+                plot_pie(
+                    vendas.vendas_by_data(ano, mes), 
+                    'tipo', 'clientes', 'Clientes por Tipo de Produto', 
+                    color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
+                )
             
-
-
     with st.container(border=True):
         retorno = st.selectbox('Ordenar por', options=['Consultor', 'Equipe'])
         sortby = 'valor_acumulado' if retorno == 'Receita' else 'quantidade_de_produtos'
