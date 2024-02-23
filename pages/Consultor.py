@@ -70,7 +70,7 @@ with st.container(border = True):
     with tab_valor:
         plot_pie(
             consultor.vendas, 'tipo', 'valor_acumulado', 'Receita por Produtos',
-            color = px.colors.sequential.RdBu
+            color = px.colors.sequential.Aggrnyl
         )
 
     with tab_vol:
