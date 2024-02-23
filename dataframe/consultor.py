@@ -34,65 +34,65 @@ class Consultor:
     
     @property
     def years(self):
-        return self.vendas['ano'].unique().tolist()
+        return self.vendas.get('ano').unique().tolist()
     
     @property
     def months(self):
-        return self.vendas['mês'].unique().tolist()
+        return self.vendas.get('mês').unique().tolist()
     
     @property
     def name(self):
-        return self.data['name']
+        return self.data.get('name')
     
     @property
     def receita_total(self):
-        return self.data['receita_total']
+        return self.data.get('receita_total')
     
     @property
     def quantidade_vendida(self):
-        return self.data['quantidade_vendida']
+        return self.data.get('quantidade_vendida')
     
     @property
     def quantidade_clientes(self):
-        return self.data['quantidade_clientes']
+        return self.data.get('quantidade_clientes')
     
     @property
     def receita_media_diaria(self):
-        return self.data['receita_media_diaria']
+        return self.data.get('receita_media_diaria')
     
     @property
     def quantidade_media_diaria(self):
-        return self.data['quantidade_media_diaria']
+        return self.data.get('quantidade_media_diaria')
     
     @property
     def quantidade_media_mensal(self):
-        return self.data['quantidade_media_mensal']
+        return self.data.get('quantidade_media_mensal')
     
     @property
     def receita_media_mensal(self):
-        return self.data['receita_media_mensal']
+        return self.data.get('receita_media_mensal')
     
     @property
     def ticket_medio(self):
-        return self.data['ticket_medio']
+        return self.data.get('ticket_medio')
     
     @property
     def delta_receita_mensal(self):
         if not self.ano and not self.mes:
             return 0
         
-        return self.data['delta_receita_mensal']
+        return self.data.get('delta_receita_mensal')
     
     @property
     def delta_quantidade_mensal(self):
         if not self.ano and not self.mes:
             return 0
         
-        return self.data['delta_quantidade_mensal']
+        return self.data.get('delta_quantidade_mensal')
     
     @property
     def vendas(self):
-        dataframe = pd.DataFrame(self.data['vendas']).sort_values(
+        dataframe = pd.DataFrame(self.vendas).sort_values(
             by = 'data', ascending = False
         )
 

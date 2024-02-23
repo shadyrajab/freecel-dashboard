@@ -7,8 +7,10 @@ from plots.scatter import plot_line
 from dataframe.freecel import Stats
 from dataframe.rankings import Ranking
 from dataframe.vendas import Vendas
-from utils.utils import years, months
+from utils.utils import years, months, meses_numeros
 import os
+
+from datetime import datetime
 
 # Configurando o Layout e título de página
 st.set_page_config(layout="wide")
@@ -19,11 +21,20 @@ with open('styles/styles.css', 'r') as styles:
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
 
-ano = st.sidebar.selectbox('Ano: ', options = years)
-mes = st.sidebar.selectbox('Mês: ', options = months)
+ano = st.sidebar.selectbox('Ano: ', options = years, index = years.index(datetime.now().year))
+mes = None
+
+if ano != 'Todos':
+    mes = st.sidebar.selectbox('Mês: ', options = months, index = months.index(meses_numeros[datetime.now().month]))
 
 @st.cache_data
 def load_data(ano, mes):
+    if ano == 'Todos':
+        ano = None
+    
+    if mes == 'Todos':
+        mes = None
+        
     freecel = Stats(ano, mes)
     rankings = Ranking(ano, mes)
     vendas = Vendas()
@@ -84,24 +95,25 @@ with st.spinner('Carregando dados...'):
     with col4:
         with st.container(border=True):
             tab_valor, tab_vol, tab_clientes = st.tabs(['Receita', 'Volume', 'Clientes'])
+            group = True if ano == 'Todos' else False
 
             with tab_valor:
                 plot_pie(
-                    vendas.vendas_by_data(ano, mes), 
+                    vendas.vendas_by_data(ano, mes, group), 
                     'revenda', 'valor_acumulado', 'Receita por Equipe', 
                     color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
                 )
 
             with tab_vol:
                 plot_pie(
-                    vendas.vendas_by_data(ano, mes), 
+                    vendas.vendas_by_data(ano, mes, group), 
                     'revenda', 'quantidade_de_produtos', 'Volume por Equipe',
                     color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
                 )
 
             with tab_clientes:
                 plot_pie(
-                    vendas.vendas_by_data(ano, mes), 
+                    vendas.vendas_by_data(ano, mes, group), 
                     'revenda', 'clientes', 'Clientes por Equipe',
                     color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
                 )
@@ -112,21 +124,21 @@ with st.spinner('Carregando dados...'):
 
             with tab_valor:
                 plot_pie(
-                    vendas.vendas_by_data(ano, mes), 
+                    vendas.vendas_by_data(ano, mes, group), 
                     'tipo', 'valor_acumulado', 'Receita por Tipo de Produto',
                     color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
                 )
 
             with tab_vol:
                 plot_pie(
-                    vendas.vendas_by_data(ano, mes), 
+                    vendas.vendas_by_data(ano, mes, group), 
                     'tipo', 'quantidade_de_produtos', 'Volume por Tipo de Produto', 
                     color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
                 )
 
             with tab_clientes:
                 plot_pie(
-                    vendas.vendas_by_data(ano, mes), 
+                    vendas.vendas_by_data(ano, mes, group), 
                     'tipo', 'clientes', 'Clientes por Tipo de Produto', 
                     color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
                 )

@@ -12,8 +12,24 @@ def remover_ponto(string):
     string = string.replace('.', '')
     return string
 
-years = [2023, 2022]
+years = ['Todos', 2024, 2023, 2022]
+meses_numeros = {
+    1: "Janeiro",
+    2: "Fevereiro",
+    3: "Março",
+    4: "Abril",
+    5: "maio",
+    6: "junho",
+    7: "julho",
+    8: "agosto",
+    9: "setembro",
+    10: "Outubro",
+    11: "Novembro",
+    12: "Dezembro"
+}
+
 months = [
+    'Todos',
     'Janeiro', 
     'Fevereiro', 
     'Março', 

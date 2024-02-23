@@ -15,12 +15,17 @@ class Vendas:
         self.mes = mes
         self.vendas = self.__get_data__()
 
-    def vendas_by_data(self, ano: Optional[int] = None, mes: Optional[str] = None):
+    def vendas_by_data(self, ano: Optional[int] = None, mes: Optional[str] = None, group: Optional[bool]= None):
         now = datetime.now()
         dataframe = self.vendas
 
+        if group:
+            return self.vendas
+        
+        if ano and mes == 'Todos':
+            return dataframe[(dataframe['ano'] == ano)]
+        
         if ano and mes:
-            
             return dataframe[(dataframe['ano'] == ano) & (dataframe['mês'] == mes)]
 
         dataframe = dataframe.groupby('data', as_index = False).sum(numeric_only = True)
