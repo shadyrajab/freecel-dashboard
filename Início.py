@@ -153,7 +153,7 @@ with st.spinner('Carregando dados...'):
 
         with tab_geral:
             plot_rankings(rankings.ranking_consultores.sort_values(
-                by='valor_acumulado', ascending=False)[0:16], 'Ranking de Consultores')
+                by='valor_acumulado', ascending=False)[0:16], 'Ranking de Consultores', True)
 
         with tab_altas:
             plot_rankings(rankings.ranking_altas.sort_values(
