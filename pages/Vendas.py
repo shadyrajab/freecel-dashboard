@@ -5,6 +5,7 @@ from requests import request
 from os import getenv
 from dotenv import load_dotenv
 from datetime import datetime
+from utils.utils import months
 
 load_dotenv()
 
@@ -13,10 +14,11 @@ TOKEN = getenv('tokenFreecel')
 @st.cache_data
 def load_vendas():
     vendas = Stats.vendas().astype(str)
+    consultores = Stats.consultores()
 
-    return vendas
+    return vendas, consultores
 
-vendas = load_vendas()
+vendas, consultores = load_vendas()
 
 url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
 
@@ -44,7 +46,18 @@ vendas = vendas[
 ] 
 
 with st.container(border = True):
-    ano = st.selectbox(label = 'Adicionar Filtro:', options = ['Nenhum', 'Ano', 'Mês', 'Tipo'])
+    with st.expander('Adicionar Filtro'):
+        with st.form('a'):
+            ano = st.multiselect('Ano', options=['Todos', 2024, 2023, 2022])
+            mes = st.multiselect('Mês', options = months)
+            tipo = st.multiselect('Tipo', options = ['Todos', "FIXA", "AVANÇADA", "MIGRAÇÃO PRÉ-PÓS", "VVN","ALTAS"])
+            consultor = st.multiselect('Consultor', options = ['Todos'] + consultores)
+            plano = st.multiselect('Plano', options=['Todos', 'A','B'])
+            uf = st.multiselect('UF', options = ['Todos', 'DF', 'GO'])
+            municipio = st.multiselect('Município', options = ['Todos', 'Brasília'])
+            equipe = st.multiselect('Equipe', options = ['Todos', 'FREECEL', 'VALPARAISO', 'PARCEIRO', 'ESCRITORIO'])
+            submit = st.form_submit_button('Adicionar')
+
     selected_columns = []
     with st.expander('Selecionar colunas'):
         for col in vendas.columns.to_list():
@@ -54,7 +67,7 @@ with st.container(border = True):
 
     vendas = vendas[selected_columns]
 
-    st.dataframe(vendas)
+    st.dataframe(vendas, hide_index = True)
 
     with st.expander('Adicionar venda'):
         today = datetime.today().date()
@@ -62,7 +75,7 @@ with st.container(border = True):
         with st.form("adicionar_venda"):
             cnpj = st.text_input('Qual CNPJ do cliente', max_chars = 14)
             telefone = st.text_input('Qual telefone do cliente')
-            consultor = st.selectbox('Qual o nome do consultor que realizou a venda', options = Stats.consultores())
+            consultor = st.selectbox('Qual o nome do consultor que realizou a venda', options = consultores)
             data = st.date_input('Qual a data da venda?', format = 'DD/MM/YYYY', max_value=today)
             gestor = st.text_input('Qual nome do gestor?')
             plano = st.text_input('Qual nome do plano vendido')
