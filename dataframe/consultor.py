@@ -92,7 +92,7 @@ class Consultor:
     
     @property
     def vendas(self):
-        dataframe = pd.DataFrame(self.vendas).sort_values(
+        dataframe = pd.DataFrame(self.data.get('vendas')).sort_values(
             by = 'data', ascending = False
         )
 
