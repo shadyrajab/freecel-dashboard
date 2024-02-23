@@ -116,4 +116,7 @@ class Stats:
     @staticmethod
     def consultores():
         url = 'https://freecelapi-b44da8eb3c50.herokuapp.com/consultores'
-        return pd.DataFrame(request('GET', url, headers={'Authorization': f'Bearer {TOKEN}'}).json())
+        data = request('GET', url, headers={'Authorization': f'Bearer {TOKEN}'}).json()
+
+        nomes_consultores = [consultor['nome'] for consultor in data]
+        return nomes_consultores
