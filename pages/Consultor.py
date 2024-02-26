@@ -1,86 +1,159 @@
+from streamlit_extras.metric_cards import style_metric_cards
+from plotly.colors import sequential
+from typing import Optional
 import streamlit as st
+
+from plots.rankings import plot_rankings
 from plots.scatter import plot_line
 from plots.pie import plot_pie
-from streamlit_extras.metric_cards import style_metric_cards
-
-import plotly.express as px
 
 from dataframe.consultor import Consultor
-from dataframe.freecel import Stats
+from dataframe.stats import Stats
+from utils.utils import months
+
+# Configurando o layout da página
+st.set_page_config(
+    page_title = "Consultor - Freecel",
+    page_icon = "https://i.imgur.com/pidHoxz.png",
+    layout = "wide",
+    initial_sidebar_state = "expanded",
+    menu_items = {
+        'About': "https://github.com/shadyrajab/freecel-dashboard"
+    }
+)
 
 with open('styles/styles.css', 'r') as styles:
     css = styles.read()
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
 @st.cache_data
-def get_consultores():
-    freecel = Stats()
+def load_consultores():
+    consultores = Stats().consultores()
 
-    return freecel.consultores()
+    return consultores
 
-consultores = get_consultores()
+@st.cache_data
+def load_data(consultor: str, ano: Optional[int] = None, mes: Optional[str] = None):
+    ano = None if ano == 'Todos' else ano
+    mes = None if mes == 'Todos' else mes
+    consultor = Consultor(consultor, ano, mes)
 
-consultor_st = st.sidebar.selectbox('Selecionar Consultor', options = consultores)
+    return consultor
 
-st.title(consultor_st)
+consultores = load_consultores()
 
-m1, m2, m3 = st.columns(3)
-m4, m5, m6 = st.columns(3)
+with st.sidebar:
+    mes = None
+    consultor = st.sidebar.selectbox(
+        label = 'Selecionar Consultor', 
+        options = consultores
+    )
 
-consultor = Consultor(consultor_st)
+consultor = load_data(consultor = consultor)
 
-m1.metric(
-    label = 'Receita Total',
-    value = f'R$ {consultor.receita_total:,.0f}',
+with st.sidebar:
+    # Selecionando todos os anos no qual o consultor realizou vendas
+    years = ['Todos'] + [list(year.keys())[0] for year in consultor.dates]
+    ano = st.selectbox(
+        label = 'Ano', 
+        options = years,
+        index = years.index('Todos')
+    )
+
+    if ano != 'Todos':
+        # Selecionando todos os meses do ano selecionado no qual o consultor realizou vendas
+        months = ['Todos'] + sorted([month for year_dict in consultor.dates if ano in year_dict for month in year_dict[ano]], key = months.index)
+        mes = st.selectbox(
+            label = 'Mês',
+            options = months,
+            index = months.index('Todos')
+        )
+
+consultor = load_data(consultor = consultor.name, ano = ano, mes = mes)
+
+st.title(
+    body = (
+        f'{consultor.nome.title()} - {ano}' if ano and mes == 'Todos' else
+        f'{consultor.nome.title()} - {mes}/{ano}' if ano and mes else
+        f'{consultor.nome.title()} - Geral'
+    )
 )
 
-m2.metric(
-    label = 'Receita Média Mensal',
-    value = f'R$ {consultor.receita_media_mensal:,.0f}'
-)
-
-m3.metric(
-    label = 'Ticket Médio',
-    value = f'R$ {consultor.ticket_medio:,.0f}'
-)
-
-m4.metric(
-    label = 'Quantidade Total',
-    value = consultor.quantidade_vendida
-)
-
-m5.metric(
-    label = 'Quantidade Média Mensal',
-    value = int(consultor.quantidade_media_mensal)
-)
-
-m6.metric(
-    label = 'Quantidade de Clientes',
-    value = consultor.quantidade_clientes
-)
-
+# Definir o estilo dos metric cards
 style_metric_cards(border_left_color = '#ffffff', border_radius_px = 20)
 
+metric1, metric2, metric3 = st.columns(3)
+metric4, metric5, metric6 = st.columns(3)
 
+metric1.metric(
+    label = f'Receita Total',
+    value = f'R$ {consultor.receita_total:,.0f}',
+    delta = int(consultor.delta_receita_total)
+)
+
+metric2.metric(
+    label = f'Quantidade de Produtos',
+    value = int(consultor.quantidade_vendida),
+    delta = int(consultor.delta_quantidade_produtos)
+)
+
+metric3.metric(
+    label = 'Quantidade de Clientes',
+    value = int(consultor.quantidade_clientes),
+    delta = int(consultor.delta_quantidade_clientes)
+)
+
+metric4.metric(
+    label = 'Média Mensal',
+    value = f'R$ {consultor.receita_media_mensal:,.0f}',
+    delta = 0
+)
+
+metric5.metric(
+    label = 'Ticket Médio',
+    value = f'R$ {consultor.ticket_medio:,.0f}',
+    delta = int(consultor.delta_ticket_medio)
+)
+
+metric6.metric(
+    label = 'Média Diária',
+    value = f'R$ {consultor.receita_media_diaria:,.0f}',
+    delta = int(consultor.delta_media_diaria)
+)
+
+# Gráfico vendas mensais  
 with st.container(border = True):
     plot_line(consultor.groupby_data, consultor.name)
 
+# Gráfico de pizza Tipo de Produto
 with st.container(border = True):
     tab_valor, tab_vol, tab_clientes = st.tabs(['Receita', 'Volume', 'Clientes'])
     with tab_valor:
         plot_pie(
-            consultor.vendas, 'tipo', 'valor_acumulado', 'Receita por Produtos',
-            color = px.colors.sequential.Aggrnyl
+            consultor.vendas, 
+            'tipo', 'valor_acumulado', 'Receita por Produtos',
+            color = sequential.Aggrnyl
         )
 
     with tab_vol:
         plot_pie(
-            consultor.vendas, 'tipo', 'quantidade_de_produtos', 'Quantidade de Produtos',
-            color = px.colors.sequential.Aggrnyl
+            consultor.vendas, 
+            'tipo', 'quantidade_de_produtos', 'Quantidade de Produtos',
+            color = sequential.Aggrnyl
         )
 
     with tab_clientes:
         plot_pie(
-            consultor.vendas, 'tipo', 'clientes', 'Quantidade de Vendas',
-            color = px.colors.sequential.Aggrnyl
+            consultor.vendas, 
+            'tipo', 'clientes', 'Quantidade de Vendas',
+            color = sequential.Aggrnyl
         )
+
+# Ranking de Planos
+with st.container(border = True):
+    plot_rankings(
+        consultor.ranking_planos.sort_values(
+            by = 'valor_acumulado', ascending = False
+        )
+        [0:16], 'Planos'
+    )

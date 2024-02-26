@@ -1,36 +1,18 @@
 from requests import request
 import pandas as pd
 from typing import Optional
-from os import getenv
-from dotenv import load_dotenv
-
-load_dotenv()
-
-TOKEN = getenv('tokenFreecel')
-
-headers = {
-    'Authorization': f'Bearer {TOKEN}'
-}
+from utils.utils import headers, consultores_url
 
 class Consultor:
     def __init__(self, nome: str, ano: Optional[int] = None, mes: Optional[str] = None):
         self.nome = nome
         self.ano = ano
         self.mes = mes
-
         self.data = self.__get_data__()
-
-    def __get_data__(self):
-        params = {
-            "ano": self.ano,
-            "mes": self.mes,
-            "display_vendas": True
-        }
-
-        url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/consultores/{self.nome}'
-        data = request('GET', url = url, params = params, headers=headers).json()
-
-        return data
+    
+    @property
+    def dates(self):
+        return self.data.get('dates')
     
     @property
     def years(self):
@@ -47,6 +29,34 @@ class Consultor:
     @property
     def receita_total(self):
         return self.data.get('receita_total')
+    
+    @property
+    def ranking_planos(self):
+        return pd.DataFrame(self.data.get('ranking_planos'))
+    
+    @property
+    def ranking_produtos(self):
+        return pd.DataFrame(self.data.get('ranking_produtos'))
+    
+    @property
+    def delta_quantidade_clientes(self):
+        return self.data.get('delta_quantidade_clientes', 0)
+    
+    @property
+    def delta_quantidade_produtos(self):
+        return self.data.get('delta_quantidade_produtos', 0)
+    
+    @property
+    def delta_receita_total(self):
+        return self.data.get('delta_receita_total', 0)
+    
+    @property
+    def delta_ticket_medio(self):
+        return self.data.get('delta_ticket_medio', 0)
+    
+    @property
+    def delta_media_diaria(self):
+        return self.data.get('delta_media_diaria', 0)
     
     @property
     def quantidade_vendida(self):
@@ -77,20 +87,6 @@ class Consultor:
         return self.data.get('ticket_medio')
     
     @property
-    def delta_receita_mensal(self):
-        if not self.ano and not self.mes:
-            return 0
-        
-        return self.data.get('delta_receita_mensal')
-    
-    @property
-    def delta_quantidade_mensal(self):
-        if not self.ano and not self.mes:
-            return 0
-        
-        return self.data.get('delta_quantidade_mensal')
-    
-    @property
     def vendas(self):
         dataframe = pd.DataFrame(self.data.get('vendas')).sort_values(
             by = 'data', ascending = False
@@ -101,9 +97,11 @@ class Consultor:
 
     @property
     def groupby_data(self):
-        vendas = self.vendas
-
-        dataframe = vendas.groupby('data', as_index = False).sum(numeric_only = True).sort_values(
+        return self.vendas.groupby('data', as_index = False).sum(numeric_only = True).sort_values(
             by = 'data', ascending = False
         )
-        return dataframe
+    
+    def __get_data__(self):
+        params = { "ano": self.ano, "mes": self.mes, "display_vendas": True }
+        data = request('GET', url = consultores_url + self.nome, params = params, headers = headers).json()
+        return data

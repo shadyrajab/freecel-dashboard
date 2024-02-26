@@ -1,117 +1,161 @@
-import streamlit as st
-from dataframe.freecel import Stats
-from utils.utils import formatar_cnpj, formatar_telefone, remover_ponto
-from requests import request
-from os import getenv
-from dotenv import load_dotenv
+from utils.utils import months, tipo_vendas, equipes, UFS, DDDS, order
+from dataframe.vendas import Vendas
+from dataframe.stats import Stats
 from datetime import datetime
-from utils.utils import months
+import streamlit as st
 
-load_dotenv()
-
-TOKEN = getenv('tokenFreecel')
-
-@st.cache_data
-def load_vendas():
-    vendas = Stats.vendas().astype(str)
-    consultores = Stats.consultores()
-
-    return vendas, consultores
-
-vendas, consultores = load_vendas()
-
-url = f'https://freecelapi-b44da8eb3c50.herokuapp.com/vendas'
-
-headers = {
-    'Authorization': f'Bearer {TOKEN}'
-}
-
-vendas['cnpj'] = vendas['cnpj'].apply(lambda cnpj: formatar_cnpj(cnpj))
-vendas['telefone'] = vendas['telefone'].apply(lambda telefone: formatar_telefone(telefone))
-vendas[['matriz', 'porte', 'capital_social', 'situacao_cadastral', 'cep']] = vendas[
-    ['matriz', 'porte', 'capital_social', 'situacao_cadastral', 'cep']
-].map(remover_ponto)
+# Configurando o layout da página
+st.set_page_config(
+    page_title = "Vendas - Freecel",
+    page_icon = "https://i.imgur.com/pidHoxz.png",
+    layout = "wide",
+    initial_sidebar_state = "expanded",
+    menu_items = {
+        'About': "https://github.com/shadyrajab/freecel-dashboard"
+    }
+)
 
 with open('styles/vendas.css', 'r') as styles:
     css = styles.read()
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
-vendas = vendas[
-    [
-        'id', 'cnpj', 'plano', 'tipo', 'quantidade_de_produtos', 'valor_do_plano', 'valor_acumulado', 
-        'consultor', 'cep', 'uf', 'municipio', 'bairro', 'telefone', 'email', 'ano', 'mês', 'data',
-        'revenda', 'gestor', 'cnae', 'faturamento', 'quadro_funcionarios', 'capital_social', 'porte',
-        'natureza_juridica', 'matriz', 'situacao_cadastral', 'regime_tributario'
-    ]
-] 
+@st.cache_data
+def load_data():
+    vendas = Vendas().data.astype(str)
+    consultores = Stats.consultores()
+    produtos = Stats.produtos()
 
+    return vendas, consultores, produtos
+
+vendas, consultores, produtos = load_data()
+
+# Criar formulário para a adição de vendas na API
+def get_form():
+    cnpj = st.text_input('Qual CNPJ do cliente?', max_chars = 14, placeholder = 'CNPJ')
+    ddd = st.selectbox('Qual DDD do cliente?', options = DDDS)
+    telefone = st.text_input('Qual telefone do cliente? (Com DDD)', max_chars = 11, placeholder = 'TELEFONE')
+    consultor = st.selectbox('Qual o nome do consultor que realizou a venda?', options = consultores)
+    data = st.date_input('Qual a data da venda?', format = 'DD/MM/YYYY', max_value = today)
+    gestor = st.text_input('Qual nome do gestor?', max_chars = 32, placeholder = 'GESTOR')
+    equipe = st.selectbox('Qual equipe realizou a venda?', options = equipes)
+    tipo = st.selectbox('Qual tipo de venda?', options = tipo_vendas)
+    uf = st.selectbox('Qual a UF da venda?', options = UFS)
+    email = st.text_input('Qual o email do cliente?', max_chars = 32, placeholder = 'EMAIL')
+    quantidade_de_produtos = st.text_input('Qual a quantidade de produtos vendidos?', max_chars = 2)
+
+    return cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos
+
+# Painel de vendas
 with st.container(border = True):
+    # Filtro para o painel 
     with st.expander('Adicionar Filtro'):
-        with st.form('a'):
-            ano = st.multiselect('Ano', options=['Todos', 2024, 2023, 2022])
-            mes = st.multiselect('Mês', options = months)
-            tipo = st.multiselect('Tipo', options = ['Todos', "FIXA", "AVANÇADA", "MIGRAÇÃO PRÉ-PÓS", "VVN","ALTAS"])
-            consultor = st.multiselect('Consultor', options = ['Todos'] + consultores)
-            plano = st.multiselect('Plano', options=['Todos', 'A','B'])
-            uf = st.multiselect('UF', options = ['Todos', 'DF', 'GO'])
-            municipio = st.multiselect('Município', options = ['Todos', 'Brasília'])
-            equipe = st.multiselect('Equipe', options = ['Todos', 'FREECEL', 'VALPARAISO', 'PARCEIRO', 'ESCRITORIO'])
-            submit = st.form_submit_button('Adicionar')
+         with st.form('filtro_vendas'):
+            ano = st.multiselect(label = 'Ano', options = list(vendas['ano'].unique()))
+            mes = st.multiselect(
+                label = 'Mês', 
+                options = sorted(
+                    list(vendas['mês'].unique()), 
+                    key = lambda x: months.index(x)
+                )
+            )
+            tipo = st.multiselect(label = 'Tipo', options = list(vendas['tipo'].unique()))
+            consultor = st.multiselect(label = 'Consultor', options = list(vendas['consultor'].unique()))
+            plano = st.multiselect(label = 'Plano', options = list(vendas['plano'].unique()))
+            uf = st.multiselect(label = 'UF', options = list(vendas['uf'].unique()))
+            municipio = st.multiselect(label = 'Município', options = list(vendas['municipio'].unique()))
+            equipe = st.multiselect(label = 'Equipe', options = list(vendas['revenda'].unique()))
+            columns = st.multiselect(
+                label = 'Selecionar colunas', 
+                options = vendas.columns.to_list(), 
+                default = vendas.columns.to_list()
+            )
+            
+            submit = st.form_submit_button('Filtrar')
 
-    selected_columns = []
-    with st.expander('Selecionar colunas'):
-        for col in vendas.columns.to_list():
-            selected = st.checkbox(col, value = True)
-            if selected:
-                selected_columns.append(col)
+            if submit:
+                # Criar uma máscara booleana para cada condição de filtro
+                mask_ano = vendas['ano'].isin(ano) if len(ano) else True
+                mask_mes = vendas['mês'].isin(mes) if len(mes) else True
+                mask_tipo = vendas['tipo'].isin(tipo) if len(tipo) else True
+                mask_consultor = vendas['consultor'].isin(consultor) if len(consultor) else True
+                mask_plano = vendas['plano'].isin(plano) if len(plano) else True
+                mask_uf = vendas['uf'].isin(uf) if len(uf) else True
+                mask_municipio = vendas['municipio'].isin(municipio) if len(municipio) else True
+                mask_equipe = vendas['revenda'].isin(equipe) if len(equipe) else True
 
-    vendas = vendas[selected_columns]
+                mask = mask_ano & mask_mes & mask_tipo & mask_consultor & mask_uf & mask_municipio & mask_equipe
+                
+                if type(mask) == bool:
+                    vendas = vendas
+                else:
+                    vendas = vendas[mask]
+
+                columns_ordered = sorted(columns, key = lambda x: order.index(x))
+                vendas = vendas[columns_ordered]
 
     st.dataframe(vendas, hide_index = True)
 
-    with st.expander('Adicionar venda'):
+    with st.expander('Adicionar Venda'):
+        # Criando abas para adicionar vendas de acordo com o tipo de cliente
+        novo, migracao = st.tabs(['Novo', 'Migração'])
+
         today = datetime.today().date()
-        
-        with st.form("adicionar_venda"):
-            cnpj = st.text_input('Qual CNPJ do cliente', max_chars = 14)
-            telefone = st.text_input('Qual telefone do cliente')
-            consultor = st.selectbox('Qual o nome do consultor que realizou a venda', options = consultores)
-            data = st.date_input('Qual a data da venda?', format = 'DD/MM/YYYY', max_value=today)
-            gestor = st.text_input('Qual nome do gestor?')
-            plano = st.text_input('Qual nome do plano vendido')
-            quantidade_de_produtos = st.text_input('Qual a quantidade de produtos vendidos')
-            revenda = st.selectbox('Qual equipe realizou a venda?', options = ['FREECEL', 'VALPARAISO', 'PARCEIRO', 'ESCRITORIO'])
-            tipo = st.selectbox('Qual tipo de venda?', options = ["FIXA", "AVANÇADA", "MIGRAÇÃO PRÉ-PÓS", "VVN","ALTAS"])
-            uf = st.text_input('Qual a uf da venda?', max_chars = 2)
-            valor_do_plano = st.text_input('Qual o valor do plano?')
-            email = st.text_input('Qual o email do cliente?')
 
-            submit = st.form_submit_button('Enviar')
+        with novo:
+            with st.form('adicionar_venda_novo'):
+                cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos = get_form()
+                plano = st.selectbox('Qual nome do plano vendido?', options = produtos)
 
-            if submit:
-                params = {
-                    "cnpj": cnpj,
-                    "telefone": telefone,
-                    "consultor": consultor,
-                    "data": str(datetime.strptime(str(data), '%Y-%m-%d').strftime('%d-%m-%Y')),
-                    "gestor": gestor,
-                    "plano": plano,
-                    "quantidade_de_produtos": quantidade_de_produtos,
-                    "revenda": revenda,
-                    "tipo": tipo,
-                    "uf": uf,
-                    "valor_do_plano": valor_do_plano,
-                    "email": email
-                }
+                submit = st.form_submit_button('Adicionar')
+                
+                if submit:
+                    valor_do_plano = produtos[produtos['nome'] == plano]['preco'].iloc[0]
+                    status_code = Vendas.add_venda(
+                        cnpj = cnpj, ddd = ddd, telefone = telefone, consultor = consultor, data = data, 
+                        gestor = gestor, plano = plano, quantidade_de_produtos = quantidade_de_produtos, 
+                        equipe = equipe, tipo = tipo, uf = uf, email = email, valor_do_plano = valor_do_plano
+                    )
 
-                response = request('PUT', url = url, json = params, headers = headers)
-                st.success('Venda adicionada com sucesso.')
-    with st.expander('Remover venda'):
+                    if status_code == 200:
+                        st.success('Venda adicionada com sucesso.')
+
+                    else:
+                        st.error('Ocorreu um erro ao adicionar esta venda.')
+
+        with migracao:
+            with st.form('adicionar_venda_migracao'):
+                cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos = get_form()
+                plano = st.text_input('Qual nome do plano vendido?', max_chars = 30, placeholder = 'PLANO')
+                valor_do_plano = st.text_input('Qual valor do plano? (Informe o valor integral)', max_chars = 8, placeholder = 'VALOR')
+
+                submit = st.form_submit_button('Adicionar')
+
+                if submit:
+                    status_code = Vendas.add_venda(
+                        cnpj = cnpj, ddd = ddd, telefone = telefone, consultor = consultor, data = data, 
+                        gestor = gestor, plano = plano, quantidade_de_produtos = quantidade_de_produtos, 
+                        equipe = equipe, tipo = tipo, uf = uf, email = email, valor_do_plano = valor_do_plano
+                    )
+
+                    if status_code == 200:
+                        st.success('Venda adicionada com sucesso.')
+
+                    else:
+                        st.error('Ocorreu um erro ao adicionar esta venda.')
+
+    with st.expander('Remover Venda'):
         with st.form('remover_venda'):
-            id_venda = st.text_input('Qual o ID da venda que deseja remover?')
+            id_venda = st.text_input(
+                label = 'Qual o ID da venda que deseja remover?',
+                placeholder = 'ID'
+            )
 
             submit = st.form_submit_button('Remover')
 
             if submit:
-                response = request('DELETE', url = url, headers=headers, json = {'id': id_venda})
-                st.success('Venda removida com sucesso.')
+                status_code = Vendas.remove_venda(id = id_venda)
+                if status_code == 200:
+                    st.success('Venda removida com sucesso.')
+                
+                else:
+                    st.error('Ocorreu um erro ao remover esta venda.')
