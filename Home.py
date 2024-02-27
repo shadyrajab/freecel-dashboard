@@ -130,10 +130,10 @@ with st.container(border = True):
     with tab_geral:
         try:
             plot_rankings(
-                rankings.ranking_consultores.sort_values(
+                dataframe = rankings.ranking_consultores.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], 'Ranking Geral', True, stats.media_por_consultor
+                [0:16], title ='Ranking Geral', key = 'consultor', media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -141,11 +141,11 @@ with st.container(border = True):
 
     with tab_altas:
         try:
-            plot_rankings(
+            dataframe = plot_rankings(
                 rankings.ranking_altas.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], 'Ranking Altas', True, stats.media_por_consultor
+                [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
             )
 
         except:
@@ -154,10 +154,10 @@ with st.container(border = True):
     with tab_migracao:
         try:
             plot_rankings(
-                rankings.ranking_migracao.sort_values(
+                dataframe = rankings.ranking_migracao.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], 'Ranking Migração Pré-pós', True, stats.media_por_consultor
+                [0:16], title = 'Ranking Migração Pré-pós', key = 'consultor',  media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -166,10 +166,10 @@ with st.container(border = True):
     with tab_fixa:
         try:
             plot_rankings(
-                rankings.ranking_fixa.sort_values(
+                dataframe = rankings.ranking_fixa.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], 'Ranking Fixa', True, stats.media_por_consultor
+                [0:16], title = 'Ranking Fixa', key = 'consultor',  media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -178,10 +178,10 @@ with st.container(border = True):
     with tab_soho:
         try:
             plot_rankings(
-                rankings.ranking_avancada.sort_values(
+                dataframe = rankings.ranking_avancada.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], 'Ranking Avançada', True, stats.media_por_consultor
+                [0:16], title = 'Ranking Avançada', key = 'consultor',  media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -190,10 +190,10 @@ with st.container(border = True):
     with tab_vvn:
         try:
             plot_rankings(
-                rankings.ranking_vvn.sort_values(
+                dataframe = rankings.ranking_vvn.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], 'Ranking VVN', True, stats.media_por_consultor
+                [0:16], title = 'Ranking VVN', key = 'consultor',  media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
             )
 
         except:
@@ -263,10 +263,10 @@ with pie2:
 # Ranking de Planos
 with st.container(border = True):
     plot_rankings(
-        rankings.ranking_planos.sort_values(
+        dataframe = rankings.ranking_planos.sort_values(
             by = 'valor_acumulado', ascending = False
         )
-        [0:16], 'Planos'
+        [0:16], title = 'Ranking Planos', key = 'plano', color = ["yellow", "orange", "red"]
     )
 
 
