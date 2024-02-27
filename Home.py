@@ -272,7 +272,7 @@ with st.container(border = True):
 
 # Gráfico Vendas Mensais
 with st.container(border = True):
-    plot_line(vendas.vendas_by_data(), 'geral')
+    plot_line(vendas.vendas_by_data(), 'Receita por Data')
 
 
 # Porta Heroku

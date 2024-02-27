@@ -123,7 +123,7 @@ metric6.metric(
 
 # Gráfico vendas mensais  
 with st.container(border = True):
-    plot_line(consultor.groupby_data, consultor.name)
+    plot_line(consultor.groupby_data, f'Receita por Data - {consultor.name.title()}')
 
 # Gráfico de pizza Tipo de Produto
 with st.container(border = True):
