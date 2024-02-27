@@ -122,3 +122,10 @@ DDDS = [
 DDDS_valor_inteiro = [
     '61', '62', '63', '64', '65', '66', '67', '68', '69', '91', '92', '93', '94', '95', '96,' '97', '98', '99'
 ]
+
+values_to_remove = [
+    'cnae', 'faturamento', 'quadro_funcionarios', 'capital_social', 'porte', 'natureza_juridica', 
+    'matriz', 'situacao_cadastral', 'regime_tributario', 'ano', 'mês'
+]
+
+default_index = list(filter(lambda x: x not in values_to_remove, order))
