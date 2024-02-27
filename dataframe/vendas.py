@@ -36,7 +36,7 @@ class Vendas:
         return dataframe
 
     @staticmethod
-    def add_venda(cnpj, ddd, telefone, consultor, data, gestor, plano, quantidade_de_produtos, equipe, tipo, uf, email, valor_do_plano):
+    def add_venda(token, cnpj, ddd, telefone, consultor, data, gestor, plano, quantidade_de_produtos, equipe, tipo, uf, email, valor_do_plano):
         if isinstance(valor_do_plano, str):
             valor_do_plano = float(valor_do_plano.replace(',', '.'))
 
@@ -44,6 +44,10 @@ class Vendas:
             valor_do_plano *= 0.3 
 
         valor_do_plano *= int(quantidade_de_produtos)
+
+        authorization = {
+            'Authorization': f'Bearer {token}'
+        }
 
         params = {
             "cnpj": cnpj,
@@ -60,12 +64,15 @@ class Vendas:
             "email": email
         }
 
-        response = request('PUT', url = vendas_url, json = params, headers = headers)
+        response = request('PUT', url = vendas_url, json = params, headers = authorization)
         return response.status_code
 
     @staticmethod
-    def remove_venda(id):
-        response = request('DELETE', url = vendas_url, headers = headers, json = { 'id': id })
+    def remove_venda(id, token):
+        authorization = {
+            'Authorization': f'Bearer {token}'
+        }
+        response = request('DELETE', url = vendas_url, headers = authorization, json = { 'id': id })
         return response.status_code
     
     def __formatar_dados__(self):
