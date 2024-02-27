@@ -17,6 +17,15 @@ def remover_ponto(string):
     string = string.replace('.', '')
     return string
 
+def formatar_nome(nome):
+    nome = nome.split(' ')
+    if nome[1] == 'DOS' or nome[1] == 'DA' or nome[1] == 'DE': 
+        nome_final = f'{nome[0]} {nome[1]} {nome[2]}'
+        return nome_final
+    
+    nome_final = f'{nome[0]} {nome[1]}'
+    return nome_final
+
 TOKEN = getenv('tokenFreecel')
 
 headers = {
