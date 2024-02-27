@@ -3,8 +3,8 @@ import streamlit as st
 
 def plot_pie(dataframe, tipo, key, title, color):
     counts = dataframe[tipo].value_counts()
-    labels = counts.index if key == "clientes" else dataframe[tipo]
-    values = counts.values if key == "clientes" else dataframe[key]
+    labels = counts.index if key == "Clientes" else dataframe[tipo]
+    values = counts.values if key == "Clientes" else dataframe[key]
 
     fig = go.Figure(
         go.Pie(

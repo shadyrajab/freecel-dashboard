@@ -133,7 +133,7 @@ with st.container(border = True):
                 dataframe = rankings.ranking_consultores.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title ='Ranking Geral', key = 'consultor', media = stats.media_por_consultor_geral, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Geral', key = 'consultor', media = stats.media_por_consultor_geral, color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -213,21 +213,21 @@ with pie1:
         with tab_valor:
             plot_pie(
                 vendas.vendas_by_data(ano, mes, group), 
-                'revenda', 'valor_acumulado', 'Receita por Equipe', 
+                'Equipe', 'Receita', 'Receita por Equipe', 
                 color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
             )
 
         with tab_vol:
             plot_pie(
                 vendas.vendas_by_data(ano, mes, group), 
-                'revenda', 'quantidade_de_produtos', 'Volume por Equipe',
+                'Equipe', 'Receita', 'Volume por Equipe',
                 color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
             )
 
         with tab_clientes:
             plot_pie(
                 vendas.vendas_by_data(ano, mes, group), 
-                'revenda', 'clientes', 'Clientes por Equipe',
+                'Equipe', 'Clientes', 'Clientes por Equipe',
                 color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
             )
 
@@ -241,21 +241,21 @@ with pie2:
         with tab_valor:
             plot_pie(
                 vendas.vendas_by_data(ano, mes, group), 
-                'tipo', 'valor_acumulado', 'Receita por Tipo de Produto',
+                'Tipo', 'Receita', 'Receita por Tipo de Produto',
                 color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
             )
 
         with tab_vol:
             plot_pie(
                 vendas.vendas_by_data(ano, mes, group), 
-                'tipo', 'quantidade_de_produtos', 'Volume por Tipo de Produto', 
+                'Tipo', 'Volume', 'Volume por Tipo de Produto', 
                 color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
             )
 
         with tab_clientes:
             plot_pie(
                 vendas.vendas_by_data(ano, mes, group), 
-                'tipo', 'clientes', 'Clientes por Tipo de Produto', 
+                'Tipo', 'Clientes', 'Clientes por Tipo de Produto', 
                 color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
             )
 
@@ -272,7 +272,7 @@ with st.container(border = True):
 
 # Gráfico Vendas Mensais
 with st.container(border = True):
-    plot_line(vendas.vendas_by_data(), 'Receita por Data')
+    plot_line(dataframe = vendas.vendas_by_data(), title = 'Receita por Data', x = 'Data', y = 'Receita')
 
 
 # Porta Heroku

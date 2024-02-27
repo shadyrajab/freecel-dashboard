@@ -1,15 +1,14 @@
 import plotly.graph_objects as go
-import plotly.express as px
 import streamlit as st
 
-def plot_line(dataframe, title):  
+def plot_line(dataframe, title, x, y):  
     
     fig = go.Figure()
 
     fig.add_trace(
         go.Scatter(
-            x = dataframe['data'],
-            y = dataframe['valor_acumulado'],
+            x = dataframe[x],
+            y = dataframe[y],
             mode = 'lines+markers',
             name = '2023',
             line = {
@@ -38,10 +37,10 @@ def plot_line(dataframe, title):
             "showgrid": False
         },
         yaxis={
-            "range": [dataframe['valor_acumulado'].min() / 1.5, dataframe['valor_acumulado'].max() * 1.1], 
+            "range": [dataframe[y].min() / 1.5, dataframe[y].max() * 1.1], 
             "showgrid": False
         },
         paper_bgcolor = "#ffffff"
     )
 
-    st.plotly_chart(fig, theme='streamlit', use_container_width=True)
+    st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)

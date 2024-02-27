@@ -26,13 +26,13 @@ class Vendas:
             return dataframe
         
         if ano and mes == 'Todos':
-            return dataframe[(dataframe['ano'] == int(ano))]
+            return dataframe[(dataframe['Ano'] == int(ano))]
         
         elif ano and mes:
-            return dataframe[(dataframe['ano'] == int(ano)) & (dataframe['mês'] == mes)]
+            return dataframe[(dataframe['Ano'] == int(ano)) & (dataframe['Mês'] == mes)]
 
-        dataframe = dataframe.groupby('data', as_index = False).sum(numeric_only = True)
-        dataframe = dataframe[(dataframe['data'].dt.month != now.month) | (dataframe['data'].dt.year != now.year)]
+        dataframe = dataframe.groupby('Data', as_index = False).sum(numeric_only = True)
+        dataframe = dataframe[(dataframe['Data'].dt.month != now.month) | (dataframe['Data'].dt.year != now.year)]
         return dataframe
 
     @staticmethod
@@ -77,10 +77,45 @@ class Vendas:
     
     def __formatar_dados__(self):
         dataframe = self.__get_data__()
-        dataframe['cnpj'] = dataframe['cnpj'].apply(lambda cnpj: formatar_cnpj(cnpj))
-        dataframe['telefone'] = dataframe['telefone'].apply(lambda telefone: formatar_telefone(telefone))
-        dataframe[['matriz', 'porte', 'capital_social', 'situacao_cadastral', 'cep']] = dataframe[
-            ['matriz', 'porte', 'capital_social', 'situacao_cadastral', 'cep']
+
+        dataframe.rename(
+            columns = {
+                'id': 'ID', 
+                'cnpj': 'CNPJ', 
+                'plano': 'Plano', 
+                'tipo': 'Tipo', 
+                'quantidade_de_produtos': 'Volume', 
+                'valor_do_plano': 'Preço', 
+                'valor_acumulado': 'Receita', 
+                'consultor': 'Consultor', 
+                'cep': 'CEP', 
+                'uf': 'UF', 
+                'municipio': 'Município', 
+                'bairro': 'Bairro', 
+                'telefone': 'Telefone', 
+                'email': 'Email', 
+                'ano': 'Ano',
+                'mês': 'Mês', 
+                'data': 'Data',
+                'revenda': 'Equipe', 
+                'gestor': 'Gestor', 
+                'cnae': 'CNAE', 
+                'faturamento': 'Faturamento', 
+                'quadro_funcionarios': 'Quadro de Funcionários', 
+                'capital_social': 'Capital', 
+                'porte': 'Porte',
+                'natureza_juridica': 'Natureza Jurídica', 
+                'matriz': 'Matriz', 
+                'situacao_cadastral': 'Situação Cadastral', 
+                'regime_tributario': 'Regime Tributário'
+            }, 
+            inplace = True
+        )
+        
+        dataframe['CNPJ'] = dataframe['CNPJ'].apply(lambda cnpj: formatar_cnpj(cnpj))
+        dataframe['Telefone'] = dataframe['Telefone'].apply(lambda telefone: formatar_telefone(telefone))
+        dataframe[['Matriz', 'Porte', 'Capital', 'Situação Cadastral', 'CEP']] = dataframe[
+            ['Matriz', 'Porte', 'Capital', 'Situação Cadastral', 'CEP']
         ].map(remover_ponto)
 
         return dataframe[order]

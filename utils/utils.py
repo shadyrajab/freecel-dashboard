@@ -106,10 +106,10 @@ UFS = [
 ]
 
 order = [
-    'id', 'cnpj', 'plano', 'tipo', 'quantidade_de_produtos', 'valor_do_plano', 'valor_acumulado', 
-    'consultor', 'cep', 'uf', 'municipio', 'bairro', 'telefone', 'email', 'ano', 'mês', 'data',
-    'revenda', 'gestor', 'cnae', 'faturamento', 'quadro_funcionarios', 'capital_social', 'porte',
-    'natureza_juridica', 'matriz', 'situacao_cadastral', 'regime_tributario'
+    'ID', 'CNPJ', 'Plano', 'Tipo', 'Volume', 'Preço', 'Receita', 
+    'Consultor', 'CEP', 'UF', 'Município', 'Bairro', 'Telefone', 'Email', 'Ano', 'Mês', 'Data',
+    'Equipe', 'Gestor', 'CNAE', 'Faturamento', 'Quadro de Funcionários', 'Capital', 'Porte',
+    'Natureza Jurídica', 'Matriz', 'Situação Cadastral', 'Regime Tributário'
 ]
 
 DDDS = [
@@ -124,8 +124,8 @@ DDDS_valor_inteiro = [
 ]
 
 values_to_remove = [
-    'cnae', 'faturamento', 'quadro_funcionarios', 'capital_social', 'porte', 'natureza_juridica', 
-    'matriz', 'situacao_cadastral', 'regime_tributario', 'ano', 'mês'
+    'CNAE', 'Faturamento', 'Quadro de Funcionários', 'Capital', 'Porte', 'Natureza Jurídica', 
+    'Matriz', 'Situação Cadastral', 'Regime Tributário', 'Ano', 'Mês'
 ]
 
 default_index = list(filter(lambda x: x not in values_to_remove, order))

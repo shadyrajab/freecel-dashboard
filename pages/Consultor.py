@@ -123,7 +123,7 @@ metric6.metric(
 
 # Gráfico vendas mensais  
 with st.container(border = True):
-    plot_line(consultor.groupby_data, f'Receita por Data - {consultor.name.title()}')
+    plot_line(dataframe = consultor.groupby_data, title = f'Receita por Data - {consultor.name.title()}', x = 'data', y = 'valor_acumulado')
 
 # Gráfico de pizza Tipo de Produto
 with st.container(border = True):
@@ -145,7 +145,7 @@ with st.container(border = True):
     with tab_clientes:
         plot_pie(
             consultor.vendas, 
-            'tipo', 'clientes', 'Quantidade de Vendas',
+            'tipo', 'Clientes', 'Quantidade de Vendas',
             color = sequential.Aggrnyl
         )
 
