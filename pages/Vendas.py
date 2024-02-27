@@ -36,6 +36,9 @@ def load_data():
     consultores = Stats.consultores()
     produtos = Stats.produtos()
 
+    # Definindo o estilo do DataFrame e cores das células
+    vendas = vendas.style.apply(lambda x: ['background-color: white']*len(x), axis=0)
+
     return vendas, consultores, produtos
 
 vendas, consultores, produtos = load_data()
@@ -111,10 +114,6 @@ with st.container(border = True):
     vendas['data'] = pd.to_datetime(vendas['data'])
     vendas[['consultor', 'gestor']] = vendas[['consultor', 'gestor']].map(formatar_nome)
     vendas['email'] = vendas['email'].apply(lambda email: email.lower() if email != 'Não Informado' else email)
-
-
-    # Definindo o estilo do DataFrame e cores das células
-    vendas = vendas.style.apply(lambda x: ['background-color: white']*len(x), axis=0)
 
     # Exibindo e configurando o Painel de Vendas
     st.dataframe(
