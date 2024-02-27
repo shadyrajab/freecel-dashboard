@@ -114,11 +114,13 @@ with st.container(border = True):
 
 
     # Definindo o estilo do DataFrame e cores das células
-    # vendas = vendas.style.apply(lambda x: ["background-color: red" if v == 'Não Informado' else "" for v in x], axis=0)
+    vendas = vendas.style.apply(lambda x: ['background-color: white']*len(x), axis=0)
+
     # Exibindo e configurando o Painel de Vendas
-    st.data_editor(
+    st.dataframe(
         data = vendas, 
         hide_index = True,
+        use_container_width = True,
         column_config = {
             "quantidade_de_produtos": st.column_config.ProgressColumn(
                 label = "Volume",
