@@ -20,6 +20,6 @@
     background-color: #f2f2f2;
 }
 
-.st-eu {
-    background-color: #f2f2f2;
+.st-bb {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
 }

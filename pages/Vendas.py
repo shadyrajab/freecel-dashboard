@@ -41,7 +41,7 @@ def get_form():
     tipo = st.selectbox('Qual tipo de venda?', options = tipo_vendas)
     uf = st.selectbox('Qual a UF da venda?', options = UFS)
     email = st.text_input('Qual o email do cliente?', max_chars = 32, placeholder = 'EMAIL')
-    quantidade_de_produtos = st.text_input('Qual a quantidade de produtos vendidos?', max_chars = 2)
+    quantidade_de_produtos = st.text_input('Qual a quantidade de produtos vendidos?', max_chars = 2, placeholder = 'Quantidade')
 
     return cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos
 
