@@ -176,7 +176,7 @@ with st.container(border = True):
             st.error(body = 'Não há dados para a sua solicitação')
 
     with tab_avancada:
-        # try:
+        try:
             plot_rankings(
                 dataframe = rankings.ranking_avancada.sort_values(
                     by = 'valor_acumulado', ascending = False
@@ -184,8 +184,8 @@ with st.container(border = True):
                 [0:16], title = 'Ranking Avançada', key = 'consultor',  media = stats.media_por_consultor_avancada, color = ["red", "blue", "#3E35AB"]
             )
         
-        # except:
-        #     st.error(body = 'Não há dados para a sua solicitação')
+        except:
+            st.error(body = 'Não há dados para a sua solicitação')
 
     with tab_vvn:
         try:
