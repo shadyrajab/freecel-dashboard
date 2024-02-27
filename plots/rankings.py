@@ -9,17 +9,19 @@ def plot_rankings(dataframe: pd.DataFrame, title: str, key: str, media: Optional
     if key == 'consultor':
         dataframe['consultor'] = dataframe['consultor'].apply(lambda nome: formatar_nome(nome))
 
+    dataframe.rename(columns = { 'valor_acumulado': 'Receita' }, inplace = True)
+
     fig = go.Figure(
         px.bar(
             dataframe,
             y = key,
-            x = 'valor_acumulado',
+            x = 'Receita',
             orientation = 'h',
             title = title,
-            hover_data = ['valor_acumulado', 'quantidade_de_produtos'],
-            color = 'valor_acumulado',
+            hover_data = ['Receita', 'quantidade_de_produtos'],
+            color = 'Receita',
             text_auto = '.1s',
-            range_color = [dataframe['valor_acumulado'].min(), dataframe['valor_acumulado'].max()],
+            range_color = [dataframe['Receita'].min(), dataframe['Receita'].max()],
             color_continuous_scale = color,
         )
     )
@@ -42,11 +44,16 @@ def plot_rankings(dataframe: pd.DataFrame, title: str, key: str, media: Optional
 
     fig.update_layout(
         yaxis = {
-            "autorange": "reversed"
+            "autorange": "reversed",
+            "title": "Consultor" if key == "consultor" else "Planos"
+        },
+        xaxis = {
+            "title": "Receita"
         },
         plot_bgcolor = "#ffffff", 
         paper_bgcolor = "#ffffff",
         bargap = 0.2,
+        showlegend = False
     )
 
     fig.update_traces(
