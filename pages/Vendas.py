@@ -6,8 +6,7 @@ from utils.utils import (
     DDDS, 
     order, 
     default_index, 
-    formatar_nome, 
-    df_styles_tipo
+    formatar_nome
 )
 
 from dataframe.vendas import Vendas
@@ -161,7 +160,7 @@ with st.container(border = True):
         today = datetime.today().date()
 
         with novo:
-            with st.form('adicionar_venda_novo'):
+            with st.form('adicionar_venda_novo', clear_on_submit = True):
                 cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos = get_form()
                 plano = st.selectbox('Qual nome do plano vendido?', options = produtos)
                 token = st.text_input('Informe seu token de acesso à API.', type = 'password', placeholder = 'TOKEN')
@@ -177,13 +176,14 @@ with st.container(border = True):
                     )
 
                     if status_code == 200:
+
                         st.success('Venda adicionada com sucesso.')
 
                     else:
                         st.error('Ocorreu um erro ao adicionar esta venda.')
 
         with migracao:
-            with st.form('adicionar_venda_migracao'):
+            with st.form('adicionar_venda_migracao', clear_on_submit = True):
                 cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos = get_form()
                 plano = st.text_input('Qual nome do plano vendido?', max_chars = 30, placeholder = 'PLANO')
                 valor_do_plano = st.text_input('Qual valor do plano? (Informe o valor integral)', max_chars = 8, placeholder = 'VALOR')
@@ -205,7 +205,7 @@ with st.container(border = True):
                         st.error('Ocorreu um erro ao adicionar esta venda.')
 
     with st.expander('Remover Venda'):
-        with st.form('remover_venda'):
+        with st.form('remover_venda', clear_on_submit = True):
             id_venda = st.text_input(
                 label = 'Qual o ID da venda que deseja remover?',
                 placeholder = 'ID'
