@@ -152,8 +152,8 @@ with st.container(border = True):
 # Ranking de Planos
 with st.container(border = True):
     plot_rankings(
-        consultor.ranking_planos.sort_values(
+        dataframe = consultor.ranking_planos.sort_values(
             by = 'valor_acumulado', ascending = False
         )
-        [0:16], 'Planos'
+        [0:16], title = 'Ranking Planos', key = 'plano', color = ["yellow", "orange", "red"]
     )
