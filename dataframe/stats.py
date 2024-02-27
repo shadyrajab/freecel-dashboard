@@ -34,8 +34,28 @@ class Stats:
         return self.data.get('receita_media_diaria', 0)
 
     @property
-    def media_por_consultor(self):
-        return self.data.get('media_por_consultor', 0)
+    def media_por_consultor_geral(self):
+        return self.data.get('media_por_consultor_geral', 0)
+    
+    @property
+    def media_por_consultor_altas(self):
+        return self.data.get('media_por_consultor_altas', 0)
+    
+    @property
+    def media_por_consultor_migracao(self):
+        return self.data.get('media_por_consultor_migracao', 0)
+    
+    @property
+    def media_por_consultor_fixa(self):
+        return self.data.get('media_por_consultor_fixa', 0)
+    
+    @property
+    def media_por_consultor_avancada(self):
+        return self.data.get('media_por_consultor_avancada', 0)
+    
+    @property
+    def media_por_consultor_vvn(self):
+        return self.data.get('media_por_consultor_vvn', 0)
 
     @property
     def maior_venda_mes(self):

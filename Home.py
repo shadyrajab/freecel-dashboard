@@ -104,7 +104,7 @@ metric3.metric(
 
 metric4.metric(
     label = 'Média por Consultor',
-    value = f'R$ {stats.media_por_consultor:,.0f}',
+    value = f'R$ {stats.media_por_consultor_geral:,.0f}',
     delta = int(stats.delta_media_por_consultor)
 )
 
@@ -123,8 +123,8 @@ metric6.metric(
 
 # Ranking de Consultores
 with st.container(border = True):
-    tab_geral, tab_altas, tab_migracao, tab_fixa, tab_soho, tab_vvn = st.tabs(
-            ['Geral', 'Altas', 'Migração Pré-Pós', 'Fixa', 'SOHO', 'VVN']
+    tab_geral, tab_altas, tab_migracao, tab_fixa, tab_avancada, tab_vvn = st.tabs(
+            ['Geral', 'Altas', 'Migração Pré-Pós', 'Fixa', 'Avançada', 'VVN']
         )
     
     with tab_geral:
@@ -133,7 +133,7 @@ with st.container(border = True):
                 dataframe = rankings.ranking_consultores.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title ='Ranking Geral', key = 'consultor', media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
+                [0:16], title ='Ranking Geral', key = 'consultor', media = stats.media_por_consultor_geral, color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -145,7 +145,7 @@ with st.container(border = True):
                 rankings.ranking_altas.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor_altas, color = ["red", "blue", "#3E35AB"]
             )
 
         except:
@@ -157,7 +157,7 @@ with st.container(border = True):
                 dataframe = rankings.ranking_migracao.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking Migração Pré-pós', key = 'consultor',  media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Migração Pré-pós', key = 'consultor',  media = stats.media_por_consultor_migracao, color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -169,23 +169,23 @@ with st.container(border = True):
                 dataframe = rankings.ranking_fixa.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking Fixa', key = 'consultor',  media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Fixa', key = 'consultor',  media = stats.media_por_consultor_fixa, color = ["red", "blue", "#3E35AB"]
             )
         
         except:
             st.error(body = 'Não há dados para a sua solicitação')
 
-    with tab_soho:
-        try:
+    with tab_avancada:
+        # try:
             plot_rankings(
                 dataframe = rankings.ranking_avancada.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking Avançada', key = 'consultor',  media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Avançada', key = 'consultor',  media = stats.media_por_consultor_avancada, color = ["red", "blue", "#3E35AB"]
             )
         
-        except:
-            st.error(body = 'Não há dados para a sua solicitação')
+        # except:
+        #     st.error(body = 'Não há dados para a sua solicitação')
 
     with tab_vvn:
         try:
@@ -193,7 +193,7 @@ with st.container(border = True):
                 dataframe = rankings.ranking_vvn.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking VVN', key = 'consultor',  media = stats.media_por_consultor, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking VVN', key = 'consultor',  media = stats.media_por_consultor_vvn, color = ["red", "blue", "#3E35AB"]
             )
 
         except:
