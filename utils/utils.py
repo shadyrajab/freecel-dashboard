@@ -1,7 +1,24 @@
 from dotenv import load_dotenv
 from os import getenv
+import streamlit as st
 
 load_dotenv()
+
+# Criar formulário para a adição de vendas na API
+def get_form(consultores, today):
+    cnpj = st.text_input('Qual CNPJ do cliente?', max_chars = 14, placeholder = 'CNPJ')
+    ddd = st.selectbox('Qual DDD do cliente?', options = DDDS)
+    telefone = st.text_input('Qual telefone do cliente? (Com DDD)', max_chars = 11, placeholder = 'TELEFONE')
+    consultor = st.selectbox('Qual o nome do consultor que realizou a venda?', options = consultores)
+    data = st.date_input('Qual a data da venda?', format = 'DD/MM/YYYY', max_value = today)
+    gestor = st.text_input('Qual nome do gestor?', max_chars = 32, placeholder = 'GESTOR')
+    equipe = st.selectbox('Qual equipe realizou a venda?', options = equipes)
+    tipo = st.selectbox('Qual tipo de venda?', options = tipo_vendas)
+    uf = st.selectbox('Qual a UF da venda?', options = UFS)
+    email = st.text_input('Qual o email do cliente?', max_chars = 32, placeholder = 'EMAIL')
+    quantidade_de_produtos = st.text_input('Qual a quantidade de produtos vendidos?', max_chars = 2, placeholder = 'Quantidade')
+
+    return cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos
 
 def formatar_cnpj(cnpj):
     cnpj = cnpj.zfill(14)
