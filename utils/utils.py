@@ -4,7 +4,50 @@ import streamlit as st
 
 load_dotenv()
 
-# Criar formulário para a adição de vendas na API
+def mask_dataframe(vendas, ano, mes, tipo, consultor, plano, equipe, municipio, uf, default_index):
+    mask_ano = vendas['Ano'].isin(ano) if len(ano) else True
+    mask_mes = vendas['Mês'].isin(mes) if len(mes) else True
+    mask_tipo = vendas['Tipo'].isin(tipo) if len(tipo) else True
+    mask_consultor = vendas['Consultor'].isin(consultor) if len(consultor) else True
+    mask_plano = vendas['Plano'].isin(plano) if len(plano) else True
+    mask_uf = vendas['UF'].isin(uf) if len(uf) else True
+    mask_municipio = vendas['Município'].isin(municipio) if len(municipio) else True
+    mask_equipe = vendas['Equipe'].isin(equipe) if len(equipe) else True
+
+    mask = mask_ano & mask_mes & mask_tipo & mask_consultor & mask_uf & mask_municipio & mask_equipe & mask_plano
+    
+    if type(mask) == bool:
+        vendas = vendas
+    else:
+        vendas = vendas[mask]
+
+    columns_ordered = sorted(default_index, key = lambda x: order.index(x))
+    vendas = vendas[columns_ordered]
+    vendas = vendas[default_index]
+
+    return vendas
+
+def colorir_tipo_venda(val):
+    cores = {
+        "FIXA": "lightblue",
+        "AVANÇADA": "lightgreen",
+        "MIGRAÇÃO PRÉ-PÓS": "lightcoral",
+        "VVN": "lightsalmon",
+        "ALTAS": "lightyellow"
+    }
+    cor = cores.get(val, "white")
+    return f"background-color: {cor}"
+
+def colorir_equipes(val):
+    cores_equipes = {
+        "FREECEL": "lightblue",
+        "VALPARAISO": "lightgreen",
+        "PARCEIRO": "lightcoral",
+        "ESCRITORIO": "lightsalmon"
+    }
+    cor_equipe = cores_equipes.get(val, "white")
+    return f"background-color: {cor_equipe}"
+
 def get_form(consultores, today):
     cnpj = st.text_input('Qual CNPJ do cliente?', max_chars = 14, placeholder = 'CNPJ')
     ddd = st.selectbox('Qual DDD do cliente?', options = DDDS)
@@ -123,9 +166,9 @@ UFS = [
 ]
 
 order = [
-    'ID', 'CNPJ', 'Plano', 'Tipo', 'Volume', 'Preço', 'Receita', 
+    'ID', 'CNPJ', 'Plano', 'Tipo', 'Volume', 'Preço', 'Receita', 'Equipe',
     'Consultor', 'CEP', 'UF', 'Município', 'Bairro', 'Telefone', 'Email', 'Ano', 'Mês', 'Data',
-    'Equipe', 'Gestor', 'CNAE', 'Faturamento', 'Quadro de Funcionários', 'Capital', 'Porte',
+    'Gestor', 'CNAE', 'Faturamento', 'Quadro de Funcionários', 'Capital', 'Porte',
     'Natureza Jurídica', 'Matriz', 'Situação Cadastral', 'Regime Tributário'
 ]
 
