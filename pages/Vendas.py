@@ -6,7 +6,8 @@ from utils.utils import (
     DDDS, 
     order, 
     default_index, 
-    formatar_nome
+    formatar_nome,
+    get_form
 )
 
 from dataframe.vendas import Vendas
@@ -30,7 +31,7 @@ with open('styles/vendas.css', 'r') as styles:
     css = styles.read()
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
-@st.cache_data
+@st.cache_data(show_spinner = False)
 def load_data():
     vendas = Vendas().data.astype(str)
     consultores = Stats.consultores()
@@ -38,26 +39,15 @@ def load_data():
 
     return vendas, consultores, produtos
 
+# Sistema de paginação do DataFrame
+@st.cache_data(show_spinner = False)
+def split_frame(df, rows):
+    dataframe = [df.loc[i : i + rows - 1, :] for i in range(0, len(df), rows)]
+    return dataframe
+
 vendas, consultores, produtos = load_data()
 
-# Criar formulário para a adição de vendas na API
-def get_form():
-    cnpj = st.text_input('Qual CNPJ do cliente?', max_chars = 14, placeholder = 'CNPJ')
-    ddd = st.selectbox('Qual DDD do cliente?', options = DDDS)
-    telefone = st.text_input('Qual telefone do cliente? (Com DDD)', max_chars = 11, placeholder = 'TELEFONE')
-    consultor = st.selectbox('Qual o nome do consultor que realizou a venda?', options = consultores)
-    data = st.date_input('Qual a data da venda?', format = 'DD/MM/YYYY', max_value = today)
-    gestor = st.text_input('Qual nome do gestor?', max_chars = 32, placeholder = 'GESTOR')
-    equipe = st.selectbox('Qual equipe realizou a venda?', options = equipes)
-    tipo = st.selectbox('Qual tipo de venda?', options = tipo_vendas)
-    uf = st.selectbox('Qual a UF da venda?', options = UFS)
-    email = st.text_input('Qual o email do cliente?', max_chars = 32, placeholder = 'EMAIL')
-    quantidade_de_produtos = st.text_input('Qual a quantidade de produtos vendidos?', max_chars = 2, placeholder = 'Quantidade')
-
-    return cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos
-
-# Painel de vendas
-
+# Painel de Filtragem dos Dados
 with st.sidebar:
     ano = st.multiselect(label = 'Ano', options = list(vendas['Ano'].unique()))
     mes = st.multiselect(
@@ -106,12 +96,38 @@ with st.sidebar:
     vendas[['Consultor', 'Gestor']] = vendas[['Consultor', 'Gestor']].map(formatar_nome)
     vendas['Email'] = vendas['Email'].apply(lambda email: email.lower() if email != 'Não Informado' else email)
 
-# Alterando o estilo do dataframe
-vendas = vendas[0:300]
-vendas = vendas.style.set_properties(**{'background-color': 'white'})
+# Menu inferior para a navegação nas páginas do DataFrame
+painel_de_vendas = st.container()
+menu_inferior = st.columns((4, 1, 1))
 
-# Exibindo e configurando o Painel de Vendas
-st.dataframe(
+with menu_inferior[2]:
+    page_size = st.selectbox("Tamanho da Página", options = [25, 50, 100])
+
+with menu_inferior[1]:
+    total_pages = int(len(vendas) / page_size) if int(len(vendas) / page_size) > 0 else 1
+    current_page = st.number_input(
+        label = "Página", 
+        min_value = 1,
+        max_value = 
+        total_pages, 
+        step = 1
+    )
+
+
+with menu_inferior[0]:
+    st.markdown(f"Página **{current_page}** de **{total_pages}** ")
+
+pages = split_frame(vendas, page_size)
+# Definindo o estilo do DataFrame
+vendas = pages[current_page - 1]
+vendas = (vendas.style
+    .set_properties(**{'background-color': 'white'})
+    .background_gradient(subset = ['Receita'], cmap = 'Reds')._compute()
+    .background_gradient(subset = ['Preço'], cmap = 'Greens')._compute()
+    .background_gradient(subset = ['Volume'], cmap = 'Blues')._compute()
+)
+
+painel_de_vendas.dataframe(
     data = vendas, 
     hide_index = True,
     height = 700,
@@ -158,7 +174,7 @@ with st.expander('Adicionar Venda'):
 
     with novo:
         with st.form('adicionar_venda_novo', clear_on_submit = True):
-            cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos = get_form()
+            cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos = get_form(consultores, today)
             plano = st.selectbox('Qual nome do plano vendido?', options = produtos)
             token = st.text_input('Informe seu token de acesso à API.', type = 'password', placeholder = 'TOKEN')
             submit = st.form_submit_button('Adicionar')
@@ -181,9 +197,9 @@ with st.expander('Adicionar Venda'):
 
     with migracao:
         with st.form('adicionar_venda_migracao', clear_on_submit = True):
-            cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos = get_form()
+            cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos = get_form(consultores, today)
             plano = st.text_input('Qual nome do plano vendido?', max_chars = 30, placeholder = 'PLANO')
-            valor_do_plano = st.text_input('Qual valor do plano? (Informe o valor integral)', max_chars = 8, placeholder = 'VALOR')
+            valor_do_plano = st.number_input('Qual valor do plano? (Informe o valor integral)', min_value = 1, placeholder = 'VALOR')
             token = st.text_input('Informe seu token de acesso à API.', type = 'password', placeholder = 'TOKEN')
             submit = st.form_submit_button('Adicionar')
 

@@ -117,14 +117,12 @@ class Vendas:
         dataframe[['Matriz', 'Porte', 'Capital', 'Situação Cadastral', 'CEP']] = dataframe[
             ['Matriz', 'Porte', 'Capital', 'Situação Cadastral', 'CEP']
         ].map(remover_ponto)
+        dataframe['Data'] = pd.to_datetime(dataframe['Data'], unit = 'ms')
 
         return dataframe[order]
 
     def __get_data__(self):
         data = request('GET', url = vendas_url, headers = headers).json()
         vendas = pd.DataFrame(data)
-        vendas['data'] = pd.to_datetime(vendas['data'], unit = 'ms')
 
-        vendas.replace(['NaN', 'UNDEFINED'], 'Não Informado', inplace = True)
-
-        return vendas.sort_values(by = 'data', ascending = False)
+        return vendas
