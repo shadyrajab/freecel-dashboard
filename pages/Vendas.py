@@ -5,7 +5,8 @@ from utils.utils import (
     formatar_nome,
     get_form, 
     colorir_tipo_venda,
-    mask_dataframe
+    mask_dataframe,
+    colorir_null_values
 )
 from math import ceil
 from dataframe.vendas import Vendas
@@ -97,6 +98,7 @@ with menu_inferior[0]:
 
 pages = split_frame(vendas, page_size)
 vendas = pages[current_page - 1]
+altura = min(len(vendas) * 50, 700)
 # Definindo o estilo do DataFrame
 vendas = (vendas.style
     .set_properties(**{'background-color': 'white'})
@@ -106,12 +108,13 @@ vendas = (vendas.style
     .background_gradient(subset = ['ID'], cmap = 'Grays')._compute()
     .map(colorir_tipo_venda, subset = ['Tipo'])._compute()
     .map(colorir_equipes, subset = ['Equipe'])._compute()
+    .map(colorir_null_values, subset = ['Telefone', 'Email'])._compute()
 )
 
 painel_de_vendas.dataframe(
     data = vendas, 
     hide_index = True,
-    height = 700,
+    height = altura,
     use_container_width = True,
     column_config = {
         "Volume": st.column_config.ProgressColumn(

@@ -48,6 +48,13 @@ def colorir_equipes(val):
     cor_equipe = cores_equipes.get(val, "white")
     return f"background-color: {cor_equipe}"
 
+def colorir_null_values(val):
+    cores_null = {
+        'Não Informado': '#f2f2f2'
+    }
+    cores_null = cores_null.get(val, "white")
+    return f"background-color: {cores_null}"
+
 def get_form(consultores, today):
     cnpj = st.text_input('Qual CNPJ do cliente?', max_chars = 14, placeholder = 'CNPJ')
     ddd = st.selectbox('Qual DDD do cliente?', options = DDDS)
