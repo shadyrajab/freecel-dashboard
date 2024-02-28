@@ -52,7 +52,7 @@ dates = load_dates()
 with st.sidebar:
     mes = None
     # Selecionando todos os anos no qual houveram vendas registradas
-    years = ['Todos', 2024] + [list(year.keys())[0] for year in dates]
+    years = ['Todos'] + [list(year.keys())[0] for year in dates]
     ano = st.sidebar.selectbox(
         label = 'Ano', 
         options = years, 
