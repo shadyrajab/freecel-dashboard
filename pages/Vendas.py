@@ -1,15 +1,13 @@
 from utils.utils import (
     months, 
-    tipo_vendas, 
-    equipes, 
-    UFS, 
-    DDDS, 
-    order, 
+    colorir_equipes, 
     default_index, 
     formatar_nome,
-    get_form
+    get_form, 
+    colorir_tipo_venda,
+    mask_dataframe
 )
-
+from math import ceil
 from dataframe.vendas import Vendas
 from dataframe.stats import Stats
 from datetime import datetime
@@ -42,6 +40,7 @@ def load_data():
 # Sistema de paginação do DataFrame
 @st.cache_data(show_spinner = False)
 def split_frame(df, rows):
+    df.reset_index(drop = True, inplace = True)
     dataframe = [df.loc[i : i + rows - 1, :] for i in range(0, len(df), rows)]
     return dataframe
 
@@ -69,27 +68,7 @@ with st.sidebar:
         default = default_index
     )
     # Criar uma máscara booleana para cada condição de filtro
-    mask_ano = vendas['Ano'].isin(ano) if len(ano) else True
-    mask_mes = vendas['Mês'].isin(mes) if len(mes) else True
-    mask_tipo = vendas['Tipo'].isin(tipo) if len(tipo) else True
-    mask_consultor = vendas['Consultor'].isin(consultor) if len(consultor) else True
-    mask_plano = vendas['Plano'].isin(plano) if len(plano) else True
-    mask_uf = vendas['UF'].isin(uf) if len(uf) else True
-    mask_municipio = vendas['Município'].isin(municipio) if len(municipio) else True
-    mask_equipe = vendas['Equipe'].isin(equipe) if len(equipe) else True
-
-    mask = mask_ano & mask_mes & mask_tipo & mask_consultor & mask_uf & mask_municipio & mask_equipe
-    
-    if type(mask) == bool:
-        vendas = vendas
-    else:
-        vendas = vendas[mask]
-
-    columns_ordered = sorted(default_index, key = lambda x: order.index(x))
-    vendas = vendas[columns_ordered]
-
-    # Formatando o index e formato das colunas do dataframe
-    vendas = vendas[default_index]
+    vendas = mask_dataframe(vendas, ano, mes, tipo, consultor, plano, equipe, municipio, uf, default_index)
     vendas['Volume'] = vendas['Volume'].astype(int)
     vendas['Receita'] = vendas['Receita'].astype(float)
     vendas['Data'] = pd.to_datetime(vendas['Data']).dt.strftime('%d %b %Y')
@@ -101,15 +80,14 @@ painel_de_vendas = st.container()
 menu_inferior = st.columns((4, 1, 1))
 
 with menu_inferior[2]:
-    page_size = st.selectbox("Tamanho da Página", options = [25, 50, 100])
+    page_size = st.selectbox("Tamanho", options = [25, 50, 100])
 
 with menu_inferior[1]:
-    total_pages = int(len(vendas) / page_size) if int(len(vendas) / page_size) > 0 else 1
+    total_pages = ceil(len(vendas) / page_size)
     current_page = st.number_input(
         label = "Página", 
         min_value = 1,
-        max_value = 
-        total_pages, 
+        max_value = total_pages, 
         step = 1
     )
 
@@ -118,13 +96,16 @@ with menu_inferior[0]:
     st.markdown(f"Página **{current_page}** de **{total_pages}** ")
 
 pages = split_frame(vendas, page_size)
-# Definindo o estilo do DataFrame
 vendas = pages[current_page - 1]
+# Definindo o estilo do DataFrame
 vendas = (vendas.style
     .set_properties(**{'background-color': 'white'})
     .background_gradient(subset = ['Receita'], cmap = 'Reds')._compute()
     .background_gradient(subset = ['Preço'], cmap = 'Greens')._compute()
     .background_gradient(subset = ['Volume'], cmap = 'Blues')._compute()
+    .background_gradient(subset = ['ID'], cmap = 'Grays')._compute()
+    .map(colorir_tipo_venda, subset = ['Tipo'])._compute()
+    .map(colorir_equipes, subset = ['Equipe'])._compute()
 )
 
 painel_de_vendas.dataframe(
