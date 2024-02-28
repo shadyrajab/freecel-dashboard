@@ -19,8 +19,8 @@ def remover_ponto(string):
 
 def formatar_nome(nome):
     nome = nome.split(' ')
-    if len(nome) == 1:
-        return nome
+    if len(nome) <= 1:
+        return nome[0]
     
     if nome[1] == 'DOS' or nome[1] == 'DA' or nome[1] == 'DE': 
         nome_final = f'{nome[0]} {nome[1]} {nome[2]}'
