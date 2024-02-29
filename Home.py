@@ -220,7 +220,7 @@ with pie1:
         with tab_vol:
             plot_pie(
                 vendas.vendas_by_data(ano, mes, group), 
-                'Equipe', 'Receita', 'Volume por Equipe',
+                'Equipe', 'Volume', 'Volume por Equipe',
                 color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
             )
 
