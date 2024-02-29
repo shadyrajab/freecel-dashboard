@@ -40,7 +40,7 @@ def load_data(ano: int, mes: str):
     ano = None if ano == 'Todos' else ano
     mes = None if mes == 'Todos' else mes
 
-    stats = Stats(ano, mes)
+    stats = Stats()
     rankings = Rankings(ano, mes)
     vendas = Vendas()
 
@@ -86,38 +86,38 @@ metric4, metric5, metric6 = st.columns(3)
 
 metric1.metric(
     label = f'Receita Total',
-    value = f'R$ {stats.receita_total:,.0f}',
-    delta = int(stats.delta_receita_total)
+    value = f'R$ {stats.receita_total(ano, mes):,.0f}',
+    delta = int(stats.delta_receita_total(ano, mes))
 )
 
 metric2.metric(
     label = f'Quantidade de Produtos',
-    value = int(stats.quantidade_vendida),
-    delta = int(stats.delta_quantidade_produtos)
+    value = int(stats.quantidade_vendida(ano, mes)),
+    delta = int(stats.delta_quantidade_produtos(ano, mes))
 )
 
 metric3.metric(
     label = 'Quantidade de Clientes',
-    value = int(stats.quantidade_clientes),
-    delta = int(stats.delta_quantidade_clientes)
+    value = int(stats.quantidade_clientes(ano, mes)),
+    delta = int(stats.delta_quantidade_clientes(ano, mes))
 )
 
 metric4.metric(
     label = 'Média por Consultor',
-    value = f'R$ {stats.media_por_consultor_geral:,.0f}',
-    delta = int(stats.delta_media_por_consultor)
+    value = f'R$ {stats.media_por_consultor_geral(ano, mes):,.0f}',
+    delta = int(stats.delta_media_por_consultor(ano, mes))
 )
 
 metric5.metric(
     label = 'Ticket Médio',
-    value = f'R$ {stats.ticket_medio:,.0f}',
-    delta = int(stats.delta_ticket_medio)
+    value = f'R$ {stats.ticket_medio(ano, mes):,.0f}',
+    delta = int(stats.delta_ticket_medio(ano, mes))
 )
 
 metric6.metric(
     label = 'Média Diária',
-    value = f'R$ {stats.receita_media_diaria:,.0f}',
-    delta = int(stats.delta_media_diaria)
+    value = f'R$ {stats.receita_media_diaria(ano, mes):,.0f}',
+    delta = int(stats.delta_media_diaria(ano, mes))
 )
 
 
