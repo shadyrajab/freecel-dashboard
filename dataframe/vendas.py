@@ -122,7 +122,7 @@ class Vendas:
         return dataframe[order]
 
     def __get_data__(self):
-        vendas = pd.read_excel('dataframe/dataframe/Vendas concluídas.xlsx')
+        vendas = pd.read_excel('dataframe/dataframe/Vendas concluídas.xlsx').astype(str)
         vendas.replace({
             'NaN': 'Não Informado',
             'nan': 'Não Informado',

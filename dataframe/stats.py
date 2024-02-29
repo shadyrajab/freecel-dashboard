@@ -1,123 +1,122 @@
-from requests import request
 import pandas as pd
 from typing import Optional
-from utils.utils import headers, stats_url, consultores_url, produtos_url
+from utils.utils import __filter_by__, months
 
 class Stats:
-    def __init__(self, ano: Optional[int] = None, mes: Optional[str] = None):
-        self.ano = ano
-        self.mes = mes
+    def __init__(self):
         self.data = self.__get_data__()
 
+    def filter_by(self, ano: Optional[int] = None, mes: Optional[str] = None, tipo: Optional[str] = None):
+        return __filter_by__(dataframe = self.data, ano = ano ,mes = mes, tipo = tipo)
+
+    def years(self) -> list[int]:
+        return list(self.data['ano'].unique())
+
+    def months(self, ano) -> list[str]:
+        return list(self.filter_by(ano)['mês'].unique())
+    
     @property
     def dates(self):
-        return self.data.get('dates')
+        dates = []
+        for year in self.years():
+            dates.append(
+                {
+                    f"{year}": self.months(year)
+                }
+            )
+        return dates
     
-    @property
-    def receita_total(self):
-        return self.data.get('receita_total', 0)
+    def receita_total(self, ano, mes):
+        return self.filter_by(ano, mes)['valor_acumulado'].sum()
 
-    @property
-    def quantidade_vendida(self):
-        return self.data.get('quantidade_vendida', 0)
+    def quantidade_vendida(self, ano, mes):
+        return self.filter_by(ano, mes)['quantidade_de_produtos'].sum()
 
-    @property
-    def quantidade_clientes(self):
-        return self.data.get('quantidade_clientes', 0)
+    def quantidade_clientes(self, ano, mes):
+        return self.filter_by(ano, mes).shape[0]
 
-    @property 
-    def ticket_medio(self):
-        return self.data.get('ticket_medio', 0)
-
-    @property
-    def receita_media_diaria(self):
-        return self.data.get('receita_media_diaria', 0)
-
-    @property
-    def media_por_consultor_geral(self):
-        return self.data.get('media_por_consultor_geral', 0)
+    def ticket_medio(self, ano, mes):
+        return self.receita_total(ano, mes) / self.quantidade_clientes(ano, mes)
     
-    @property
-    def media_por_consultor_altas(self):
-        return self.data.get('media_por_consultor_altas', 0)
+    def receita_media_diaria(self, ano, mes):
+        return self.receita_total(ano, mes) / 22
     
-    @property
-    def media_por_consultor_migracao(self):
-        return self.data.get('media_por_consultor_migracao', 0)
+    def media_por_consultor_geral(self, ano, mes):
+        return self.__get_media__(ano, mes)
     
-    @property
-    def media_por_consultor_fixa(self):
-        return self.data.get('media_por_consultor_fixa', 0)
+    def media_por_consultor_altas(self, ano, mes):
+        return self.__get_media__(ano, mes, 'ALTAS')
     
-    @property
-    def media_por_consultor_avancada(self):
-        return self.data.get('media_por_consultor_avancada', 0)
+    def media_por_consultor_migracao(self, ano, mes):
+        return self.__get_media__(ano, mes, 'MIGRAÇÃO PRÉ-PÓS')
     
-    @property
-    def media_por_consultor_vvn(self):
-        return self.data.get('media_por_consultor_vvn', 0)
+    def media_por_consultor_fixa(self, ano, mes):
+        return self.__get_media__(ano, mes, 'FIXA')
+    
+    def media_por_consultor_avancada(self, ano, mes):
+        return self.__get_media__(ano, mes, 'AVANÇADA')
+    
+    def media_por_consultor_vvn(self, ano, mes):
+        return self.__get_media__(ano, mes, 'VVN')
+    
+    def delta_receita_total(self, ano, mes):
+        return self.__calculate_delta_metric__(self.receita_total, ano, mes)
 
-    @property
-    def maior_venda_mes(self):
-        return self.data.get('maior_venda_mes', 0)
+    def delta_quantidade_clientes(self, ano, mes):
+        return self.__calculate_delta_metric__(self.quantidade_clientes, ano, mes)
 
-    @property
-    def delta_receita_total(self):
-        return self.data.get('delta_receita_total', 0)
+    def delta_quantidade_produtos(self, ano, mes):
+        return self.__calculate_delta_metric__(self.quantidade_vendida, ano, mes)
 
-    @property
-    def delta_quantidade_clientes(self):
-        return self.data.get('delta_quantidade_clientes', 0)
+    def delta_ticket_medio(self, ano, mes):
+        return self.__calculate_delta_metric__(self.ticket_medio, ano, mes)
 
-    @property
-    def delta_quantidade_produtos(self):
-        return self.data.get('delta_quantidade_produtos', 0)
+    def delta_media_diaria(self, ano, mes):
+        return self.__calculate_delta_metric__(self.receita_media_diaria, ano, mes)
 
-    @property
-    def delta_ticket_medio(self):
-        return self.data.get('delta_ticket_medio', 0)
-
-    @property
-    def delta_media_diaria(self):
-        return self.data.get('delta_media_diaria', 0)
-
-    @property
-    def delta_media_por_consultor(self):
-        return self.data.get('delta_media_por_consultor', 0)
-
-    @property
-    def consultor_do_mes(self):
-        return self.data.get('consultor_do_mes')
-
-    @property
-    def qtd_vendas_por_cnae(self):
-        return pd.DataFrame(self.data.get('qtd_vendas_por_cnae'))
-
-    @property
-    def qtd_vendas_por_faturamento(self):
-        return pd.DataFrame(self.data.get('qtd_vendas_por_faturamento'))
-
-    @property
-    def qtd_vendas_por_colaboradores(self):
-        return pd.DataFrame(self.data.get('qtd_vendas_por_colaboradores'))
+    def delta_media_por_consultor(self, ano, mes):
+        return self.__calculate_delta_metric__(self.media_por_consultor_geral, ano, mes)
 
     @property
     def ufs(self):
-        return self.data.get('ufs')
+        return self.data['UF'].unique().tolist()
 
-    @staticmethod
-    def consultores():
-        data = request('GET', url = consultores_url, headers = headers).json()
-
-        nomes_consultores = [consultor['nome'] for consultor in data]
-        return nomes_consultores
+    @property
+    def consultores(self):
+        return self.data['Consultor'].unique().tolist()
     
-    @staticmethod
-    def produtos():
-        data = request('GET', url = produtos_url, headers = headers).json()
-        return pd.DataFrame(data)
+    @property
+    def produtos(self):
+        return self.data['Plano'].unique().tolist()
     
     def __get_data__(self):
-        params = { "ano": self.ano, "mes": self.mes }
-        data = request('GET', url = stats_url, params = params, headers = headers).json()
+        data = pd.read_excel('dataframe/dataframe/Vendas concluídas.xlsx')
         return data
+    
+    def __get_media__(self, ano: Optional[int] = None, mes: Optional[str] = None, tipo: Optional[str] = None):
+        dataframe = self.filter_by(ano, mes, tipo)
+        consultores: int = dataframe['consultor'].nunique() # -> Quantidade de consultores
+        media_por_consultor: int = dataframe['valor_acumulado'].sum() / consultores
+
+        return media_por_consultor
+    
+    def __calculate_delta_metric__(self, metric_function, ano: int = None, mes: str = None) -> int:
+        ano = int(ano)
+        
+        if ano == min(self.years()) and mes == None:
+            return 0
+        
+        if ano == min(self.years()) and mes.lower() == 'janeiro':
+            return 0
+        
+        if mes:
+            mes = mes.capitalize()
+
+            ano_delta = ano - 1 if mes == 'Janeiro' else ano
+            index_mes_passado = months.index(mes) - 1
+            mes_delta = months[index_mes_passado]
+
+            return metric_function(ano, mes) - metric_function(ano_delta, mes_delta)
+        else:
+            ano_delta = ano - 1 if ano != min(self.years()) else ano
+            return metric_function(ano) - metric_function(ano_delta)
