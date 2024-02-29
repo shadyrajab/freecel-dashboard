@@ -133,7 +133,7 @@ with st.container(border = True):
                 dataframe = rankings.ranking_consultores.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking Geral', key = 'consultor', media = stats.media_por_consultor_geral, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Geral', key = 'consultor', media = stats.media_por_consultor_geral(ano, mes), color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -145,7 +145,7 @@ with st.container(border = True):
                 rankings.ranking_altas.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor_altas, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor_altas(ano, mes), color = ["red", "blue", "#3E35AB"]
             )
 
         except:
@@ -157,7 +157,7 @@ with st.container(border = True):
                 dataframe = rankings.ranking_migracao.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking Migração Pré-pós', key = 'consultor',  media = stats.media_por_consultor_migracao, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Migração Pré-pós', key = 'consultor',  media = stats.media_por_consultor_migracao(ano, mes), color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -169,7 +169,7 @@ with st.container(border = True):
                 dataframe = rankings.ranking_fixa.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking Fixa', key = 'consultor',  media = stats.media_por_consultor_fixa, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Fixa', key = 'consultor',  media = stats.media_por_consultor_fixa(ano, mes), color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -181,7 +181,7 @@ with st.container(border = True):
                 dataframe = rankings.ranking_avancada.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking Avançada', key = 'consultor',  media = stats.media_por_consultor_avancada, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Avançada', key = 'consultor',  media = stats.media_por_consultor_avancada(ano, mes), color = ["red", "blue", "#3E35AB"]
             )
         
         except:
@@ -193,7 +193,7 @@ with st.container(border = True):
                 dataframe = rankings.ranking_vvn.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking VVN', key = 'consultor',  media = stats.media_por_consultor_vvn, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking VVN', key = 'consultor',  media = stats.media_por_consultor_vvn(ano, mes), color = ["red", "blue", "#3E35AB"]
             )
 
         except:
@@ -220,7 +220,7 @@ with pie1:
         with tab_vol:
             plot_pie(
                 vendas.vendas_by_data(ano, mes, group), 
-                'Equipe', 'Receita', 'Volume por Equipe',
+                'Equipe', 'Volume', 'Volume por Equipe',
                 color = ["#FFC102", "#FF4560", "#1A374B", "#70DC9E"]
             )
 

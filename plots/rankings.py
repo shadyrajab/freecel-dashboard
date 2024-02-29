@@ -11,6 +11,9 @@ def plot_rankings(dataframe: pd.DataFrame, title: str, key: str, media: Optional
 
     dataframe.rename(columns = { 'valor_acumulado': 'Receita' }, inplace = True)
 
+    if not dataframe.shape[0]:
+        raise ValueError('DataFrame vazio')
+
     fig = go.Figure(
         px.bar(
             dataframe,

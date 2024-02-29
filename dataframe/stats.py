@@ -95,8 +95,8 @@ class Stats:
     
     def __get_media__(self, ano: Optional[int] = None, mes: Optional[str] = None, tipo: Optional[str] = None):
         dataframe = self.filter_by(ano, mes, tipo)
-        consultores: int = dataframe['consultor'].nunique() # -> Quantidade de consultores
-        media_por_consultor: int = dataframe['valor_acumulado'].sum() / consultores
+        consultores = dataframe['consultor'].nunique() # -> Quantidade de consultores
+        media_por_consultor = dataframe['valor_acumulado'].sum() / consultores
 
         return media_por_consultor
     

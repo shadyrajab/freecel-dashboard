@@ -26,10 +26,13 @@ class Vendas:
             return dataframe
         
         if ano and mes == 'Todos':
-            return dataframe[(dataframe['Ano'] == int(ano))]
+            return dataframe[(dataframe['Ano'] == ano)]
         
         elif ano and mes:
-            return dataframe[(dataframe['Ano'] == int(ano)) & (dataframe['Mês'] == mes)]
+            return dataframe[(dataframe['Ano'] == ano) & (dataframe['Mês'] == mes)]
+        
+        dataframe['Receita'] = dataframe['Receita'].astype(float)
+        dataframe['Volume'] = dataframe['Volume'].astype(int)
 
         dataframe = dataframe.groupby('Data', as_index = False).sum(numeric_only = True)
         dataframe = dataframe[(dataframe['Data'].dt.month != now.month) | (dataframe['Data'].dt.year != now.year)]
