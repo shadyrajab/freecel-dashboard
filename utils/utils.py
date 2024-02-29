@@ -1,8 +1,33 @@
 from dotenv import load_dotenv
 from os import getenv
 import streamlit as st
+from typing import Optional
 
 load_dotenv()
+
+def __filter_by__(dataframe, ano: Optional[int] = None, mes: Optional[str] = None, consultor: Optional[str] = None, tipo: Optional[str] = None):
+    print(dataframe.columns)
+    mes = mes.capitalize() if mes else mes
+    ano = int(ano) if ano else ano
+    tipo = tipo.upper() if tipo else tipo
+    consultor = consultor.upper() if consultor else consultor
+
+    if mes and mes not in months:
+        raise ValueError('Formato de mês inválido. Por favor, escreva o nome do mês completo com acentos.')
+
+    # Aplica os filtros
+    filters = {
+        'ano': ano,
+        'mês': mes,
+        'consultor': consultor,
+        'tipo': tipo
+    }
+
+    for column, value in filters.items():
+        if value is not None:
+            dataframe = dataframe[dataframe[column] == value]
+
+    return dataframe
 
 def mask_dataframe(vendas, ano, mes, tipo, consultor, plano, equipe, municipio, uf, default_index):
     mask_ano = vendas['Ano'].isin(ano) if len(ano) else True
