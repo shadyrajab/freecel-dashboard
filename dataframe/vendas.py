@@ -122,11 +122,11 @@ class Vendas:
         return dataframe[order]
 
     def __get_data__(self):
-        data = request('GET', url = vendas_url, headers = headers).json()
-        vendas = pd.DataFrame(data)
+        vendas = pd.read_excel('dataframe/dataframe/Vendas concluídas.xlsx')
         vendas.replace({
             'NaN': 'Não Informado',
             'nan': 'Não Informado',
             'UNDEFINED': 'Não Informado'
         }, inplace = True)
+
         return vendas
