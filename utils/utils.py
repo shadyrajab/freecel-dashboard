@@ -33,7 +33,8 @@ def colorir_tipo_venda(val):
         "AVANÇADA": "lightgreen",
         "MIGRAÇÃO PRÉ-PÓS": "lightcoral",
         "VVN": "lightsalmon",
-        "ALTAS": "lightyellow"
+        "ALTAS": "lightyellow",
+        "PORTABILIDADE": "lightcyan"
     }
     cor = cores.get(val, "white")
     return f"background-color: {cor}"
@@ -43,7 +44,7 @@ def colorir_equipes(val):
         "FREECEL": "lightblue",
         "VALPARAISO": "lightgreen",
         "PARCEIRO": "lightcoral",
-        "ESCRITORIO": "lightsalmon"
+        "GOIÂNIA": "lightsalmon"
     }
     cor_equipe = cores_equipes.get(val, "white")
     return f"background-color: {cor_equipe}"
