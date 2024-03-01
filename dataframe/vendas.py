@@ -119,7 +119,7 @@ class Vendas:
         ].map(remover_ponto)
         dataframe['Data'] = pd.to_datetime(dataframe['Data'], unit = 'ms')
 
-        return dataframe[order]
+        return dataframe[order].sort_values(by = 'Data', ascending = False)
 
     def __get_data__(self):
         data = request('GET', url = vendas_url, headers = headers).json()
