@@ -41,6 +41,10 @@ class Rankings:
     def ranking_planos(self):
         return pd.DataFrame(self.data.get('ranking_planos'))
     
+    @property
+    def ranking_portabilidade(self):
+        return pd.DataFrame(self.data.get('ranking_portabilidade'))
+    
     def __get_data__(self):
         params = { "ano": self.ano, "mes": self.mes }
         data = request('GET', url = rankings_url, params = params, headers = headers).json()

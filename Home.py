@@ -121,8 +121,8 @@ metric6.metric(
 
 # Ranking de Consultores
 with st.container(border = True):
-    tab_geral, tab_altas, tab_migracao, tab_fixa, tab_avancada, tab_vvn = st.tabs(
-            ['Geral', 'Altas', 'Migração Pré-Pós', 'Fixa', 'Avançada', 'VVN']
+    tab_geral, tab_altas, tab_portabilidade, tab_migracao, tab_fixa, tab_avancada, tab_vvn = st.tabs(
+            ['Geral', 'Altas', 'Portabilidade', 'Migração Pré-Pós', 'Fixa', 'Avançada', 'VVN']
         )
     
     with tab_geral:
@@ -141,6 +141,18 @@ with st.container(border = True):
         try:
             dataframe = plot_rankings(
                 rankings.ranking_altas.sort_values(
+                    by = 'valor_acumulado', ascending = False
+                )
+                [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor_altas, color = ["red", "blue", "#3E35AB"]
+            )
+
+        except:
+            st.error(body = 'Não há dados para a sua solicitação')
+    
+    with tab_portabilidade:
+        try:
+            dataframe = plot_rankings(
+                rankings.ranking_portabilidade.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
                 [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor_altas, color = ["red", "blue", "#3E35AB"]
