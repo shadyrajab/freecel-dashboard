@@ -26,13 +26,11 @@ with open('styles/styles.css', 'r') as styles:
     css = styles.read()
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
-@st.cache_data(show_spinner = False)
 def load_consultores():
     consultores = Stats().consultores()
 
     return consultores
 
-@st.cache_data(show_spinner = False)
 def load_data(consultor: str, ano: Optional[int] = None, mes: Optional[str] = None):
     ano = None if ano == 'Todos' else ano
     mes = None if mes == 'Todos' else mes

@@ -30,7 +30,6 @@ with open('styles/vendas.css', 'r') as styles:
     css = styles.read()
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
-@st.cache_data(show_spinner = False)
 def load_data():
     vendas = Vendas().data.astype(str)
     consultores = Stats.consultores()
@@ -39,7 +38,6 @@ def load_data():
     return vendas, consultores, produtos
 
 # Sistema de paginação do DataFrame
-@st.cache_data(show_spinner = False)
 def split_frame(df, rows):
     df.reset_index(drop = True, inplace = True)
     dataframe = [df.loc[i : i + rows - 1, :] for i in range(0, len(df), rows)]

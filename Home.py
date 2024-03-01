@@ -29,13 +29,11 @@ with open('styles/styles.css', 'r') as styles:
     css = styles.read()
     st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
-@st.cache_data(show_spinner = False)
 def load_dates():
     dates = Stats().dates
 
     return dates
 
-@st.cache_data(show_spinner = False)
 def load_data(ano: int, mes: str):
     ano = None if ano == 'Todos' else ano
     mes = None if mes == 'Todos' else mes
@@ -65,7 +63,7 @@ with st.sidebar:
         mes = st.selectbox(
             label = 'Mês: ', 
             options = months, 
-            index = months.index(month_by_numbers[datetime.now().month])
+            index = months.index(month_by_numbers[datetime.now().month - 1]) 
         )
 
 st.title(
