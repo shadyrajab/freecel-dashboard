@@ -140,7 +140,7 @@ month_by_numbers = {
 }
 
 tipo_vendas = ["FIXA", "AVANÇADA", "MIGRAÇÃO PRÉ-PÓS", "VVN","ALTAS"]
-equipes = ['FREECEL', 'VALPARAISO', 'PARCEIRO', 'ESCRITORIO']
+equipes = ['FREECEL', 'VALPARAISO', 'PARCEIRO', 'GOIÂNIA']
 
 UFS = [
     "AC",
