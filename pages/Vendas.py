@@ -6,7 +6,8 @@ from utils.utils import (
     get_form, 
     colorir_tipo_venda,
     mask_dataframe,
-    colorir_null_values
+    colorir_null_values,
+    colorir_adabas
 )
 from math import ceil
 from dataframe.vendas import Vendas
@@ -61,13 +62,14 @@ with st.sidebar:
     uf = st.multiselect(label = 'UF', options = list(vendas['UF'].unique()))
     municipio = st.multiselect(label = 'Município', options = list(vendas['Município'].unique()))
     equipe = st.multiselect(label = 'Equipe', options = list(vendas['Equipe'].unique()))
+    adabas = st.multiselect(label = 'ADABAS', options = list(vendas['ADABAS'].unique()))
     default_index = st.multiselect(
         label = 'Selecionar colunas', 
         options = vendas.columns.to_list(), 
         default = default_index
     )
     # Criar uma máscara booleana para cada condição de filtro
-    vendas = mask_dataframe(vendas, ano, mes, tipo, consultor, plano, equipe, municipio, uf, default_index)
+    vendas = mask_dataframe(vendas, ano, mes, tipo, consultor, plano, equipe, municipio, uf, adabas, default_index)
     vendas['Volume'] = vendas['Volume'].astype(int)
     vendas['Receita'] = vendas['Receita'].astype(float)
     vendas['Data'] = pd.to_datetime(vendas['Data']).dt.strftime('%d %b %Y')
@@ -107,6 +109,7 @@ vendas = (vendas.style
     .map(colorir_tipo_venda, subset = ['Tipo'])._compute()
     .map(colorir_equipes, subset = ['Equipe'])._compute()
     .map(colorir_null_values, subset = ['Telefone', 'Email'])._compute()
+    .map(colorir_adabas, subset = ['ADABAS'])._compute()
 )
 
 painel_de_vendas.dataframe(

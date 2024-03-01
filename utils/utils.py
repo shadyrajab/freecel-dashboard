@@ -4,7 +4,7 @@ import streamlit as st
 
 load_dotenv()
 
-def mask_dataframe(vendas, ano, mes, tipo, consultor, plano, equipe, municipio, uf, default_index):
+def mask_dataframe(vendas, ano, mes, tipo, consultor, plano, equipe, municipio, uf, adabas, default_index):
     mask_ano = vendas['Ano'].isin(ano) if len(ano) else True
     mask_mes = vendas['Mês'].isin(mes) if len(mes) else True
     mask_tipo = vendas['Tipo'].isin(tipo) if len(tipo) else True
@@ -13,8 +13,9 @@ def mask_dataframe(vendas, ano, mes, tipo, consultor, plano, equipe, municipio, 
     mask_uf = vendas['UF'].isin(uf) if len(uf) else True
     mask_municipio = vendas['Município'].isin(municipio) if len(municipio) else True
     mask_equipe = vendas['Equipe'].isin(equipe) if len(equipe) else True
+    mask_adabas = vendas['ADABAS'].isin(adabas) if len(adabas) else True
 
-    mask = mask_ano & mask_mes & mask_tipo & mask_consultor & mask_uf & mask_municipio & mask_equipe & mask_plano
+    mask = mask_adabas & mask_ano & mask_mes & mask_tipo & mask_consultor & mask_uf & mask_municipio & mask_equipe & mask_plano
     
     if type(mask) == bool:
         vendas = vendas
@@ -35,6 +36,16 @@ def colorir_tipo_venda(val):
         "VVN": "lightsalmon",
         "ALTAS": "lightyellow",
         "PORTABILIDADE": "lightcyan"
+    }
+    cor = cores.get(val, "white")
+    return f"background-color: {cor}"
+
+def colorir_adabas(val):
+    cores = {
+        "DFP4059-001": "azure",
+        "GOP4096-001": "beige",
+        "DFPAE0005-1": "bisque",
+        "GOPAE0031-1": "blanchedalmond",
     }
     cor = cores.get(val, "white")
     return f"background-color: {cor}"
@@ -174,7 +185,7 @@ UFS = [
 ]
 
 order = [
-    'ID', 'CNPJ', 'Plano', 'Tipo', 'Volume', 'Preço', 'Receita', 'Equipe',
+    'ID', 'CNPJ', 'Plano', 'Tipo', 'Volume', 'Preço', 'Receita', 'Equipe', 'ADABAS',
     'Consultor', 'CEP', 'UF', 'Município', 'Bairro', 'Telefone', 'Email', 'Ano', 'Mês', 'Data',
     'Gestor', 'CNAE', 'Faturamento', 'Quadro de Funcionários', 'Capital', 'Porte',
     'Natureza Jurídica', 'Matriz', 'Situação Cadastral', 'Regime Tributário'

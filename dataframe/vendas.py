@@ -107,7 +107,8 @@ class Vendas:
                 'natureza_juridica': 'Natureza Jurídica', 
                 'matriz': 'Matriz', 
                 'situacao_cadastral': 'Situação Cadastral', 
-                'regime_tributario': 'Regime Tributário'
+                'regime_tributario': 'Regime Tributário',
+                'adabas': 'ADABAS'
             }, 
             inplace = True
         )
