@@ -155,7 +155,7 @@ with st.container(border = True):
                 rankings.ranking_portabilidade.sort_values(
                     by = 'valor_acumulado', ascending = False
                 )
-                [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor_altas, color = ["red", "blue", "#3E35AB"]
+                [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor_portabilidade, color = ["red", "blue", "#3E35AB"]
             )
 
         except:

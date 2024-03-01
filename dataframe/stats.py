@@ -56,6 +56,10 @@ class Stats:
     @property
     def media_por_consultor_vvn(self):
         return self.data.get('media_por_consultor_vvn', 0)
+    
+    @property
+    def media_por_consultor_portabilidade(self):
+        return self.data.get('media_por_consultor_portabilidade', 0)
 
     @property
     def maior_venda_mes(self):
