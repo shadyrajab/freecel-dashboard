@@ -79,15 +79,15 @@ class Stats:
 
     @property
     def ufs(self):
-        return self.data['UF'].unique().tolist()
+        return self.data['uf'].unique().tolist()
 
     @property
     def consultores(self):
-        return self.data['Consultor'].unique().tolist()
+        return self.data['consultor'].unique().tolist()
     
     @property
     def produtos(self):
-        return self.data['Plano'].unique().tolist()
+        return self.data['plano'].unique().tolist()
     
     def __get_data__(self):
         data = pd.read_excel('dataframe/dataframe/Vendas concluídas.xlsx')

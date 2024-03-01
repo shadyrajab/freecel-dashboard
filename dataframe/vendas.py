@@ -8,8 +8,7 @@ from utils.utils import (
     remover_ponto, 
     order, 
     DDDS_valor_inteiro,
-    vendas_url,
-    headers
+    vendas_url
 )
 
 class Vendas:

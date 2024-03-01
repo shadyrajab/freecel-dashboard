@@ -33,8 +33,8 @@ with open('styles/vendas.css', 'r') as styles:
 @st.cache_data(show_spinner = False)
 def load_data():
     vendas = Vendas().data.astype(str)
-    consultores = Stats.consultores()
-    produtos = Stats.produtos()
+    consultores = Stats().consultores
+    produtos = Stats().produtos
 
     return vendas, consultores, produtos
 

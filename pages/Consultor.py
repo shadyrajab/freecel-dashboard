@@ -28,7 +28,7 @@ with open('styles/styles.css', 'r') as styles:
 
 @st.cache_data(show_spinner = False)
 def load_consultores():
-    consultores = Stats().consultores()
+    consultores = Stats().consultores
 
     return consultores
 
@@ -68,8 +68,10 @@ with st.sidebar:
             options = months,
             index = months.index('Todos')
         )
+ano = None if ano == 'Todos' else ano
+mes = None if mes == 'Todos' else mes
 
-consultor = load_data(consultor = consultor.name, ano = ano, mes = mes)
+consultor = load_data(consultor = consultor.nome, ano = ano, mes = mes)
 
 st.title(
     body = (
@@ -87,43 +89,43 @@ metric4, metric5, metric6 = st.columns(3)
 
 metric1.metric(
     label = f'Receita Total',
-    value = f'R$ {consultor.receita_total:,.0f}',
-    delta = int(consultor.delta_receita_total)
+    value = f'R$ {consultor.receita_total(ano, mes):,.0f}',
+    delta = int(consultor.delta_receita_total(ano, mes))
 )
 
 metric2.metric(
     label = f'Quantidade de Produtos',
-    value = int(consultor.quantidade_vendida),
-    delta = int(consultor.delta_quantidade_produtos)
+    value = int(consultor.quantidade_vendida(ano, mes)),
+    delta = int(consultor.delta_quantidade_produtos(ano, mes))
 )
 
 metric3.metric(
     label = 'Quantidade de Clientes',
-    value = int(consultor.quantidade_clientes),
-    delta = int(consultor.delta_quantidade_clientes)
+    value = int(consultor.quantidade_clientes(ano, mes)),
+    delta = int(consultor.delta_quantidade_clientes(ano, mes))
 )
 
 metric4.metric(
     label = 'Média Mensal',
-    value = f'R$ {consultor.receita_media_mensal:,.0f}',
+    value = f'R$ {consultor.receita_media_mensal(ano, mes):,.0f}',
     delta = 0
 )
 
 metric5.metric(
     label = 'Ticket Médio',
-    value = f'R$ {consultor.ticket_medio:,.0f}',
-    delta = int(consultor.delta_ticket_medio)
+    value = f'R$ {consultor.ticket_medio(ano, mes):,.0f}',
+    delta = int(consultor.delta_ticket_medio(ano, mes))
 )
 
 metric6.metric(
     label = 'Média Diária',
-    value = f'R$ {consultor.receita_media_diaria:,.0f}',
-    delta = int(consultor.delta_media_diaria)
+    value = f'R$ {consultor.receita_media_diaria(ano, mes):,.0f}',
+    delta = int(consultor.delta_media_diaria(ano, mes))
 )
 
 # Gráfico vendas mensais  
 with st.container(border = True):
-    plot_line(dataframe = consultor.groupby_data, title = f'Receita por Data - {consultor.name.title()}', x = 'data', y = 'valor_acumulado')
+    plot_line(dataframe = consultor.groupby_data, title = f'Receita por Data - {consultor.nome.title()}', x = 'data', y = 'valor_acumulado')
 
 # Gráfico de pizza Tipo de Produto
 with st.container(border = True):
