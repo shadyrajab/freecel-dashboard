@@ -29,7 +29,7 @@ class Consultor:
     def months(self, ano):
         return list(self.filter_by(ano)['mês'].unique())
     
-    def receita_total(self, ano, mes):
+    def receita_total(self, ano: Optional[int] = None, mes: Optional[str] = None):
         return self.filter_by(ano, mes, self.nome)['valor_acumulado'].sum()
     
     @property
@@ -58,31 +58,31 @@ class Consultor:
 
         return pd.merge(ranking_planos, quantidade_de_vendas, on = 'plano')
     
-    def delta_quantidade_clientes(self, ano = None, mes = None ):
+    def delta_quantidade_clientes(self, ano: Optional[int] = None, mes: Optional[str] = None):
         return self.__calculate_delta_metric__(self.quantidade_clientes, ano, mes)
     
-    def delta_quantidade_produtos(self, ano = None, mes = None):
+    def delta_quantidade_produtos(self, ano: Optional[int] = None, mes: Optional[str] = None):
         return self.__calculate_delta_metric__(self.quantidade_vendida, ano, mes)
     
-    def delta_receita_total(self, ano = None, mes = None):
+    def delta_receita_total(self, ano: Optional[int] = None, mes: Optional[str] = None):
         return self.__calculate_delta_metric__(self.receita_total, ano, mes)
     
-    def delta_ticket_medio(self, ano, mes = None):
+    def delta_ticket_medio(self, ano: Optional[int] = None, mes: Optional[str] = None):
         return self.__calculate_delta_metric__(self.ticket_medio, ano, mes)
     
-    def delta_media_diaria(self, ano, mes):
+    def delta_media_diaria(self, ano: Optional[int] = None, mes: Optional[str] = None):
         return self.__calculate_delta_metric__(self.receita_media_diaria, ano, mes)
     
-    def quantidade_vendida(self, ano, mes):
+    def quantidade_vendida(self, ano: Optional[int] = None, mes: Optional[str] = None):
         return self.filter_by(ano, mes, self.nome)['quantidade_de_produtos'].sum()
     
-    def quantidade_clientes(self, ano, mes):
+    def quantidade_clientes(self, ano: Optional[int] = None, mes: Optional[str] = None):
         return self.filter_by(ano, mes, self.nome).shape[0]
     
-    def receita_media_diaria(self, ano, mes):
+    def receita_media_diaria(self, ano: Optional[int] = None, mes: Optional[str] = None):
         return self.receita_total(ano, mes) / 22
     
-    def quantidade_media_diaria(self, ano = None, mes = None):
+    def quantidade_media_diaria(self, ano: Optional[int] = None, mes: Optional[str] = None):
         return self.quantidade_vendida(ano, mes) / 22
     
     @property
@@ -128,8 +128,15 @@ class Consultor:
         return media_por_consultor
     
     def __calculate_delta_metric__(self, metric_function, ano: Optional[int] = None, mes: Optional[str] = None) -> int:
-        ano = int(ano)
+        if mes == 'Todos':
+            mes = None
         
+        if not ano and not mes:
+            return 0
+        
+        if ano != 'Todos':
+            ano = int(ano)
+
         if ano == min(self.years()) and mes == None:
             return 0
         
@@ -142,7 +149,7 @@ class Consultor:
             ano_delta = ano - 1 if mes == 'Janeiro' else ano
             index_mes_passado = months.index(mes) - 1
             mes_delta = months[index_mes_passado]
-
+            print(metric_function, ano, mes, ano_delta, mes_delta)
             return metric_function(ano, mes) - metric_function(ano_delta, mes_delta)
         else:
             ano_delta = ano - 1 if ano != min(self.years()) else ano

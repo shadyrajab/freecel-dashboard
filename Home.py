@@ -56,7 +56,7 @@ with st.sidebar:
     ano = st.sidebar.selectbox(
         label = 'Ano', 
         options = years, 
-        index = years.index(str(datetime.now().year))
+        index = years.index('2023')
     )
 
     if ano != 'Todos':
