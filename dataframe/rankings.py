@@ -11,7 +11,7 @@ class Rankings:
 
     @property
     def ranking_consultores(self):
-        return pd.DataFrame(self.data.get('consultores'))
+        return pd.DataFrame(self.data.get('geral'))
     
     @property
     def ranking_produtos(self):
