@@ -36,12 +36,7 @@ class Vendas:
         return dataframe
 
     @staticmethod
-    def add_venda(token, cnpj, telefone, consultor, data, gestor, plano, quantidade_de_produtos, equipe, tipo, email, valor_do_plano):
-        if isinstance(valor_do_plano, str):
-            valor_do_plano = float(valor_do_plano.replace(',', '.'))
-
-        valor_do_plano *= int(quantidade_de_produtos)
-
+    def add_venda(token, cnpj, telefone, consultor, data, gestor, plano, volume, equipe, tipo, email):
         authorization = {
             'Authorization': f'Bearer {token}'
         }
@@ -53,14 +48,14 @@ class Vendas:
             "data": str(datetime.strptime(str(data), '%Y-%m-%d').strftime('%d-%m-%Y')),
             "gestor": gestor,
             "plano": plano,
-            "quantidade_de_produtos": quantidade_de_produtos,
-            "revenda": equipe,
+            "volume": volume,
+            "equipe": equipe,
             "tipo": tipo,
-            "valor_do_plano": valor_do_plano,
             "email": email
         }
 
         response = request('PUT', url = vendas_url, json = params, headers = authorization)
+        print(response.text)
         return response.status_code
 
     @staticmethod
