@@ -69,18 +69,16 @@ def colorir_null_values(val):
 
 def get_form(consultores, today):
     cnpj = st.text_input('Qual CNPJ do cliente?', max_chars = 14, placeholder = 'CNPJ')
-    ddd = st.selectbox('Qual DDD do cliente?', options = DDDS)
     telefone = st.text_input('Qual telefone do cliente? (Com DDD)', max_chars = 11, placeholder = 'TELEFONE')
     consultor = st.selectbox('Qual o nome do consultor que realizou a venda?', options = consultores)
     data = st.date_input('Qual a data da venda?', format = 'DD/MM/YYYY', max_value = today)
     gestor = st.text_input('Qual nome do gestor?', max_chars = 32, placeholder = 'GESTOR')
     equipe = st.selectbox('Qual equipe realizou a venda?', options = equipes)
     tipo = st.selectbox('Qual tipo de venda?', options = tipo_vendas)
-    uf = st.selectbox('Qual a UF da venda?', options = UFS)
     email = st.text_input('Qual o email do cliente?', max_chars = 32, placeholder = 'EMAIL')
     quantidade_de_produtos = st.number_input('Qual a quantidade de produtos vendidos?', min_value = 1, max_value = 100, placeholder = 'Quantidade')
 
-    return cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos
+    return cnpj, telefone, consultor, data, gestor, equipe, tipo, email, quantidade_de_produtos
 
 def formatar_cnpj(cnpj):
     cnpj = cnpj.zfill(14)

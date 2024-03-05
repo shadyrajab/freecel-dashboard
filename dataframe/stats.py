@@ -15,15 +15,15 @@ class Stats:
     
     @property
     def receita_total(self):
-        return self.data.get('receita_total', 0)
+        return self.data.get('receita', 0)
 
     @property
     def quantidade_vendida(self):
-        return self.data.get('quantidade_vendida', 0)
+        return self.data.get('volume', 0)
 
     @property
     def quantidade_clientes(self):
-        return self.data.get('quantidade_clientes', 0)
+        return self.data.get('clientes', 0)
 
     @property 
     def ticket_medio(self):
@@ -31,51 +31,47 @@ class Stats:
 
     @property
     def receita_media_diaria(self):
-        return self.data.get('receita_media_diaria', 0)
+        return self.data.get('receita_media', 0)
 
     @property
     def media_por_consultor_geral(self):
-        return self.data.get('media_por_consultor_geral', 0)
+        return self.data.get('media_consultor_geral', 0)
     
     @property
     def media_por_consultor_altas(self):
-        return self.data.get('media_por_consultor_altas', 0)
+        return self.data.get('media_consultor_altas', 0)
     
     @property
     def media_por_consultor_migracao(self):
-        return self.data.get('media_por_consultor_migracao', 0)
+        return self.data.get('media_consultor_migracao', 0)
     
     @property
     def media_por_consultor_fixa(self):
-        return self.data.get('media_por_consultor_fixa', 0)
+        return self.data.get('media_consultor_fixa', 0)
     
     @property
     def media_por_consultor_avancada(self):
-        return self.data.get('media_por_consultor_avancada', 0)
+        return self.data.get('media_consultor_avancada', 0)
     
     @property
     def media_por_consultor_vvn(self):
-        return self.data.get('media_por_consultor_vvn', 0)
+        return self.data.get('media_consultor_vvn', 0)
     
     @property
     def media_por_consultor_portabilidade(self):
-        return self.data.get('media_por_consultor_portabilidade', 0)
-
-    @property
-    def maior_venda_mes(self):
-        return self.data.get('maior_venda_mes', 0)
+        return self.data.get('media_consultor_portabilidade', 0)
 
     @property
     def delta_receita_total(self):
-        return self.data.get('delta_receita_total', 0)
+        return self.data.get('delta_receita', 0)
 
     @property
     def delta_quantidade_clientes(self):
-        return self.data.get('delta_quantidade_clientes', 0)
+        return self.data.get('delta_clientes', 0)
 
     @property
     def delta_quantidade_produtos(self):
-        return self.data.get('delta_quantidade_produtos', 0)
+        return self.data.get('delta_volume', 0)
 
     @property
     def delta_ticket_medio(self):
@@ -83,27 +79,11 @@ class Stats:
 
     @property
     def delta_media_diaria(self):
-        return self.data.get('delta_media_diaria', 0)
+        return self.data.get('delta_receita_media', 0)
 
     @property
     def delta_media_por_consultor(self):
-        return self.data.get('delta_media_por_consultor', 0)
-
-    @property
-    def consultor_do_mes(self):
-        return self.data.get('consultor_do_mes')
-
-    @property
-    def qtd_vendas_por_cnae(self):
-        return pd.DataFrame(self.data.get('qtd_vendas_por_cnae'))
-
-    @property
-    def qtd_vendas_por_faturamento(self):
-        return pd.DataFrame(self.data.get('qtd_vendas_por_faturamento'))
-
-    @property
-    def qtd_vendas_por_colaboradores(self):
-        return pd.DataFrame(self.data.get('qtd_vendas_por_colaboradores'))
+        return self.data.get('delta_media_consultor_geral', 0)
 
     @property
     def ufs(self):

@@ -27,8 +27,8 @@ class Consultor:
         return self.data.get('name')
     
     @property
-    def receita_total(self):
-        return self.data.get('receita_total')
+    def receita(self):
+        return self.data.get('receita')
     
     @property
     def ranking_planos(self):
@@ -39,48 +39,44 @@ class Consultor:
         return pd.DataFrame(self.data.get('ranking_produtos'))
     
     @property
-    def delta_quantidade_clientes(self):
-        return self.data.get('delta_quantidade_clientes', 0)
+    def delta_clientes(self):
+        return self.data.get('delta_clientes', 0)
     
     @property
-    def delta_quantidade_produtos(self):
-        return self.data.get('delta_quantidade_produtos', 0)
+    def delta_volume(self):
+        return self.data.get('delta_volume', 0)
     
     @property
-    def delta_receita_total(self):
-        return self.data.get('delta_receita_total', 0)
+    def delta_receita(self):
+        return self.data.get('delta_receita', 0)
     
     @property
     def delta_ticket_medio(self):
         return self.data.get('delta_ticket_medio', 0)
     
     @property
-    def delta_media_diaria(self):
-        return self.data.get('delta_media_diaria', 0)
+    def delta_receita_media(self):
+        return self.data.get('delta_receita_media', 0)
     
     @property
-    def quantidade_vendida(self):
-        return self.data.get('quantidade_vendida')
+    def volume(self):
+        return self.data.get('volume')
     
     @property
-    def quantidade_clientes(self):
-        return self.data.get('quantidade_clientes')
+    def clientes(self):
+        return self.data.get('clientes')
     
     @property
-    def receita_media_diaria(self):
-        return self.data.get('receita_media_diaria')
+    def receita_media(self):
+        return self.data.get('receita_media')
     
     @property
-    def quantidade_media_diaria(self):
-        return self.data.get('quantidade_media_diaria')
+    def volume_media(self):
+        return self.data.get('volume_media')
     
     @property
-    def quantidade_media_mensal(self):
-        return self.data.get('quantidade_media_mensal')
-    
-    @property
-    def receita_media_mensal(self):
-        return self.data.get('receita_media_mensal')
+    def delta_volume_media(self):
+        return self.data.get('delta_volume_media')
     
     @property
     def ticket_medio(self):

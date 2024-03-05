@@ -36,12 +36,9 @@ class Vendas:
         return dataframe
 
     @staticmethod
-    def add_venda(token, cnpj, ddd, telefone, consultor, data, gestor, plano, quantidade_de_produtos, equipe, tipo, uf, email, valor_do_plano):
+    def add_venda(token, cnpj, telefone, consultor, data, gestor, plano, quantidade_de_produtos, equipe, tipo, email, valor_do_plano):
         if isinstance(valor_do_plano, str):
             valor_do_plano = float(valor_do_plano.replace(',', '.'))
-
-        if ddd not in DDDS_valor_inteiro:
-            valor_do_plano *= 0.3 
 
         valor_do_plano *= int(quantidade_de_produtos)
 
@@ -59,7 +56,6 @@ class Vendas:
             "quantidade_de_produtos": quantidade_de_produtos,
             "revenda": equipe,
             "tipo": tipo,
-            "uf": uf,
             "valor_do_plano": valor_do_plano,
             "email": email
         }

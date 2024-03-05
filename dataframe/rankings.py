@@ -11,39 +11,39 @@ class Rankings:
 
     @property
     def ranking_consultores(self):
-        return pd.DataFrame(self.data.get('ranking_consultores'))
+        return pd.DataFrame(self.data.get('consultores'))
     
     @property
     def ranking_produtos(self):
-        return pd.DataFrame(self.data.get('ranking_produtos'))
+        return pd.DataFrame(self.data.get('produtos'))
     
     @property
     def ranking_altas(self):
-        return pd.DataFrame(self.data.get('ranking_altas'))
+        return pd.DataFrame(self.data.get('altas'))
     
     @property
     def ranking_migracao(self):
-        return pd.DataFrame(self.data.get('ranking_migracao'))
+        return pd.DataFrame(self.data.get('migracao'))
     
     @property
     def ranking_fixa(self):
-        return pd.DataFrame(self.data.get('ranking_fixa'))
+        return pd.DataFrame(self.data.get('fixa'))
 
     @property
     def ranking_avancada(self):
-        return pd.DataFrame(self.data.get('ranking_avancada'))
+        return pd.DataFrame(self.data.get('avancada'))
     
     @property
     def ranking_vvn(self):
-        return pd.DataFrame(self.data.get('ranking_vvn'))
+        return pd.DataFrame(self.data.get('vvn'))
     
     @property
     def ranking_planos(self):
-        return pd.DataFrame(self.data.get('ranking_planos'))
+        return pd.DataFrame(self.data.get('planos'))
     
     @property
     def ranking_portabilidade(self):
-        return pd.DataFrame(self.data.get('ranking_portabilidade'))
+        return pd.DataFrame(self.data.get('portabilidade'))
     
     def __get_data__(self):
         params = { "ano": self.ano, "mes": self.mes }

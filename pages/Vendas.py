@@ -159,7 +159,7 @@ with st.expander('Adicionar Venda'):
 
     with novo:
         with st.form('adicionar_venda_novo', clear_on_submit = True):
-            cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos = get_form(consultores, today)
+            cnpj, telefone, consultor, data, gestor, equipe, tipo, email, quantidade_de_produtos = get_form(consultores, today)
             plano = st.selectbox('Qual nome do plano vendido?', options = produtos)
             token = st.text_input('Informe seu token de acesso à API.', type = 'password', placeholder = 'TOKEN')
             submit = st.form_submit_button('Adicionar')
@@ -167,9 +167,9 @@ with st.expander('Adicionar Venda'):
             if submit:
                 valor_do_plano = produtos[produtos['nome'] == plano]['preco'].iloc[0]
                 status_code = Vendas.add_venda(
-                    cnpj = cnpj, ddd = ddd, telefone = telefone, consultor = consultor, data = data, 
+                    cnpj = cnpj, telefone = telefone, consultor = consultor, data = data, 
                     gestor = gestor, plano = plano, quantidade_de_produtos = quantidade_de_produtos, 
-                    equipe = equipe, tipo = tipo, uf = uf, email = email, valor_do_plano = valor_do_plano,
+                    equipe = equipe, tipo = tipo, email = email, valor_do_plano = valor_do_plano,
                     token = token
                 )
 
@@ -182,7 +182,7 @@ with st.expander('Adicionar Venda'):
 
     with migracao:
         with st.form('adicionar_venda_migracao', clear_on_submit = True):
-            cnpj, ddd, telefone, consultor, data, gestor, equipe, tipo, uf, email, quantidade_de_produtos = get_form(consultores, today)
+            cnpj, telefone, consultor, data, gestor, equipe, tipo, email, quantidade_de_produtos = get_form(consultores, today)
             plano = st.text_input('Qual nome do plano vendido?', max_chars = 30, placeholder = 'PLANO')
             valor_do_plano = st.number_input('Qual valor do plano? (Informe o valor integral)', min_value = 1, placeholder = 'VALOR')
             token = st.text_input('Informe seu token de acesso à API.', type = 'password', placeholder = 'TOKEN')
@@ -190,9 +190,9 @@ with st.expander('Adicionar Venda'):
 
             if submit:
                 status_code = Vendas.add_venda(
-                    cnpj = cnpj, ddd = ddd, telefone = telefone, consultor = consultor, data = data, 
+                    cnpj = cnpj, telefone = telefone, consultor = consultor, data = data, 
                     gestor = gestor, plano = plano, quantidade_de_produtos = quantidade_de_produtos, 
-                    equipe = equipe, tipo = tipo, uf = uf, email = email, valor_do_plano = valor_do_plano,
+                    equipe = equipe, tipo = tipo, email = email, valor_do_plano = valor_do_plano,
                     token = token
                 )
 

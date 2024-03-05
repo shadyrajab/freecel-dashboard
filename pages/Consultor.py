@@ -67,7 +67,7 @@ with st.sidebar:
             index = months.index('Todos')
         )
 
-consultor = load_data(consultor = consultor.name, ano = ano, mes = mes)
+consultor = load_data(consultor = consultor.nome, ano = ano, mes = mes)
 
 st.title(
     body = (
@@ -85,26 +85,26 @@ metric4, metric5, metric6 = st.columns(3)
 
 metric1.metric(
     label = f'Receita Total',
-    value = f'R$ {consultor.receita_total:,.0f}',
-    delta = int(consultor.delta_receita_total)
+    value = f'R$ {consultor.receita:,.0f}',
+    delta = int(consultor.delta_receita)
 )
 
 metric2.metric(
     label = f'Quantidade de Produtos',
-    value = int(consultor.quantidade_vendida),
-    delta = int(consultor.delta_quantidade_produtos)
+    value = int(consultor.volume),
+    delta = int(consultor.delta_volume)
 )
 
 metric3.metric(
     label = 'Quantidade de Clientes',
-    value = int(consultor.quantidade_clientes),
-    delta = int(consultor.delta_quantidade_clientes)
+    value = int(consultor.clientes),
+    delta = int(consultor.delta_clientes)
 )
 
 metric4.metric(
-    label = 'Média Mensal',
-    value = f'R$ {consultor.receita_media_mensal:,.0f}',
-    delta = 0
+    label = 'Volume Média',
+    value = f'R$ {consultor.volume_media:,.0f}',
+    delta = int(consultor.delta_volume_media)
 )
 
 metric5.metric(
@@ -114,14 +114,14 @@ metric5.metric(
 )
 
 metric6.metric(
-    label = 'Média Diária',
-    value = f'R$ {consultor.receita_media_diaria:,.0f}',
-    delta = int(consultor.delta_media_diaria)
+    label = 'Receita Média',
+    value = f'R$ {consultor.receita_media:,.0f}',
+    delta = int(consultor.delta_receita_media)
 )
 
 # Gráfico vendas mensais  
 with st.container(border = True):
-    plot_line(dataframe = consultor.groupby_data, title = f'Receita por Data - {consultor.name.title()}', x = 'data', y = 'valor_acumulado')
+    plot_line(dataframe = consultor.groupby_data, title = f'Receita por Data - {consultor.nome.title()}', x = 'data', y = 'valor_acumulado')
 
 # Gráfico de pizza Tipo de Produto
 with st.container(border = True):
