@@ -16,8 +16,8 @@ class Rankings:
             'consultores_fixa': self.consultores_fixa,
             'consultores_migracao': self.consultores_migracao,
             'consultores_portabilidade': self.consultores_portabilidade,
-            'consultores_avancada': self.consultores_avancada
-            # 'consultores_vvn': self.consultores_vvn
+            'consultores_avancada': self.consultores_avancada,
+            'consultores_vvn': self.consultores_vvn
         }
 
         if key in funcs:
@@ -96,6 +96,9 @@ class Rankings:
     
     def __get_ranking(self, name):
         ranking_consultores = pd.DataFrame(self.data.get(name))
+        if ranking_consultores.shape[0] == 0:
+            return None
+        
         ranking_consultores.rename(columns = {
             'receita': 'Receita',
             'consultor': 'Consultor',
@@ -106,5 +109,6 @@ class Rankings:
             'receita_media': 'Receita Média',
             'clientes_media': 'Clientes Média'
         }, inplace=True)
+
         ranking_consultores['Consultor'] = ranking_consultores['Consultor'].apply(lambda n: formatar_nome(n))
         return ranking_consultores
