@@ -69,7 +69,6 @@ class Rankings:
         merged_df = pd.merge(merged_df, avanc_migr, on='consultor', how='outer')
 
         merged_df['consultor'] = merged_df['consultor'].apply(lambda n: formatar_nome(n))
-        merged_df.to_excel('doidao.xlsx')
 
         return merged_df.rename(columns={'consultor': 'Consultor'})
 
