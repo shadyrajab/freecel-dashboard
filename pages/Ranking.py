@@ -59,7 +59,7 @@ st.title(
 rankings = load_data(ano, mes)
 df = rankings.full_ranking
 df.fillna(0, inplace=True)
-categories = ['Altas', 'Total', 'VVN', 'Portabilidade', 'Avançada', 'Migração Pré-Pós']
+categories = ['Altas', 'Total', 'VVN', 'Portabilidade', 'Avançada', 'Migração Pré-Pós', 'Fixa']
 sub_categories = ['Volume', 'Receita']
 multi_index = pd.MultiIndex.from_product([categories, sub_categories])
 

@@ -60,13 +60,15 @@ class Rankings:
         vvn = self['vvn'].rename(columns={'volume': 'Volume VVN', 'receita': 'Receita VVN'}).drop(columns=['clientes'])
         avancada = self['avancada'].rename(columns={'volume': 'Volume Avançada', 'receita': 'Receita Avançada'}).drop(columns=['clientes'])
         migracao = self['migracao'].rename(columns={'volume': 'Volume Migração Pré-Pós', 'receita': 'Receita Migração Pré-Pós'}).drop(columns=['clientes'])
-
+        fixa = self['fixa'].rename(columns={'volume': 'Volume Fixa', 'receita': 'Receita Fixa'}).drop(columns=['clientes'])
+        
         altas_geral = pd.merge(altas, geral, on='consultor', how='outer')
         port_vvn = pd.merge(vvn, portabilidade, on='consultor', how='outer')
         avanc_migr = pd.merge(avancada, migracao, on='consultor', how='outer')
 
         merged_df = pd.merge(altas_geral, port_vvn, on='consultor', how='outer')
         merged_df = pd.merge(merged_df, avanc_migr, on='consultor', how='outer')
+        merged_df = pd.merge(merged_df, fixa, on='consultor', how='outer')
 
         merged_df['consultor'] = merged_df['consultor'].apply(lambda n: formatar_nome(n))
 
