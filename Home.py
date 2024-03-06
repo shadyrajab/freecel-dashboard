@@ -130,7 +130,7 @@ with st.container(border = True):
             try:
                 plot_rankings(
                     dataframe = rankings[formated_tipo].sort_values(
-                        by = 'valor_acumulado', ascending = False
+                        by = 'receita', ascending = False
                     )
                     [0:16], 
                     title = f'Ranking {tipo}', 
@@ -138,36 +138,6 @@ with st.container(border = True):
                     media = stats[f'media_consultor_{formated_tipo}'], 
                     color = ["red", "blue", "#3E35AB"]
                 )
-
-            except:
-                st.error(body = 'Não há dados para a sua solicitação')
-    
-
-with st.container(border = True):
-    tabs = st.tabs(tab_names)
-    for tipo, tab in zip(tab_names, tabs):
-        with tab:
-            formated_tipo = format_tab_name(tipo)
-            try:
-                consultores_geral = rankings[f'consultores_{formated_tipo}'].sort_values(by='Receita', ascending=False)
-                consultores_geral = (consultores_geral.style
-                    .set_properties(**{'background-color': 'white'})._compute()
-                    .background_gradient(subset = ['Receita'], cmap = 'Reds')._compute()
-                    .background_gradient(subset = ['Clientes'], cmap = 'Greens')._compute()
-                    .background_gradient(subset = ['Volume'], cmap = 'Blues')._compute()
-                    .background_gradient(subset = ['Ticket Médio'], cmap = 'Grays')._compute()
-                    .background_gradient(subset = ['Receita Média'], cmap = 'Reds')._compute()
-                    .background_gradient(subset = ['Clientes Média'], cmap = 'Greens')._compute()
-                    .background_gradient(subset = ['Volume Média'], cmap = 'Blues')._compute()
-                    .format({
-                        'Receita': 'R$ {:.2f}', 
-                        'Receita Média': 'R$ {:.2f}', 
-                        'Ticket Médio': 'R$ {:.2f}',
-                        'Clientes Média': '{:.2f}',
-                        'Volume Média': '{:.2f}'
-                    })
-                )
-                st.dataframe(data = consultores_geral, hide_index = True)
 
             except:
                 st.error(body = 'Não há dados para a sua solicitação')
@@ -236,7 +206,7 @@ with pie2:
 with st.container(border = True):
     plot_rankings(
         dataframe = rankings.planos.sort_values(
-            by = 'valor_acumulado', ascending = False
+            by = 'receita', ascending = False
         )
         [0:16], title = 'Ranking Planos', key = 'plano', color = ["yellow", "orange", "red"]
     )

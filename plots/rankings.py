@@ -9,7 +9,7 @@ def plot_rankings(dataframe: pd.DataFrame, title: str, key: str, media: Optional
     if key == 'consultor':
         dataframe['consultor'] = dataframe['consultor'].apply(lambda nome: formatar_nome(nome))
 
-    dataframe.rename(columns = { 'valor_acumulado': 'Receita' }, inplace = True)
+    dataframe.rename(columns = { 'receita': 'Receita' }, inplace = True)
 
     fig = go.Figure(
         px.bar(
@@ -18,7 +18,7 @@ def plot_rankings(dataframe: pd.DataFrame, title: str, key: str, media: Optional
             x = 'Receita',
             orientation = 'h',
             title = title,
-            hover_data = ['Receita', 'quantidade_de_produtos'],
+            hover_data = ['Receita', 'volume'],
             color = 'Receita',
             text_auto = '.1s',
             range_color = [dataframe['Receita'].min(), dataframe['Receita'].max()],
