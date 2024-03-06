@@ -11,6 +11,9 @@ def plot_rankings(dataframe: pd.DataFrame, title: str, key: str, media: Optional
 
     dataframe.rename(columns = { 'receita': 'Receita' }, inplace = True)
 
+    if dataframe.shape[0] == 0:
+        return st.error('Não há dados para a sua solicitação')
+
     fig = go.Figure(
         px.bar(
             dataframe,
@@ -61,4 +64,4 @@ def plot_rankings(dataframe: pd.DataFrame, title: str, key: str, media: Optional
         textposition = 'outside',
     )
 
-    st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
+    return st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
