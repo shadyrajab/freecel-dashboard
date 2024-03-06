@@ -186,7 +186,7 @@ order = [
     'ID', 'CNPJ', 'Plano', 'Tipo', 'Volume', 'Preço', 'Receita', 'Equipe', 'ADABAS',
     'Consultor', 'CEP', 'UF', 'Município', 'Bairro', 'Telefone', 'Email', 'Ano', 'Mês', 'Data',
     'Gestor', 'CNAE', 'Faturamento', 'Quadro de Funcionários', 'Capital', 'Porte',
-    'Natureza Jurídica', 'Matriz', 'Situação Cadastral', 'Regime Tributário'
+    'Natureza Jurídica', 'Matriz', 'Regime Tributário'
 ]
 
 DDDS = [

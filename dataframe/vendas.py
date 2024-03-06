@@ -7,7 +7,6 @@ from utils.utils import (
     formatar_telefone, 
     remover_ponto, 
     order, 
-    DDDS_valor_inteiro,
     vendas_url,
     headers
 )
@@ -97,7 +96,6 @@ class Vendas:
                 'porte': 'Porte',
                 'natureza_juridica': 'Natureza Jurídica', 
                 'matriz': 'Matriz', 
-                'situacao_cadastral': 'Situação Cadastral', 
                 'regime_tributario': 'Regime Tributário',
                 'adabas': 'ADABAS'
             }, 
@@ -106,8 +104,8 @@ class Vendas:
         
         dataframe['CNPJ'] = dataframe['CNPJ'].apply(lambda cnpj: formatar_cnpj(cnpj))
         dataframe['Telefone'] = dataframe['Telefone'].apply(lambda telefone: formatar_telefone(telefone))
-        dataframe[['Matriz', 'Porte', 'Capital', 'Situação Cadastral', 'CEP']] = dataframe[
-            ['Matriz', 'Porte', 'Capital', 'Situação Cadastral', 'CEP']
+        dataframe[['Matriz', 'Porte', 'Capital', 'CEP']] = dataframe[
+            ['Matriz', 'Porte', 'Capital', 'CEP']
         ].map(remover_ponto)
         dataframe['Data'] = pd.to_datetime(dataframe['Data'], unit = 'ms')
 
