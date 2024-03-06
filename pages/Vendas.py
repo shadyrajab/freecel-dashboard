@@ -72,6 +72,7 @@ with st.sidebar:
     vendas = mask_dataframe(vendas, ano, mes, tipo, consultor, plano, equipe, municipio, uf, adabas, default_index)
     vendas['Volume'] = vendas['Volume'].astype(int)
     vendas['Receita'] = vendas['Receita'].astype(float)
+    vendas['Preço'] = vendas['Preço'].astype(float)
     vendas['Data'] = pd.to_datetime(vendas['Data']).dt.strftime('%d %b %Y')
     vendas[['Consultor', 'Gestor']] = vendas[['Consultor', 'Gestor']].map(formatar_nome)
     vendas['Email'] = vendas['Email'].apply(lambda email: email.lower() if email != 'Não Informado' else email)
@@ -110,6 +111,7 @@ vendas = (vendas.style
     .map(colorir_equipes, subset = ['Equipe'])._compute()
     .map(colorir_null_values, subset = ['Telefone', 'Email'])._compute()
     .map(colorir_adabas, subset = ['ADABAS'])._compute()
+    .format({'Preço': 'R$ {:.2f}'})
 )
 
 painel_de_vendas.dataframe(

@@ -11,7 +11,7 @@ from plots.rankings import plot_rankings
 from plots.scatter import plot_line
 from plots.pie import plot_pie
 
-from utils.utils import months, month_by_numbers
+from utils.utils import months, month_by_numbers, format_tab_name
 
 
 # Configurando o layout da página
@@ -84,26 +84,26 @@ metric4, metric5, metric6 = st.columns(3)
 
 metric1.metric(
     label = f'Receita Total',
-    value = f'R$ {stats.receita_total:,.0f}',
-    delta = int(stats.delta_receita_total)
+    value = f'R$ {stats.receita:,.0f}',
+    delta = int(stats.delta_receita)
 )
 
 metric2.metric(
     label = f'Quantidade de Produtos',
-    value = int(stats.quantidade_vendida),
-    delta = int(stats.delta_quantidade_produtos)
+    value = int(stats.volume),
+    delta = int(stats.delta_volume)
 )
 
 metric3.metric(
     label = 'Quantidade de Clientes',
-    value = int(stats.quantidade_clientes),
-    delta = int(stats.delta_quantidade_clientes)
+    value = int(stats.clientes),
+    delta = int(stats.delta_clientes)
 )
 
 metric4.metric(
     label = 'Média por Consultor',
-    value = f'R$ {stats.media_por_consultor_geral:,.0f}',
-    delta = int(stats.delta_media_por_consultor)
+    value = f'R$ {stats.media_consultor_geral:,.0f}',
+    delta = int(stats.delta_media_consultor_geral)
 )
 
 metric5.metric(
@@ -114,102 +114,64 @@ metric5.metric(
 
 metric6.metric(
     label = 'Média Diária',
-    value = f'R$ {stats.receita_media_diaria:,.0f}',
-    delta = int(stats.delta_media_diaria)
+    value = f'R$ {stats.receita_media:,.0f}',
+    delta = int(stats.delta_receita_media)
 )
 
+tab_names = ['Geral', 'Altas', 'Portabilidade', 'Migração', 'Fixa', 'Avançada', 'VVN']
 
 # Ranking de Consultores
 with st.container(border = True):
-    tab_geral, tab_altas, tab_portabilidade, tab_migracao, tab_fixa, tab_avancada, tab_vvn = st.tabs(
-            ['Geral', 'Altas', 'Portabilidade', 'Migração Pré-Pós', 'Fixa', 'Avançada', 'VVN']
-        )
+    # Cria uma aba para cada valor em tab_names
+    tabs = st.tabs(tab_names)
+    for tipo, tab in zip(tab_names, tabs):
+        with tab:
+            formated_tipo = format_tab_name(tipo)
+            try:
+                plot_rankings(
+                    dataframe = rankings[formated_tipo].sort_values(
+                        by = 'valor_acumulado', ascending = False
+                    )
+                    [0:16], 
+                    title = f'Ranking {tipo}', 
+                    key = 'consultor',  
+                    media = stats[f'media_consultor_{formated_tipo}'], 
+                    color = ["red", "blue", "#3E35AB"]
+                )
+
+            except:
+                st.error(body = 'Não há dados para a sua solicitação')
     
-    with tab_geral:
-        try:
-            plot_rankings(
-                dataframe = rankings.ranking_consultores.sort_values(
-                    by = 'valor_acumulado', ascending = False
+
+with st.container(border = True):
+    tabs = st.tabs(tab_names)
+    for tipo, tab in zip(tab_names, tabs):
+        with tab:
+            formated_tipo = format_tab_name(tipo)
+            try:
+                consultores_geral = rankings[f'consultores_{formated_tipo}'].sort_values(by='Receita', ascending=False)
+                consultores_geral = (consultores_geral.style
+                    .set_properties(**{'background-color': 'white'})._compute()
+                    .background_gradient(subset = ['Receita'], cmap = 'Reds')._compute()
+                    .background_gradient(subset = ['Clientes'], cmap = 'Greens')._compute()
+                    .background_gradient(subset = ['Volume'], cmap = 'Blues')._compute()
+                    .background_gradient(subset = ['Ticket Médio'], cmap = 'Grays')._compute()
+                    .background_gradient(subset = ['Receita Média'], cmap = 'Reds')._compute()
+                    .background_gradient(subset = ['Clientes Média'], cmap = 'Greens')._compute()
+                    .background_gradient(subset = ['Volume Média'], cmap = 'Blues')._compute()
+                    .format({
+                        'Receita': 'R$ {:.2f}', 
+                        'Receita Média': 'R$ {:.2f}', 
+                        'Ticket Médio': 'R$ {:.2f}',
+                        'Clientes Média': '{:.2f}',
+                        'Volume Média': '{:.2f}'
+                    })
                 )
-                [0:16], title = 'Ranking Geral', key = 'consultor', media = stats.media_por_consultor_geral, color = ["red", "blue", "#3E35AB"]
-            )
+                st.dataframe(data = consultores_geral, hide_index = True)
+
+            except:
+                st.error(body = 'Não há dados para a sua solicitação')
         
-        except:
-            st.error(body = 'Não há dados para a sua solicitação')
-
-    with tab_altas:
-        try:
-            dataframe = plot_rankings(
-                rankings.ranking_altas.sort_values(
-                    by = 'valor_acumulado', ascending = False
-                )
-                [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor_altas, color = ["red", "blue", "#3E35AB"]
-            )
-
-        except:
-            st.error(body = 'Não há dados para a sua solicitação')
-    
-    with tab_portabilidade:
-        try:
-            dataframe = plot_rankings(
-                rankings.ranking_portabilidade.sort_values(
-                    by = 'valor_acumulado', ascending = False
-                )
-                [0:16], title = 'Ranking Altas', key = 'consultor', media = stats.media_por_consultor_portabilidade, color = ["red", "blue", "#3E35AB"]
-            )
-
-        except:
-            st.error(body = 'Não há dados para a sua solicitação')
-
-    with tab_migracao:
-        try:
-            plot_rankings(
-                dataframe = rankings.ranking_migracao.sort_values(
-                    by = 'valor_acumulado', ascending = False
-                )
-                [0:16], title = 'Ranking Migração Pré-pós', key = 'consultor',  media = stats.media_por_consultor_migracao, color = ["red", "blue", "#3E35AB"]
-            )
-        
-        except:
-            st.error(body = 'Não há dados para a sua solicitação')
-
-    with tab_fixa:
-        try:
-            plot_rankings(
-                dataframe = rankings.ranking_fixa.sort_values(
-                    by = 'valor_acumulado', ascending = False
-                )
-                [0:16], title = 'Ranking Fixa', key = 'consultor',  media = stats.media_por_consultor_fixa, color = ["red", "blue", "#3E35AB"]
-            )
-        
-        except:
-            st.error(body = 'Não há dados para a sua solicitação')
-
-    with tab_avancada:
-        try:
-            plot_rankings(
-                dataframe = rankings.ranking_avancada.sort_values(
-                    by = 'valor_acumulado', ascending = False
-                )
-                [0:16], title = 'Ranking Avançada', key = 'consultor',  media = stats.media_por_consultor_avancada, color = ["red", "blue", "#3E35AB"]
-            )
-        
-        except:
-            st.error(body = 'Não há dados para a sua solicitação')
-
-    with tab_vvn:
-        try:
-            plot_rankings(
-                dataframe = rankings.ranking_vvn.sort_values(
-                    by = 'valor_acumulado', ascending = False
-                )
-                [0:16], title = 'Ranking VVN', key = 'consultor',  media = stats.media_por_consultor_vvn, color = ["red", "blue", "#3E35AB"]
-            )
-
-        except:
-            st.error(body = 'Não há dados para a sua solicitação')
-
-
 # Colunas para os gráficos de tipos de produto e equipe
 pie1, pie2 = st.columns(2)
 
@@ -273,7 +235,7 @@ with pie2:
 # Ranking de Planos
 with st.container(border = True):
     plot_rankings(
-        dataframe = rankings.ranking_planos.sort_values(
+        dataframe = rankings.planos.sort_values(
             by = 'valor_acumulado', ascending = False
         )
         [0:16], title = 'Ranking Planos', key = 'plano', color = ["yellow", "orange", "red"]

@@ -4,6 +4,11 @@ import streamlit as st
 
 load_dotenv()
 
+def format_tab_name(string):
+    string = string.lower().replace('ç', 'c').replace('ã', 'a')
+    return string
+
+
 def mask_dataframe(vendas, ano, mes, tipo, consultor, plano, equipe, municipio, uf, adabas, default_index):
     mask_ano = vendas['Ano'].isin(ano) if len(ano) else True
     mask_mes = vendas['Mês'].isin(mes) if len(mes) else True
