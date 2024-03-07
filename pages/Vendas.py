@@ -155,7 +155,7 @@ painel_de_vendas.dataframe(
 
 with st.expander('Adicionar Venda'):
     # Criando abas para adicionar vendas de acordo com o tipo de cliente
-    novo, migracao = st.tabs(['Novo'])
+    novo, migracao = st.tabs(['Novo', 'Já cliente'])
 
     today = datetime.today().date()
 
@@ -183,6 +183,8 @@ with st.expander('Adicionar Venda'):
                 else:
                     st.error('Ocorreu um erro ao adicionar esta venda.')
                     
+    with migracao:
+        st.write('Em breve.')
 
 with st.expander('Remover Venda'):
     with st.form('remover_venda', clear_on_submit = True):
