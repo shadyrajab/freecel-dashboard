@@ -5,7 +5,7 @@ from datetime import datetime
 from utils.utils import month_by_numbers, months
 from typing import Optional
 import pandas as pd
-import numpy as np
+from io import StringIO
 
 # Configurando o layout da página
 st.set_page_config(
@@ -59,7 +59,7 @@ st.title(
 rankings = load_data(ano, mes)
 df = rankings.full_ranking
 df.fillna(0, inplace=True)
-categories = ['Altas', 'Total', 'VVN', 'Portabilidade', 'Avançada', 'Migração Pré-Pós', 'Fixa']
+categories = ['Altas', 'Total', 'VVN', 'Avançada', 'Migração Pré-Pós', 'Fixa']
 sub_categories = ['Volume', 'Receita']
 multi_index = pd.MultiIndex.from_product([categories, sub_categories])
 
@@ -75,36 +75,72 @@ index_names = {
 }
 headers = {
     'selector': 'th:not(.index_name)',
-    'props': 'background-color: white; color: black;',
-    'border': None,
+    'props': 'background-color: white; color: black; text-align: center;',
+    'border': None
 }
 
 # Definindo o MultiIndex para o DataFrame
 df.columns = multi_index
 df.reset_index(inplace=True)
-df = (df.style
+df = df[['Consultor', 'Altas', 'Avançada', 'VVN', 'Migração Pré-Pós', 'Fixa', 'Total']].sort_values(
+    by=('Total', 'Receita'), ascending=False
+)
+
+total = (df.iloc[:1].style
+        .format({
+        ('Altas', 'Receita'): 'R$ {:.1f}',
+        ('Total', 'Receita'): 'R$ {:.1f}',
+        ('Fixa', 'Receita'): 'R$ {:.1f}',
+        ('Avançada', 'Receita'): 'R$ {:.1f}',
+        ('VVN', 'Receita'): 'R$ {:.1f}',
+        ('Migração Pré-Pós', 'Receita'): 'R$ {:.1f}',
+        ('Altas', 'Volume'): '{:.0f}',
+        ('Avançada', 'Volume'): '{:.0f}',
+        ('Fixa', 'Volume'): '{:.0f}',
+        ('Migração Pré-Pós', 'Volume'): '{:.0f}',
+        ('Total', 'Volume'): '{:.0f}',
+        ('VVN', 'Volume'): '{:.0f}'
+    }) 
+    .apply(lambda x: ['background-color: lightgreen; font-weight: bold']*len(x), axis=1)
+)
+
+df = (df.iloc[1:].style
     .set_properties(**{'background-color': 'white', 'border': None})
     .set_table_styles([cell_hover, index_names, headers])
     .hide(axis='index')
+    .background_gradient(subset = [
+        ('Altas', 'Receita'),
+        ('VVN', 'Receita'),
+        ('Avançada', 'Receita'),
+        ('Migração Pré-Pós', 'Receita'),
+        ('Fixa', 'Receita')
+    ], cmap = 'Blues')
     .background_gradient(subset = [
         ('Altas', 'Volume'),
         ('Migração Pré-Pós', 'Volume'),
         ('VVN', 'Volume'),
         ('Avançada', 'Volume'),
-        ('Portabilidade', 'Volume')
+        ('Fixa', 'Volume')
     ], cmap = 'Reds')
+    .background_gradient(subset = ['Total'], cmap = 'Greys')
     .format({
         ('Altas', 'Receita'): 'R$ {:.1f}',
         ('Total', 'Receita'): 'R$ {:.1f}',
         ('Fixa', 'Receita'): 'R$ {:.1f}',
-        ('Portabilidade', 'Receita'): 'R$ {:.1f}',
         ('Avançada', 'Receita'): 'R$ {:.1f}',
         ('VVN', 'Receita'): 'R$ {:.1f}',
-        ('Migração Pré-Pós', 'Receita'): 'R$ {:.1f}'
+        ('Migração Pré-Pós', 'Receita'): 'R$ {:.1f}',
+        ('Altas', 'Volume'): '{:.0f}',
+        ('Avançada', 'Volume'): '{:.0f}',
+        ('Fixa', 'Volume'): '{:.0f}',
+        ('Migração Pré-Pós', 'Volume'): '{:.0f}',
+        ('Total', 'Volume'): '{:.0f}',
+        ('VVN', 'Volume'): '{:.0f}'
     })
 )
-html = df.to_html(index=False).replace('\n', ' ').replace('<td', '<td style="white-space: nowrap;"')
 
+ranking = df.concat(total)
+html = ranking.to_html(index=False).replace('\n', ' ').replace('<td', '<td style="white-space: nowrap;"')
 
 # Exibindo o HTML em Markdown
 st.markdown(f"""
