@@ -180,28 +180,7 @@ with st.expander('Adicionar Venda'):
 
                 else:
                     st.error('Ocorreu um erro ao adicionar esta venda.')
-
-    with migracao:
-        with st.form('adicionar_venda_migracao', clear_on_submit = True):
-            cnpj, telefone, consultor, data, gestor, equipe, tipo, email, volume = get_form(consultores, today)
-            plano = st.text_input('Qual nome do plano vendido?', max_chars = 30, placeholder = 'PLANO')
-            valor_do_plano = st.number_input('Qual valor do plano? (Informe o valor integral)', min_value = 1, placeholder = 'VALOR')
-            token = st.text_input('Informe seu token de acesso à API.', type = 'password', placeholder = 'TOKEN')
-            submit = st.form_submit_button('Adicionar')
-
-            if submit:
-                status_code = Vendas.add_venda(
-                    cnpj = cnpj, telefone = telefone, consultor = consultor, data = data, 
-                    gestor = gestor, plano = plano, volume = volume, 
-                    equipe = equipe, tipo = tipo, email = email, preco = valor_do_plano,
-                    token = token
-                )
-
-                if status_code == 200:
-                    st.success('Venda adicionada com sucesso.')
-
-                else:
-                    st.error('Ocorreu um erro ao adicionar esta venda.')
+                    
 
 with st.expander('Remover Venda'):
     with st.form('remover_venda', clear_on_submit = True):
