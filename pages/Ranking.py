@@ -5,7 +5,7 @@ from datetime import datetime
 from utils.utils import month_by_numbers, months
 from typing import Optional
 import pandas as pd
-from io import StringIO
+import tempfile
 
 # Configurando o layout da página
 st.set_page_config(
@@ -17,6 +17,10 @@ st.set_page_config(
         'About': "https://github.com/shadyrajab/freecel-dashboard"
     }
 )
+
+with open('styles/styles.css', 'r') as styles:
+    css = styles.read()
+    st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
 def load_data(ano: Optional[int] = None, mes: Optional[str] = None):
     rankings = Rankings(ano, mes)
@@ -65,18 +69,14 @@ multi_index = pd.MultiIndex.from_product([categories, sub_categories])
 
 # Removendo a primeira coluna 'consultor' para aplicar o MultiIndex nas demais
 df.set_index('Consultor', inplace=True)
-cell_hover = {  # for row hover use <tr> instead of <td>
-    'selector': 'td:hover',
-    'props': [('background-color', 'lightgreen')]
-}
-index_names = {
-    'selector': '.index_name',
-    'props': 'font-style: italic; color: darkgrey; font-weight:normal;',
-}
 headers = {
     'selector': 'th:not(.index_name)',
-    'props': 'background-color: white; color: black; text-align: center;',
-    'border': None
+    'props': 'background-color: white; color: black; text-align: center; border:None; border-radius: 30px;',
+}
+
+td = {
+    'selector': 'tr',
+    'props': "border: None;"
 }
 
 # Definindo o MultiIndex para o DataFrame
@@ -87,7 +87,9 @@ df = df[['Consultor', 'Altas', 'Avançada', 'VVN', 'Migração Pré-Pós', 'Fixa
 )
 
 total = (df.iloc[:1].style
-        .format({
+    .apply(lambda x: ['background-color: lightgreen; font-weight: bold']*len(x), axis=1)
+    .set_properties(**{'border': None, 'border-radius': '30px'})
+    .format({
         ('Altas', 'Receita'): 'R$ {:.1f}',
         ('Total', 'Receita'): 'R$ {:.1f}',
         ('Fixa', 'Receita'): 'R$ {:.1f}',
@@ -101,28 +103,13 @@ total = (df.iloc[:1].style
         ('Total', 'Volume'): '{:.0f}',
         ('VVN', 'Volume'): '{:.0f}'
     }) 
-    .apply(lambda x: ['background-color: lightgreen; font-weight: bold']*len(x), axis=1)
 )
 
 df = (df.iloc[1:].style
-    .set_properties(**{'background-color': 'white', 'border': None})
-    .set_table_styles([cell_hover, index_names, headers])
+    .set_properties(**{'background-color': '#f2f2f2', 'border': None, 'border-top': None, 'border-radius': '20px', 'font-weight': 'bold'})
+    .set_table_styles([headers, td])
     .hide(axis='index')
-    .background_gradient(subset = [
-        ('Altas', 'Receita'),
-        ('VVN', 'Receita'),
-        ('Avançada', 'Receita'),
-        ('Migração Pré-Pós', 'Receita'),
-        ('Fixa', 'Receita')
-    ], cmap = 'Blues')
-    .background_gradient(subset = [
-        ('Altas', 'Volume'),
-        ('Migração Pré-Pós', 'Volume'),
-        ('VVN', 'Volume'),
-        ('Avançada', 'Volume'),
-        ('Fixa', 'Volume')
-    ], cmap = 'Reds')
-    .background_gradient(subset = ['Total'], cmap = 'Greys')
+    .background_gradient(subset = ['Total', 'Fixa', 'Avançada', 'VVN', 'Altas', 'Migração Pré-Pós'], cmap = 'Greys')
     .format({
         ('Altas', 'Receita'): 'R$ {:.1f}',
         ('Total', 'Receita'): 'R$ {:.1f}',
@@ -140,10 +127,32 @@ df = (df.iloc[1:].style
 )
 
 ranking = df.concat(total)
-html = ranking.to_html(index=False).replace('\n', ' ').replace('<td', '<td style="white-space: nowrap;"')
+# teste = pd.concat([df.data, total.data])
+html = (ranking.to_html(index=False)
+    .replace('\n', ' ')
+    .replace('<td', '<td style="white-space: nowrap;"')
+)
 
 # Exibindo o HTML em Markdown
-st.markdown(f"""
-    <div style="overflow-x: auto; overflow-y: auto; height: 500px;">
-        {html}
-""", unsafe_allow_html=True)
+
+with st.container(border = True):
+    st.markdown(f"""
+        <div style="overflow-x: auto; overflow-y: auto; height: 500px;">
+            {html}
+    """, unsafe_allow_html=True)
+
+def download_excel():
+    ranking = pd.concat([df.data, total.data])
+    
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as temp:
+        ranking.to_excel(temp.name)
+        temp.close()
+    
+        # Ler e retornar os dados do arquivo Excel
+        with open(temp.name, 'rb') as f:
+            data = f.read()
+        
+    return data
+
+
+st.download_button('Exportar Planilha', download_excel(), file_name='ranking.xlsx', mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
