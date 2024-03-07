@@ -161,11 +161,10 @@ with st.expander('Adicionar Venda'):
 
     with novo:
         with st.form('adicionar_venda_novo', clear_on_submit = True):
-            cnpj, telefone, consultor, data, gestor, equipe, tipo, email, volume, ja_cliente = get_form(consultores, today)
+            cnpj, telefone, consultor, data, gestor, equipe, tipo, email, volume = get_form(consultores, today)
             plano = st.selectbox('Qual nome do plano vendido?', options = produtos)
             token = st.text_input('Informe seu token de acesso à API.', type = 'password', placeholder = 'TOKEN')
             submit = st.form_submit_button('Adicionar')
-            ja_cliente = True if ja_cliente == 'Sim' else False
             
             if submit:
                 valor_do_plano = produtos[produtos['nome'] == plano]['preco'].iloc[0]
@@ -173,7 +172,7 @@ with st.expander('Adicionar Venda'):
                     cnpj = cnpj, telefone = telefone, consultor = consultor, data = data, 
                     gestor = gestor, plano = plano, volume = volume, 
                     equipe = equipe, tipo = tipo, email = email, token = token,
-                    ja_cliente = ja_cliente
+                    ja_cliente = False
                 )
 
                 if status_code == 200:
@@ -182,7 +181,7 @@ with st.expander('Adicionar Venda'):
 
                 else:
                     st.error('Ocorreu um erro ao adicionar esta venda.')
-                    
+
     with migracao:
         st.write('Em breve.')
 
