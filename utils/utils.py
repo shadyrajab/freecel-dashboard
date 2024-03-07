@@ -82,8 +82,9 @@ def get_form(consultores, today):
     tipo = st.selectbox('Qual tipo de venda?', options = tipo_vendas)
     email = st.text_input('Qual o email do cliente?', max_chars = 32, placeholder = 'EMAIL')
     quantidade_de_produtos = st.number_input('Qual a quantidade de produtos vendidos?', min_value = 1, max_value = 100, placeholder = 'Quantidade')
+    ja_cliente = st.selectbox('O Cliente já está na base?', options=['Sim', 'Não'], placeholder = 'NOVO OU JÁ CLIENTE')
 
-    return cnpj, telefone, consultor, data, gestor, equipe, tipo, email, quantidade_de_produtos
+    return cnpj, telefone, consultor, data, gestor, equipe, tipo, email, quantidade_de_produtos, ja_cliente
 
 def formatar_cnpj(cnpj):
     cnpj = cnpj.zfill(14)
