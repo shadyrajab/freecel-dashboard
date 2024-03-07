@@ -155,7 +155,7 @@ painel_de_vendas.dataframe(
 
 with st.expander('Adicionar Venda'):
     # Criando abas para adicionar vendas de acordo com o tipo de cliente
-    novo, migracao = st.tabs(['Novo', 'Migração'])
+    novo, migracao = st.tabs(['Novo'])
 
     today = datetime.today().date()
 
