@@ -35,7 +35,7 @@ class Vendas:
         return dataframe
 
     @staticmethod
-    def add_venda(token, cnpj, telefone, consultor, data, gestor, plano, volume, equipe, tipo, email, ja_cliente):
+    def add_venda(token, cnpj, telefone, consultor, data, gestor, plano, volume, equipe, tipo, email, ja_cliente, preco: Optional[float] = 0):
         authorization = {
             'Authorization': f'Bearer {token}'
         }
@@ -51,11 +51,11 @@ class Vendas:
             "equipe": equipe,
             "tipo": tipo,
             "email": email,
-            "ja_cliente": ja_cliente
+            "ja_cliente": ja_cliente,
+            "preco": preco
         }
 
         response = request('PUT', url = vendas_url, json = params, headers = authorization)
-        print(response.text)
         return response.status_code
 
     @staticmethod
