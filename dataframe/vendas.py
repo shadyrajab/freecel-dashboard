@@ -105,9 +105,9 @@ class Vendas:
         
         dataframe['CNPJ'] = dataframe['CNPJ'].apply(lambda cnpj: formatar_cnpj(cnpj))
         dataframe['Telefone'] = dataframe['Telefone'].apply(lambda telefone: formatar_telefone(telefone))
-        dataframe[['Matriz', 'Porte', 'Capital', 'CEP']] = dataframe[
-            ['Matriz', 'Porte', 'Capital', 'CEP']
-        ].map(remover_ponto)
+        # dataframe[['Matriz', 'Porte', 'Capital', 'CEP']] = dataframe[
+        #     ['Matriz', 'Porte', 'Capital', 'CEP']
+        # ].map(remover_ponto)
         dataframe['Data'] = pd.to_datetime(dataframe['Data'], unit = 'ms')
 
         return dataframe[order].sort_values(by = 'Data', ascending = False)
