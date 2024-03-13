@@ -125,33 +125,33 @@ produtos_url = 'https://freecelapi-b44da8eb3c50.herokuapp.com/produtos'
 
 months = [
     'Todos',
-    'Janeiro', 
-    'Fevereiro', 
-    'Março', 
-    'Abril',
-    'Maio', 
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro'
+    'JANEIRO', 
+    'FEVEREIRO', 
+    'MARÇO', 
+    'ABRIL',
+    'MAIO', 
+    'JUNHO',
+    'JULHO',
+    'AGOSTO',
+    'SETEMBRO',
+    'OUTUBRO',
+    'NOVEMBRO',
+    'DEZEMBRO'
 ]
 
 month_by_numbers = {
-    1: "Janeiro",
-    2: "Fevereiro",
-    3: "Março",
-    4: "Abril",
-    5: "maio",
-    6: "junho",
-    7: "julho",
-    8: "agosto",
-    9: "setembro",
-    10: "Outubro",
-    11: "Novembro",
-    12: "Dezembro"
+    1: "JANEIRO",
+    2: "FEVEREIRO",
+    3: "MARÇO",
+    4: "ABRIL",
+    5: "MAIO",
+    6: "JUNHO",
+    7: "JULHO",
+    8: "AGOSTO",
+    9: "SETEMBRO",
+    10: "OUTUBRO",
+    11: "NOVEMBRO",
+    12: "DEZEMBRO"
 }
 
 tipo_vendas = ["FIXA", "AVANÇADA", "MIGRAÇÃO PRÉ-PÓS", "VVN", "ALTAS", "PORTABILIDADE"]
