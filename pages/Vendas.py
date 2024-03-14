@@ -53,7 +53,8 @@ def split_frame(df, rows):
 
 
 vendas, consultores, produtos = load_data()
-
+st.session_state['cnpj'] = ''
+st.session_state['n_pedido'] = ''
 # Painel de Filtragem dos Dados
 with st.sidebar:
     ano = st.multiselect(label="Ano", options=list(vendas["Ano"].unique()))
@@ -100,18 +101,17 @@ with st.sidebar:
         lambda email: email.lower() if email != "Não Informado" else email
     )
 
-
 # Barra de pesquisa
 menu_superior = st.columns((4, 1, 1))
 with menu_superior[2]:
-    cnpj = st.text_input("Pesquisar CNPJ", placeholder="CNPJ")
-    if cnpj:
-        vendas = vendas[vendas["CNPJ"] == cnpj]
+    st.session_state['cnpj'] = st.text_input("Pesquisar CNPJ", placeholder="CNPJ", value=st.session_state['cnpj'])
+    if st.session_state['cnpj']:
+        vendas = vendas[vendas["CNPJ"] == st.session_state['cnpj']]
 
 with menu_superior[1]:
-    n_pedido = st.text_input("Pesquisar nº Pedido", placeholder="Nº Pedido")
-    if n_pedido:
-        vendas = vendas[vendas["Número do Pedido"] == n_pedido]
+    st.session_state['n_pedido'] = st.text_input("Pesquisar nº Pedido", placeholder="Nº Pedido", value=st.session_state['n_pedido'])
+    if st.session_state['n_pedido']:
+        vendas = vendas[vendas["Número do Pedido"] == st.session_state['n_pedido']]
 # Menu inferior para a navegação nas páginas do DataFrame
 painel_de_vendas = st.container()
 menu_inferior = st.columns((4, 1, 1))
@@ -245,6 +245,7 @@ with st.expander("Adicionar Venda"):
                 type="password",
                 placeholder="TOKEN",
             )
+
             submit = st.form_submit_button("Adicionar")
 
             if submit:

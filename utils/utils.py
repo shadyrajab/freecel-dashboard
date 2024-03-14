@@ -1,9 +1,9 @@
 from os import getenv
 
 import pandas as pd
+import requests
 import streamlit as st
 from dotenv import load_dotenv
-import requests
 
 load_dotenv()
 
@@ -17,23 +17,22 @@ vendas_url = "https://freecelapi-b44da8eb3c50.herokuapp.com/vendas"
 consultores_url = "https://freecelapi-b44da8eb3c50.herokuapp.com/consultores/"
 produtos_url = "https://freecelapi-b44da8eb3c50.herokuapp.com/produtos"
 
+
 def compare_and_update(original: pd.DataFrame, updated: pd.DataFrame):
     original.set_index("ID", inplace=True)
     updated.set_index("ID", inplace=True)
 
     alteracoes = original.compare(updated).reset_index()
-    if len(alteracoes) > 0 :
-        id = int(alteracoes['ID'].iloc[0])
+    if len(alteracoes) > 0:
+        id = int(alteracoes["ID"].iloc[0])
         key = alteracoes.columns[1][0]
-        value = alteracoes[key]['other'].iloc[0]
-        params = {
-            "id": id,
-            key.lower(): value.upper()
-        }
+        value = alteracoes[key]["other"].iloc[0]
+        params = {"id": id, key.lower(): value.upper()}
 
         print(params)
         response = requests.put(vendas_url, headers=headers, json=params)
-        print(response.text)        
+        print(response.text)
+
 
 def format_tab_name(string):
     string = string.lower().replace("ç", "c").replace("ã", "a")
@@ -191,6 +190,7 @@ def formatar_nome(nome):
 
     nome_final = f"{nome[0]} {nome[1]}"
     return nome_final
+
 
 months = [
     "Todos",
