@@ -13,6 +13,7 @@ from utils.utils import (
     colorir_equipes,
     colorir_null_values,
     colorir_tipo_venda,
+    compare_and_update,
     default_index,
     equipes,
     formatar_nome,
@@ -153,7 +154,7 @@ vendas = (
     .format({"Preço": "R$ {:.2f}"})
 )
 
-painel_de_vendas.data_editor(
+painel = painel_de_vendas.data_editor(
     data=vendas,
     disabled=[
         "ID",
@@ -224,6 +225,8 @@ painel_de_vendas.data_editor(
         ),
     },
 )
+
+compare_and_update(vendas.data, painel)
 
 with st.expander("Adicionar Venda"):
     # Criando abas para adicionar vendas de acordo com o tipo de cliente
