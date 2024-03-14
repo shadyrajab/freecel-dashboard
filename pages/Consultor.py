@@ -127,7 +127,7 @@ with st.container(border=True):
         dataframe=consultor.groupby_data,
         title=f"Receita por Data - {consultor.nome.title()}",
         x="data",
-        y="valor_acumulado",
+        y="receita",
     )
 
 # Gráfico de pizza Tipo de Produto
@@ -137,7 +137,7 @@ with st.container(border=True):
         plot_pie(
             consultor.vendas,
             "tipo",
-            "valor_acumulado",
+            "receita",
             "Receita por Produtos",
             color=sequential.Aggrnyl,
         )
@@ -146,7 +146,7 @@ with st.container(border=True):
         plot_pie(
             consultor.vendas,
             "tipo",
-            "quantidade_de_produtos",
+            "volume",
             "Quantidade de Produtos",
             color=sequential.Aggrnyl,
         )
