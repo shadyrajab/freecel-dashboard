@@ -53,8 +53,8 @@ def split_frame(df, rows):
 
 
 vendas, consultores, produtos = load_data()
-st.session_state['cnpj'] = ''
-st.session_state['n_pedido'] = ''
+st.session_state["cnpj"] = ""
+st.session_state["n_pedido"] = ""
 # Painel de Filtragem dos Dados
 with st.sidebar:
     ano = st.multiselect(label="Ano", options=list(vendas["Ano"].unique()))
@@ -63,6 +63,7 @@ with st.sidebar:
         options=sorted(list(vendas["Mês"].unique()), key=lambda x: months.index(x)),
     )
     tipo = st.multiselect(label="Tipo", options=list(vendas["Tipo"].unique()))
+    status = st.multiselect(label="Status", options=list(vendas["Status"].unique()))
     consultor = st.multiselect(
         label="Consultor", options=list(vendas["Consultor"].unique())
     )
@@ -90,6 +91,7 @@ with st.sidebar:
         municipio,
         uf,
         adabas,
+        status,
         default_index,
     )
     vendas["Volume"] = vendas["Volume"].astype(int)
@@ -104,14 +106,20 @@ with st.sidebar:
 # Barra de pesquisa
 menu_superior = st.columns((4, 1, 1))
 with menu_superior[2]:
-    st.session_state['cnpj'] = st.text_input("Pesquisar CNPJ", placeholder="CNPJ", value=st.session_state['cnpj'])
-    if st.session_state['cnpj']:
-        vendas = vendas[vendas["CNPJ"] == st.session_state['cnpj']]
+    st.session_state["cnpj"] = st.text_input(
+        "Pesquisar CNPJ", placeholder="CNPJ", value=st.session_state["cnpj"]
+    )
+    if st.session_state["cnpj"]:
+        vendas = vendas[vendas["CNPJ"] == st.session_state["cnpj"]]
 
 with menu_superior[1]:
-    st.session_state['n_pedido'] = st.text_input("Pesquisar nº Pedido", placeholder="Nº Pedido", value=st.session_state['n_pedido'])
-    if st.session_state['n_pedido']:
-        vendas = vendas[vendas["Número do Pedido"] == st.session_state['n_pedido']]
+    st.session_state["n_pedido"] = st.text_input(
+        "Pesquisar nº Pedido",
+        placeholder="Nº Pedido",
+        value=st.session_state["n_pedido"],
+    )
+    if st.session_state["n_pedido"]:
+        vendas = vendas[vendas["Número do Pedido"] == st.session_state["n_pedido"]]
 # Menu inferior para a navegação nas páginas do DataFrame
 painel_de_vendas = st.container()
 menu_inferior = st.columns((4, 1, 1))

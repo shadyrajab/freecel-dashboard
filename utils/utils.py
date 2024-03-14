@@ -50,6 +50,7 @@ def mask_dataframe(
     municipio,
     uf,
     adabas,
+    status,
     default_index,
 ):
     mask_ano = vendas["Ano"].isin(ano) if len(ano) else True
@@ -61,6 +62,7 @@ def mask_dataframe(
     mask_municipio = vendas["Município"].isin(municipio) if len(municipio) else True
     mask_equipe = vendas["Equipe"].isin(equipe) if len(equipe) else True
     mask_adabas = vendas["ADABAS"].isin(adabas) if len(adabas) else True
+    mask_status = vendas["Status"].isin(status) if len(status) else True
 
     mask = (
         mask_adabas
@@ -72,6 +74,7 @@ def mask_dataframe(
         & mask_municipio
         & mask_equipe
         & mask_plano
+        & mask_status
     )
 
     if type(mask) == bool:
@@ -406,8 +409,8 @@ STATUS = [
     "CANCELADO",
     "CHECK LIST PENDENTE",
     "CHECKLIST",
-    "CONCLUIDO",
-    "CONCLUIDO-EXECUTADO PARCIALMENTE",
+    "CONCLUÍDO",
+    "CONCLUÍDO-EXECUTADO PARCIALMENTE",
     "CREDITO REPROVADO",
     "EXECUTADO PARCIALMENTE",
     "FATURANDO",
@@ -426,7 +429,7 @@ STATUS = [
     "FATURANDO- INSTALADO",
     "AGUARDANDO 1º PEDIDO",
     "ABERTA",
-    "CONCLUIDO / PAGO",
+    "CONCLUÍDO / PAGO",
     "Simulação Reprovada",
     "SIMPLIFIQUE",
     "VALIDAÇÃO DE DOCUMENTOS",
