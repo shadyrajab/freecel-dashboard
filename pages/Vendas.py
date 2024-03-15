@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime
 from math import ceil
 
@@ -37,11 +38,18 @@ with open("styles/vendas.css", "r") as styles:
     st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
 
-def load_data():
-    vendas = Vendas().data.astype(str)
-    consultores = Stats.consultores()
-    produtos = Stats.produtos()
+async def load_data():
+    async def load_vendas():
+        return Vendas().data.astype(str)
 
+    async def load_consultores():
+        return Stats.consultores()
+
+    async def load_produtos():
+        return Stats.produtos()
+
+    tasks = [load_vendas(), load_consultores(), load_produtos()]
+    vendas, consultores, produtos = await asyncio.gather(*tasks)
     return vendas, consultores, produtos
 
 
@@ -52,7 +60,7 @@ def split_frame(df, rows):
     return dataframe
 
 
-vendas, consultores, produtos = load_data()
+vendas, consultores, produtos = asyncio.run(load_data())
 st.session_state["cnpj"] = ""
 st.session_state["n_pedido"] = ""
 # Painel de Filtragem dos Dados
