@@ -25,10 +25,16 @@ with open("styles/styles.css", "r") as styles:
     st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
 
+@st.cache_data
 def load_consultores():
     consultores = Stats().consultores()
-
     return consultores
+
+
+@st.cache_data
+def load_date(consultor: str):
+    dates = Consultor(consultor).dates
+    return dates
 
 
 def load_data(consultor: str, ano: Optional[int] = None, mes: Optional[str] = None):
@@ -45,11 +51,11 @@ with st.sidebar:
     mes = None
     consultor = st.sidebar.selectbox(label="Selecionar Consultor", options=consultores)
 
-consultor = load_data(consultor=consultor)
+dates = load_date(consultor)
 
 with st.sidebar:
     # Selecionando todos os anos no qual o consultor realizou vendas
-    years = ["Todos"] + [list(year.keys())[0] for year in consultor.dates]
+    years = ["Todos"] + [list(year.keys())[0] for year in dates]
     ano = st.selectbox(label="Ano", options=years, index=years.index("Todos"))
 
     if ano != "Todos":
@@ -57,7 +63,7 @@ with st.sidebar:
         months = ["Todos"] + sorted(
             [
                 month
-                for year_dict in consultor.dates
+                for year_dict in dates
                 if ano in year_dict
                 for month in year_dict[ano]
             ],
@@ -65,7 +71,7 @@ with st.sidebar:
         )
         mes = st.selectbox(label="Mês", options=months, index=months.index("Todos"))
 
-consultor = load_data(consultor=consultor.nome, ano=ano, mes=mes)
+consultor = load_data(consultor=consultor, ano=ano, mes=mes)
 
 st.title(
     body=(

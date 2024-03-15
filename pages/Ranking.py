@@ -27,7 +27,7 @@ def load_data(ano: Optional[int] = None, mes: Optional[str] = None):
     rankings = Rankings(ano, mes)
     return rankings
 
-
+@st.cache_data
 def load_dates():
     dates = Stats().dates
     return dates

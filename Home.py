@@ -25,7 +25,7 @@ with open("styles/styles.css", "r") as styles:
     css = styles.read()
     st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
-
+@st.cache_data
 def load_dates():
     dates = Stats().dates
 
