@@ -18,6 +18,14 @@ consultores_url = "https://freecelapi-b44da8eb3c50.herokuapp.com/consultores/"
 produtos_url = "https://freecelapi-b44da8eb3c50.herokuapp.com/produtos"
 
 
+def format_param(param):
+    return {"True": True, "False": False}.get(param, param.upper())
+
+
+def format_key(key):
+    return {"Já Cliente?": "ja_cliente"}.get(key, key.lower())
+
+
 def compare_and_update(original: pd.DataFrame, updated: pd.DataFrame):
     original.set_index("ID", inplace=True)
     updated.set_index("ID", inplace=True)
@@ -27,7 +35,7 @@ def compare_and_update(original: pd.DataFrame, updated: pd.DataFrame):
         id = int(alteracoes["ID"].iloc[0])
         key = alteracoes.columns[1][0]
         value = alteracoes[key]["other"].iloc[0]
-        params = {"id": id, key.lower(): value.upper()}
+        params = {"id": id, format_key(key): format_param(value)}
 
         print(params)
         response = requests.put(vendas_url, headers=headers, json=params)
@@ -166,9 +174,9 @@ def get_form(consultores, today):
         tipo,
         email,
         quantidade_de_produtos,
-        status, 
+        status,
         ddd,
-        numero_pedido
+        numero_pedido,
     )
 
 
@@ -388,8 +396,7 @@ DDDS_valor_inteiro = [
     "93",
     "94",
     "95",
-    "96," 
-    "97",
+    "96," "97",
     "98",
     "99",
 ]

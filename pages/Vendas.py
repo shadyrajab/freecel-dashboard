@@ -187,7 +187,7 @@ painel = painel_de_vendas.data_editor(
         "Número do Pedido",
         "M",
         "UF",
-        "DDD"
+        "DDD",
     ],
     hide_index=True,
     height=altura,
@@ -238,11 +238,14 @@ painel = painel_de_vendas.data_editor(
         "Já Cliente?": st.column_config.SelectboxColumn(
             label="Já Cliente?",
             help="True para Sim e False para Não",
-            options=[True, False],
+            options=['True', 'False'],
             required=True,
         ),
         "UF": st.column_config.SelectboxColumn(
             label="UF", help="A UF da venda", options=UFS, required=True
+        ),
+        "Telefone": st.column_config.TextColumn(
+            label="Telefone", help="Telefone do Cliente", max_chars=11, required=True
         ),
     },
 )
