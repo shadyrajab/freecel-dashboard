@@ -51,6 +51,7 @@ def mask_dataframe(
     uf,
     adabas,
     status,
+    m,
     default_index,
 ):
     mask_ano = vendas["Ano"].isin(ano) if len(ano) else True
@@ -63,6 +64,7 @@ def mask_dataframe(
     mask_equipe = vendas["Equipe"].isin(equipe) if len(equipe) else True
     mask_adabas = vendas["ADABAS"].isin(adabas) if len(adabas) else True
     mask_status = vendas["Status"].isin(status) if len(status) else True
+    mask_m = vendas["M"].isin(m) if len(m) else True
 
     mask = (
         mask_adabas
@@ -75,6 +77,7 @@ def mask_dataframe(
         & mask_equipe
         & mask_plano
         & mask_status
+        & mask_m
     )
 
     if type(mask) == bool:
@@ -279,8 +282,10 @@ order = [
     "Equipe",
     "ADABAS",
     "Consultor",
+    "M",
     "Já Cliente?",
     "CEP",
+    "DDD",
     "Telefone",
     "UF",
     "Município",
@@ -413,7 +418,6 @@ STATUS = [
     "AGUARDANDO SS",
     "ANALISE BKO",
     "ANALISE DE CREDITO",
-    "CANCELADO",
     "CHECK LIST PENDENTE",
     "CHECKLIST",
     "CONCLUÍDO",

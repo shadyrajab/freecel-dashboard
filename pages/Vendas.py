@@ -76,6 +76,7 @@ with st.sidebar:
         label="Consultor", options=list(vendas["Consultor"].unique())
     )
     plano = st.multiselect(label="Plano", options=list(vendas["Plano"].unique()))
+    m = st.multiselect(label="M", options=list(vendas["M"].unique()))
     uf = st.multiselect(label="UF", options=list(vendas["UF"].unique()))
     municipio = st.multiselect(
         label="Município", options=list(vendas["Município"].unique())
@@ -100,6 +101,7 @@ with st.sidebar:
         uf,
         adabas,
         status,
+        m,
         default_index,
     )
     vendas["Volume"] = vendas["Volume"].astype(int)
@@ -183,6 +185,9 @@ painel = painel_de_vendas.data_editor(
         "Bairro",
         "Data",
         "Número do Pedido",
+        "M",
+        "UF",
+        "DDD"
     ],
     hide_index=True,
     height=altura,

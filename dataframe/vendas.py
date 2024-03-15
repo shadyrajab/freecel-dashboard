@@ -132,6 +132,8 @@ class Vendas:
                 "numero_pedido": "Número do Pedido",
                 "ja_cliente": "Já Cliente?",
                 "status": "Status",
+                "m": "M",
+                "ddd": "DDD"
             },
             inplace=True,
         )
