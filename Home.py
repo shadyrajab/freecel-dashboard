@@ -47,12 +47,8 @@ async def load_data(ano: int, mes: str):
     async def load_vendas():
         return Vendas()
 
-    # Inicia os carregamentos de dados em paralelo
     tasks = [load_stats(), load_rankings(), load_vendas()]
-
-    # Aguarda até que todos os carregamentos de dados estejam completos
     stats, rankings, vendas = await asyncio.gather(*tasks)
-
     return stats, rankings, vendas
 
 
