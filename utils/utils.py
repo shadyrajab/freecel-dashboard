@@ -135,9 +135,11 @@ def get_form(consultores, today):
     telefone = st.text_input(
         "Qual telefone do cliente? (Com DDD)", max_chars=11, placeholder="TELEFONE"
     )
+    ddd = st.selectbox("Qual DDD do cliente?", options=DDDS)
     consultor = st.selectbox(
         "Qual o nome do consultor que realizou a venda?", options=consultores
     )
+    numero_pedido = st.text_input("Qual número do Pedido?", placeholder="Nº Pedido")
     data = st.date_input("Qual a data da venda?", format="DD/MM/YYYY", max_value=today)
     gestor = st.text_input("Qual nome do gestor?", max_chars=32, placeholder="GESTOR")
     equipe = st.selectbox("Qual equipe realizou a venda?", options=equipes)
@@ -149,6 +151,7 @@ def get_form(consultores, today):
         max_value=100,
         placeholder="Quantidade",
     )
+    status = st.selectbox("Status da venda", options=STATUS)
 
     return (
         cnpj,
@@ -160,6 +163,9 @@ def get_form(consultores, today):
         tipo,
         email,
         quantidade_de_produtos,
+        status, 
+        ddd,
+        numero_pedido
     )
 
 

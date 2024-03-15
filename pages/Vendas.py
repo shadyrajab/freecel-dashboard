@@ -252,9 +252,20 @@ with st.expander("Adicionar Venda"):
 
     with novo:
         with st.form("adicionar_venda_novo", clear_on_submit=True):
-            cnpj, telefone, consultor, data, gestor, equipe, tipo, email, volume = (
-                get_form(consultores, today)
-            )
+            (
+                cnpj,
+                telefone,
+                consultor,
+                data,
+                gestor,
+                equipe,
+                tipo,
+                email,
+                volume,
+                status,
+                ddd,
+                numero_pedido,
+            ) = get_form(consultores, today)
             plano = st.selectbox("Qual nome do plano vendido?", options=produtos)
             token = st.text_input(
                 "Informe seu token de acesso à API.",
@@ -265,7 +276,7 @@ with st.expander("Adicionar Venda"):
             submit = st.form_submit_button("Adicionar")
 
             if submit:
-                status_code = Vendas.add_venda(
+                response = Vendas.add_venda(
                     cnpj=cnpj,
                     telefone=telefone,
                     consultor=consultor,
@@ -278,20 +289,35 @@ with st.expander("Adicionar Venda"):
                     email=email,
                     token=token,
                     ja_cliente=False,
+                    ddd=ddd,
+                    status=status,
+                    numero_pedido=numero_pedido,
                 )
 
-                if status_code == 200:
+                if response.status_code == 200:
 
                     st.success("Venda adicionada com sucesso.")
 
                 else:
+                    print(response.text)
                     st.error("Ocorreu um erro ao adicionar esta venda.")
 
     with migracao:
         with st.form("adicionar_venda_migracao", clear_on_submit=True):
-            cnpj, telefone, consultor, data, gestor, equipe, tipo, email, volume = (
-                get_form(consultores, today)
-            )
+            (
+                cnpj,
+                telefone,
+                consultor,
+                data,
+                gestor,
+                equipe,
+                tipo,
+                email,
+                volume,
+                status,
+                ddd,
+                numero_pedido,
+            ) = get_form(consultores, today)
             plano = st.text_input("Qual nome do plano vendido?")
             preco = st.number_input("Qual valor da migração?")
             token = st.text_input(
@@ -302,7 +328,7 @@ with st.expander("Adicionar Venda"):
             submit = st.form_submit_button("Adicionar")
 
             if submit:
-                status_code = Vendas.add_venda(
+                response = Vendas.add_venda(
                     cnpj=cnpj,
                     telefone=telefone,
                     consultor=consultor,
@@ -316,12 +342,16 @@ with st.expander("Adicionar Venda"):
                     token=token,
                     ja_cliente=True,
                     preco=preco,
+                    ddd=ddd,
+                    status=status,
+                    numero_pedido=numero_pedido,
                 )
 
-                if status_code == 200:
+                if response.status_code == 200:
                     st.success("Venda adicionada com sucesso.")
 
                 else:
+                    print(response.text)
                     st.error("Ocorreu um erro ao adicionar esta venda.")
 
 with st.expander("Remover Venda"):

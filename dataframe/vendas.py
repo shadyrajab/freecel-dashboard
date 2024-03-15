@@ -60,6 +60,9 @@ class Vendas:
         tipo,
         email,
         ja_cliente,
+        ddd,
+        status,
+        numero_pedido,
         preco: Optional[float] = 0,
     ):
         authorization = {"Authorization": f"Bearer {token}"}
@@ -77,10 +80,13 @@ class Vendas:
             "email": email,
             "ja_cliente": ja_cliente,
             "preco": preco,
+            "ddd": ddd,
+            "status": status,
+            "numero_pedido": numero_pedido,
         }
 
-        response = request("PUT", url=vendas_url, json=params, headers=authorization)
-        return response.status_code
+        response = request("POST", url=vendas_url, json=params, headers=authorization)
+        return response
 
     @staticmethod
     def remove_venda(id, token):
