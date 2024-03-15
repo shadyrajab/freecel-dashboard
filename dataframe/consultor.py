@@ -11,7 +11,7 @@ class Consultor:
         self.nome = nome
         self.ano = ano
         self.mes = mes
-        self.data = self.__get_data__()
+        self.data = self.__get_data()
 
     @property
     def dates(self):
@@ -102,7 +102,7 @@ class Consultor:
             .sort_values(by="data", ascending=False)
         )
 
-    def __get_data__(self):
+    def __get_data(self):
         params = {"ano": self.ano, "mes": self.mes, "display_vendas": True}
         data = request(
             "GET", url=consultores_url + self.nome, params=params, headers=headers

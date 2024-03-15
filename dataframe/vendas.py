@@ -19,7 +19,7 @@ class Vendas:
         self.mes = mes
         self.cnpj = cnpj
         self.n_pedido = n_pedido
-        self.data = self.__formatar_dados__()
+        self.data = self.__formatar_dados()
 
     def vendas_by_data(
         self,
@@ -90,8 +90,8 @@ class Vendas:
         )
         return response.status_code
 
-    def __formatar_dados__(self):
-        dataframe = self.__get_data__()
+    def __formatar_dados(self):
+        dataframe = self.__get_data()
 
         dataframe.rename(
             columns={
@@ -138,7 +138,7 @@ class Vendas:
 
         return dataframe[order].sort_values(by="Data", ascending=False)
 
-    def __get_data__(self):
+    def __get_data(self):
         data = request("GET", url=vendas_url, headers=headers).json()
         vendas = pd.DataFrame(data)
         vendas.replace(

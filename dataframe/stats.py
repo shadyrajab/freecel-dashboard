@@ -10,7 +10,7 @@ class Stats:
     def __init__(self, ano: Optional[int] = None, mes: Optional[str] = None):
         self.ano = ano
         self.mes = mes
-        self.data = self.__get_data__()
+        self.data = self.__get_data()
 
     def __getitem__(self, key):
         return self.data.get(key, 0)
@@ -107,7 +107,7 @@ class Stats:
         data = request("GET", url=produtos_url, headers=headers).json()
         return pd.DataFrame(data)
 
-    def __get_data__(self):
+    def __get_data(self):
         params = {"ano": self.ano, "mes": self.mes}
         data = request("GET", url=stats_url, params=params, headers=headers).json()
         return data
