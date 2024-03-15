@@ -1,3 +1,4 @@
+import asyncio
 import os
 from datetime import datetime
 
@@ -25,6 +26,7 @@ with open("styles/styles.css", "r") as styles:
     css = styles.read()
     st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
+
 @st.cache_data
 def load_dates():
     dates = Stats().dates
@@ -32,13 +34,24 @@ def load_dates():
     return dates
 
 
-def load_data(ano: int, mes: str):
+async def load_data(ano: int, mes: str):
     ano = None if ano == "Todos" else ano
     mes = None if mes == "Todos" else mes
 
-    stats = Stats(ano, mes)
-    rankings = Rankings(ano, mes)
-    vendas = Vendas()
+    async def load_stats():
+        return Stats(ano, mes)
+
+    async def load_rankings():
+        return Rankings(ano, mes)
+
+    async def load_vendas():
+        return Vendas()
+
+    # Inicia os carregamentos de dados em paralelo
+    tasks = [load_stats(), load_rankings(), load_vendas()]
+
+    # Aguarda até que todos os carregamentos de dados estejam completos
+    stats, rankings, vendas = await asyncio.gather(*tasks)
 
     return stats, rankings, vendas
 
@@ -86,7 +99,7 @@ st.title(
 # Definir o estilo dos metric cards
 style_metric_cards(border_left_color="#ffffff", border_radius_px=20)
 
-stats, rankings, vendas = load_data(ano, mes)
+stats, rankings, vendas = asyncio.run(load_data(ano, mes))
 
 metric1, metric2, metric3 = st.columns(3)
 metric4, metric5, metric6 = st.columns(3)
