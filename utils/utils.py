@@ -24,13 +24,18 @@ def format_param(param):
 
 
 def format_key(key):
-    return {"Já Cliente?": "ja_cliente"}.get(key, key.lower())
+    return {
+        "Já Cliente?": "ja_cliente",
+        "Valor Renovação": "valor_renovacao",
+        "Pacote Inovação": "pacote_inovacao",
+        "Volume Inovação": "volume_inovacao"
+    }.get(key, key.lower().replace(" ", "_"))
 
 
-def compare_and_update(original: pd.DataFrame, updated: pd.DataFrame):
+def compare_and_update(original: pd.DataFrame, updated: pd.DataFrame, type: str):
     original.set_index("ID", inplace=True)
     updated.set_index("ID", inplace=True)
-
+    url = vendas_url if type == "Vendas" else migracoes_url
     alteracoes = original.compare(updated).reset_index()
     if len(alteracoes) > 0:
         id = int(alteracoes["ID"].iloc[0])
@@ -39,7 +44,7 @@ def compare_and_update(original: pd.DataFrame, updated: pd.DataFrame):
         params = {"id": id, format_key(key): format_param(value)}
 
         print(params)
-        response = requests.put(vendas_url, headers=headers, json=params)
+        response = requests.put(url, headers=headers, json=params)
         print(response.text)
 
 
@@ -62,7 +67,7 @@ def mask_dataframe(
     status,
     m,
     default_index,
-    order
+    order,
 ):
     mask_ano = vendas["Ano"].isin(ano) if len(ano) else True
     mask_mes = vendas["Mês"].isin(mes) if len(mes) else True
@@ -213,6 +218,7 @@ def formatar_nome(nome):
     nome_final = f"{nome[0]} {nome[1]}"
     return nome_final
 
+
 months = [
     "Todos",
     "JANEIRO",
@@ -244,7 +250,15 @@ month_by_numbers = {
     12: "DEZEMBRO",
 }
 
-tipo_vendas = ["FIXA", "AVANÇADA", "MIGRAÇÃO PRÉ-PÓS", "VVN", "ALTAS", "PORTABILIDADE", "MIGRAÇÃO"]
+tipo_vendas = [
+    "FIXA",
+    "AVANÇADA",
+    "MIGRAÇÃO PRÉ-PÓS",
+    "VVN",
+    "ALTAS",
+    "PORTABILIDADE",
+    "MIGRAÇÃO",
+]
 equipes = ["FREECEL", "VALPARAISO", "PARCEIRO", "GOIÂNIA", "SAMAMBAIA"]
 
 UFS = [
@@ -416,8 +430,10 @@ values_to_remove = [
     "Mês",
 ]
 
+
 def default_index(order):
     return list(filter(lambda x: x not in values_to_remove, order))
+
 
 STATUS = [
     "AGUARDANDO CHAMADO",

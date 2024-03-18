@@ -252,4 +252,4 @@ painel = painel_de_vendas.data_editor(
     },
 )
 
-compare_and_update(vendas.data, painel)
+compare_and_update(vendas.data, painel, "Migrações")
