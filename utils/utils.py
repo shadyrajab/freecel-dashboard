@@ -27,6 +27,8 @@ def format_key(key):
     return {
         "Já Cliente?": "ja_cliente",
         "Valor Renovação": "valor_renovacao",
+        "Valor Inovação": "valor_inovacao",
+        "Valor Atual": "valor_atual",
         "Pacote Inovação": "pacote_inovacao",
         "Volume Inovação": "volume_inovacao"
     }.get(key, key.lower().replace(" ", "_"))
