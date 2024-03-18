@@ -16,6 +16,7 @@ stats_url = "https://freecelapi-b44da8eb3c50.herokuapp.com/stats"
 vendas_url = "https://freecelapi-b44da8eb3c50.herokuapp.com/vendas"
 consultores_url = "https://freecelapi-b44da8eb3c50.herokuapp.com/consultores/"
 produtos_url = "https://freecelapi-b44da8eb3c50.herokuapp.com/produtos"
+migracoes_url = "https://freecelapi-b44da8eb3c50.herokuapp.com/migracoes"
 
 
 def format_param(param):
@@ -61,6 +62,7 @@ def mask_dataframe(
     status,
     m,
     default_index,
+    order
 ):
     mask_ano = vendas["Ano"].isin(ano) if len(ano) else True
     mask_mes = vendas["Mês"].isin(mes) if len(mes) else True
@@ -210,7 +212,6 @@ def formatar_nome(nome):
 
     nome_final = f"{nome[0]} {nome[1]}"
     return nome_final
-
 
 months = [
     "Todos",
@@ -415,7 +416,8 @@ values_to_remove = [
     "Mês",
 ]
 
-default_index = list(filter(lambda x: x not in values_to_remove, order))
+def default_index(order):
+    return list(filter(lambda x: x not in values_to_remove, order))
 
 STATUS = [
     "AGUARDANDO CHAMADO",
@@ -489,3 +491,10 @@ STATUS = [
     "CREDITO REPROVADO",
     "TOTALIZAÇÃO",
 ]
+
+new_order = order.copy()
+new_order.insert(9, "Valor Atual")
+new_order.insert(10, "Valor Renovação")
+new_order.insert(11, "Pacote Inovação")
+new_order.insert(12, "Valor Inovação")
+new_order.insert(13, "Volume Inovação")

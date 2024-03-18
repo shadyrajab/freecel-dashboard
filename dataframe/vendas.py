@@ -1,10 +1,18 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 import pandas as pd
 from requests import request
 
-from utils.utils import formatar_cnpj, formatar_telefone, headers, order, vendas_url
+from utils.utils import (
+    formatar_cnpj,
+    formatar_telefone,
+    headers,
+    migracoes_url,
+    order,
+    vendas_url,
+    new_order
+)
 
 
 class Vendas:
@@ -19,7 +27,14 @@ class Vendas:
         self.mes = mes
         self.cnpj = cnpj
         self.n_pedido = n_pedido
-        self.data = self.__formatar_dados()
+
+    @property
+    def vendas(self):
+        return self.__formatar_dados(self.__get_data(vendas_url), order)
+
+    @property
+    def migracoes(self):
+        return self.__formatar_dados(self.__get_data(migracoes_url), new_order)
 
     def vendas_by_data(
         self,
@@ -96,9 +111,7 @@ class Vendas:
         )
         return response.status_code
 
-    def __formatar_dados(self):
-        dataframe = self.__get_data()
-
+    def __formatar_dados(self, dataframe: pd.DataFrame, order: List[str]):
         dataframe.rename(
             columns={
                 "id": "ID",
@@ -133,7 +146,12 @@ class Vendas:
                 "ja_cliente": "Já Cliente?",
                 "status": "Status",
                 "m": "M",
-                "ddd": "DDD"
+                "ddd": "DDD",
+                "valor_atual": "Valor Atual",
+                "valor_renovacao": "Valor Renovação",
+                "valor_inovacao": "Valor Inovação",
+                "pacote_inovacao": "Pacote Inovação",
+                "volume_inovacao": "Volume Inovação"
             },
             inplace=True,
         )
@@ -146,8 +164,8 @@ class Vendas:
 
         return dataframe[order].sort_values(by="Data", ascending=False)
 
-    def __get_data(self):
-        data = request("GET", url=vendas_url, headers=headers).json()
+    def __get_data(self, url: str):
+        data = request("GET", url=url, headers=headers).json()
         vendas = pd.DataFrame(data)
         vendas.replace(
             {

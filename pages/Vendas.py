@@ -40,7 +40,7 @@ with open("styles/vendas.css", "r") as styles:
 
 async def load_data():
     async def load_vendas():
-        return Vendas().data.astype(str)
+        return Vendas().vendas.astype(str)
 
     async def load_consultores():
         return Stats.consultores()
