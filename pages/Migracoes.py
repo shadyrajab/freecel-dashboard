@@ -20,9 +20,9 @@ from utils.utils import (
     formatar_nome,
     mask_dataframe,
     months,
-    tipo_vendas,
+    new_order,
     order,
-    new_order
+    tipo_vendas,
 )
 
 # Configurando o layout da página
@@ -104,7 +104,7 @@ with st.sidebar:
         status,
         m,
         default_index=default_index,
-        order=new_order
+        order=new_order,
     )
     vendas["Volume"] = vendas["Volume"].astype(int)
     vendas["Receita"] = vendas["Receita"].astype(float)
@@ -248,6 +248,18 @@ painel = painel_de_vendas.data_editor(
         ),
         "Telefone": st.column_config.TextColumn(
             label="Telefone", help="Telefone do Cliente", max_chars=11, required=True
+        ),
+        "Valor Renovação": st.column_config.NumberColumn(
+            label="Valor Renovação", help="Valor da Renovação", required=True
+        ),
+        "Valor Inovação": st.column_config.NumberColumn(
+            label="Valor Inovação", help="Valor da Inovação", required=True
+        ),
+        "Volume Inovação": st.column_config.NumberColumn(
+            label="Volume Inovação", help="Volume Inovação", required=True, step=1
+        ),
+        "Valor Atual": st.column_config.NumberColumn(
+            label="Valor Atual", help="Valor Atual", required=True
         ),
     },
 )
