@@ -22,6 +22,7 @@ from utils.utils import (
     mask_dataframe,
     months,
     tipo_vendas,
+    order
 )
 
 # Configurando o layout da página
@@ -86,7 +87,7 @@ with st.sidebar:
     default_index = st.multiselect(
         label="Selecionar colunas",
         options=vendas.columns.to_list(),
-        default=default_index,
+        default=default_index(order),
     )
     # Criar uma máscara booleana para cada condição de filtro
     vendas = mask_dataframe(
@@ -103,6 +104,7 @@ with st.sidebar:
         status,
         m,
         default_index,
+        order
     )
     vendas["Volume"] = vendas["Volume"].astype(int)
     vendas["Receita"] = vendas["Receita"].astype(float)
