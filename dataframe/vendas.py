@@ -9,9 +9,9 @@ from utils.utils import (
     formatar_telefone,
     headers,
     migracoes_url,
+    new_order,
     order,
     vendas_url,
-    new_order
 )
 
 
@@ -27,14 +27,10 @@ class Vendas:
         self.mes = mes
         self.cnpj = cnpj
         self.n_pedido = n_pedido
-
-    @property
-    def vendas(self):
-        return self.__formatar_dados(self.__get_data(vendas_url), order)
-
-    @property
-    def migracoes(self):
-        return self.__formatar_dados(self.__get_data(migracoes_url), new_order)
+        self.vendas = self.__formatar_dados(self.__get_data(vendas_url), order)
+        self.migracoes = self.__formatar_dados(
+            self.__get_data(migracoes_url), new_order
+        )
 
     def vendas_by_data(
         self,
@@ -43,7 +39,7 @@ class Vendas:
         group: Optional[bool] = None,
     ):
         now = datetime.now()
-        dataframe = self.data
+        dataframe = self.vendas
 
         if group:
             return dataframe
@@ -151,7 +147,7 @@ class Vendas:
                 "valor_renovacao": "Valor Renovação",
                 "valor_inovacao": "Valor Inovação",
                 "pacote_inovacao": "Pacote Inovação",
-                "volume_inovacao": "Volume Inovação"
+                "volume_inovacao": "Volume Inovação",
             },
             inplace=True,
         )
