@@ -80,7 +80,7 @@ multi_index = pd.MultiIndex.from_product([categories, sub_categories])
 df.set_index("Consultor", inplace=True)
 headers = {
     "selector": "th:not(.index_name)",
-    "props": "background-color: white; color: black; text-align: center; border:None; border-radius: 30px;",
+    "props": "background-color: white; color: black; text-align: center; border:None;",
 }
 
 td = {"selector": "tr", "props": "border: None;"}
@@ -97,7 +97,7 @@ total = (
     .style.apply(
         lambda x: ["background-color: lightgreen; font-weight: bold"] * len(x), axis=1
     )
-    .set_properties(**{"border": None, "border-radius": "30px"})
+    .set_properties(**{"border": None})
     .format(
         {
             ("Altas", "Receita"): "R$ {:.1f}",
@@ -123,7 +123,6 @@ df = (
             "background-color": "#f2f2f2",
             "border": None,
             "border-top": None,
-            "border-radius": "20px",
             "font-weight": "bold",
         }
     )
