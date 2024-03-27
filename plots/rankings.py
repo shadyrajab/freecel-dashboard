@@ -67,4 +67,4 @@ def plot_rankings(
         textposition="outside",
     )
 
-    return st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+    return fig

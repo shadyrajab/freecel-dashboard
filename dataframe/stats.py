@@ -7,9 +7,15 @@ from utils.utils import consultores_url, headers, produtos_url, stats_url
 
 
 class Stats:
-    def __init__(self, ano: Optional[int] = None, mes: Optional[str] = None):
-        self.ano = ano
-        self.mes = mes
+    def __init__(
+        self,
+        data_inicio: Optional[str] = None,
+        data_fim: Optional[str] = None,
+        equipe: Optional[str] = None,
+    ):
+        self.data_inicio = data_inicio
+        self.data_fim = data_fim
+        self.equipe = equipe
         self.data = self.__get_data()
 
     def __getitem__(self, key):
@@ -108,6 +114,10 @@ class Stats:
         return pd.DataFrame(data)
 
     def __get_data(self):
-        params = {"ano": self.ano, "mes": self.mes}
+        params = {
+            "data_inicio": self.data_inicio,
+            "data_fim": self.data_fim,
+            "equipe": self.equipe,
+        }
         data = request("GET", url=stats_url, params=params, headers=headers).json()
         return data

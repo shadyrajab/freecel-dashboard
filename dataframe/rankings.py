@@ -8,10 +8,14 @@ from utils.utils import formatar_nome, headers, rankings_url
 
 class Rankings:
     def __init__(
-        self, ano: Optional[int] = None, mes: Optional[str] = None
+        self,
+        data_inicio: Optional[int] = None,
+        data_fim: Optional[str] = None,
+        equipe: Optional[str] = None,
     ) -> pd.DataFrame:
-        self.ano = ano
-        self.mes = mes
+        self.data_inicio = data_inicio
+        self.data_fim = data_fim
+        self.equipe = equipe
         self.data = self.__get_data()
 
     def __getitem__(self, key):
@@ -139,6 +143,10 @@ class Rankings:
         return merged_df.rename(columns={"consultor": "Consultor"})
 
     def __get_data(self):
-        params = {"ano": self.ano, "mes": self.mes}
+        params = {
+            "data_inicio": self.data_inicio,
+            "data_fim": self.data_fim,
+            "equipe": self.equipe,
+        }
         data = request("GET", url=rankings_url, params=params, headers=headers).json()
         return data

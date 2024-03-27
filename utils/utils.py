@@ -221,7 +221,7 @@ def formatar_nome(nome):
     return nome_final
 
 
-months = [
+MONTHS = [
     "Todos",
     "JANEIRO",
     "FEVEREIRO",
